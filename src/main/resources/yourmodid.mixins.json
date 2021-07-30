@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "mod.yourname.yourmodid.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "yourmodid.refmap.json",
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}
