@@ -22,7 +22,7 @@ apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 
-group = "mod.${author}.${modid}"
+group = "com.kotakotik.${modid}"
 version = "${minecraft_version}-${mod_version}"
 archivesBaseName = modid
 
@@ -98,7 +98,27 @@ repositories {
     maven {
         url 'https://jitpack.io/'
     }
+    maven {
+        // location of the maven that hosts JEI files
+        name "Progwml6 maven"
+        url "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        url "https://maven.blamejared.com"
+    }
+    maven {
+        url = "https://maven.architectury.dev"
+        content {
+            includeGroup "me.shedaniel"
+        }
+    }
 
+    maven {
+        url = "https://maven.saps.dev/minecraft"
+        content {
+            includeGroup "dev.latvian.mods"
+        }
+    }
 }
 
 dependencies {
@@ -106,6 +126,9 @@ dependencies {
 
     implementation fg.deobf("curse.maven:create-328085:${create_file_id}")
     implementation fg.deobf("com.jozufozu.flywheel:Flywheel:${flywheel_version}")
+    implementation fg.deobf("dev.latvian.mods:kubejs-forge:${kubejs_version}")
+    implementation "dev.latvian.mods:rhino:${rhino_version}"
+    implementation fg.deobf("me.shedaniel:architectury-forge:${architectury_version}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8:processor'
 }
