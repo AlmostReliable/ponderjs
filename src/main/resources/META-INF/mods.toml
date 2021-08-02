@@ -62,3 +62,9 @@ mandatory = true
 versionRange = "mc1.16.5_v0.3.1c" # TODO: probably update this, maybe to a version range https://maven.apache.org/enforcer/enforcer-rules/versionRanges.html
 ordering = "NONE"
 side = "BOTH"
+#[[dependencies.pondermaker]]
+#modId = "kubejs"
+#mandatory = false
+#versionRange = "[0,)"
+#ordering = "AFTER"
+#side = "BOTH"
