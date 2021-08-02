@@ -1,6 +1,6 @@
 package com.kotakotik.pondermaker;
 
-import com.kotakotik.pondermaker.kubejs.PonderJS;
+
 import com.simibubi.create.foundation.ponder.content.PonderTag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -27,7 +27,7 @@ public class PonderMaker {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
                 () -> () -> {
                     if(ModList.get().isLoaded("kubejs")) {
-                        new PonderJS();
+                        new com.kotakotik.pondermaker.kubejs.PonderJS();
                     }
                 });
     }
