@@ -1,39 +1,33 @@
 package com.kotakotik.pondermaker.kubejs;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.google.gson.stream.JsonReader;
+import com.kotakotik.pondermaker.PonderMaker;
 import com.simibubi.create.foundation.ponder.PonderLocalization;
-import com.simibubi.create.foundation.ponder.PonderRegistry;
 import com.simibubi.create.foundation.ponder.content.PonderPalette;
 import com.simibubi.create.foundation.ponder.elements.ParrotElement;
-import dev.latvian.kubejs.BuiltinKubeJSPlugin;
-import dev.latvian.kubejs.KubeJSObjects;
 import dev.latvian.kubejs.KubeJSPlugin;
 import dev.latvian.kubejs.client.KubeJSClientResourcePack;
-import dev.latvian.kubejs.client.KubeJSResourcePackFinder;
 import dev.latvian.kubejs.script.BindingsEvent;
 import dev.latvian.kubejs.script.ScriptType;
-import dev.latvian.kubejs.util.BuilderBase;
 import dev.latvian.kubejs.util.ClassFilter;
 import me.shedaniel.architectury.hooks.PackRepositoryHooks;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.LanguageManager;
-import net.minecraft.resources.IReloadableResourceManager;
-import net.minecraft.resources.IResourcePack;
 import net.minecraft.resources.ResourcePackList;
-import net.minecraft.util.Unit;
-import net.minecraft.util.Util;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.DeferredWorkQueue;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.apache.commons.codec.language.bm.Languages;
 
 import javax.swing.text.html.parser.Entity;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PonderJS extends KubeJSPlugin {
     private static PonderJS INSTANCE;
@@ -77,24 +71,52 @@ public class PonderJS extends KubeJSPlugin {
         LANG.put(key, value);
     }
 
+    public static JsonObject getKubeJSAssetLang(Gson g) {
+        JsonObject assetLang = new JsonObject();
+        try {
+            Reader reader = new InputStreamReader(Minecraft.getInstance().getResourceManager().getResource(new ResourceLocation("kubejs", "lang/en_us.json")).getInputStream(), StandardCharsets.UTF_8);
+            assetLang = g.getAdapter(JsonObject.class).read(new JsonReader(reader));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return assetLang;
+    }
+
     public static void generatePonderLang() {
+        Gson g = new GsonBuilder().setPrettyPrinting().create();
+        Minecraft mc = Minecraft.getInstance();
         JsonObject json = new JsonObject();
         PonderLocalization.generateSceneLang();
         PonderLocalization.record("kubejs", json);
+
+//        JsonObject assetLang = ((KubeJSClientResourcePack) mc.getResourcePackRepository().getPack("kubejs:resource_pack").open())
+//                .getCachedResources().get(new ResourceLocation("kubejs", "lang/en_us")).getAsJsonObject();
+        JsonObject assetLang = getKubeJSAssetLang(g);
         json.entrySet().forEach(e -> {
             // kubejs.ponder.ponder_builder.test.header
-            addLang(e.getKey(), e.getValue().getAsString());
+                if(!assetLang.has(e.getKey())) {
+                    String key = e.getKey();
+                    String val = e.getValue().getAsString();
+                    addLang(key, val);
+                }
         });
-        Minecraft mc = Minecraft.getInstance();
-        ResourcePackList list = mc.getResourcePackRepository();
-        PonderMakerResourcePack pack = new PonderMakerResourcePack();
-        PackRepositoryHooks.addSource(list, pack);
+        if(LANG.size() > 0) {
+            PonderMaker.LOGGER.warn("Found missing ponder lang, registering resource pack and reloading" +
+                    "\nMissing: " + g.toJson(LANG) +
+                    "\nKeys only: " + g.toJson(LANG.keySet()));
+            ResourcePackList list = mc.getResourcePackRepository();
+            PonderMakerResourcePack pack = new PonderMakerResourcePack();
+            PackRepositoryHooks.addSource(list, pack);
+            Minecraft.getInstance().reloadResourcePacks();
+        } else {
+            PonderMaker.LOGGER.info("No ponder lang missing, skipping resource pack registration");
+        }
+
 //        list.reload();
 //        List<IResourcePack> list1 = list.openAllSelected();
 //        CompletableFuture<Unit> completablePain = CompletableFuture.completedFuture(Unit.INSTANCE);
 //        ((IReloadableResourceManager) mc.getResourceManager()).createFullReload(Util.backgroundExecutor(), mc,completablePain , list1).done().complete(Unit.INSTANCE);
 //        completablePain.complete(Unit.INSTANCE);
-        Minecraft.getInstance().reloadResourcePacks();
 //        list.reload();
 //        Collection<String> s = list.getSelectedIds();
 //        List<String> sl = new ArrayList<>(s);

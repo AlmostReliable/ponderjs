@@ -18,7 +18,7 @@ import java.util.Optional;
 public class PonderMaker {
 
     // Directly reference a log4j logger.
-    private static final Logger LOGGER = LogManager.getLogger(BuildConfig.MODID);
+    public static final Logger LOGGER = LogManager.getLogger(BuildConfig.MODID);
     public static IEventBus modEventBus;
 
     public PonderMaker() {
