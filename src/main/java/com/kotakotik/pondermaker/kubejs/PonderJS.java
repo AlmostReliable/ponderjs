@@ -8,20 +8,28 @@ import com.kotakotik.pondermaker.PonderMaker;
 import com.simibubi.create.foundation.ponder.PonderLocalization;
 import com.simibubi.create.foundation.ponder.content.PonderPalette;
 import com.simibubi.create.foundation.ponder.elements.ParrotElement;
+import com.simibubi.create.foundation.utility.Pair;
 import dev.latvian.kubejs.KubeJSPlugin;
 import dev.latvian.kubejs.client.KubeJSClientResourcePack;
 import dev.latvian.kubejs.script.BindingsEvent;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.util.ClassFilter;
+import jdk.jfr.EventType;
 import me.shedaniel.architectury.hooks.PackRepositoryHooks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourcePackList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.antlr.v4.runtime.misc.Triple;
 import org.apache.commons.codec.language.bm.Languages;
+import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.text.html.parser.Entity;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -52,7 +60,52 @@ public class PonderJS extends KubeJSPlugin {
     public void addBindings(BindingsEvent event) {
         event.add("PonderPalette", PonderPalette.class);
         event.addFunction("DancePose", ($) -> new ParrotElement.DancePose());
+        if(event.type == ScriptType.STARTUP) {
+            event.add("pondersettings", Settings.instance);
+        }
         super.addBindings(event);
+    }
+
+    public static Triple<Boolean, ITextComponent, Integer> generateJsonLang(HashMap<String, String> from) {
+        Logger log = PonderMaker.LOGGER;
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        File file = new File("kubejs/assets/kubejs/lang/en_us.json");
+        JsonObject json = new JsonObject();
+        if(file.exists()) {
+            log.info("Found KubeJS en_us.json, reading!");
+//            Files.writeString(file.toPath(), "", Charset.defaultCharset(), StandardOpenOption.WRITE);
+//            file.
+            try {
+//                FileInputStream i = new FileInputStream(file.getAbsolutePath());
+                json = gson.fromJson(FileUtils.readFileToString(file, "UTF-8"), JsonObject.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+//            json = gson.fromJson(Files.readString(file.getPath()));
+        }
+        JsonObject finalJson = json;
+        List<String> wrote = new ArrayList<>();
+        from.forEach((key, value) -> {
+            if(!(finalJson.has(key) && finalJson.get(key).getAsString().equals(value))) {
+                log.info("Writing KubeJS lang key " + key);
+                finalJson.addProperty(key, value);
+                wrote.add(key);
+            }
+        });
+        String j = gson.toJson(wrote);
+        try {
+            FileUtils.writeStringToFile(file, gson.toJson(finalJson), "UTF-8");
+            String c = "Wrote " + wrote.size() + " KubeJS lang keys";
+            log.info(c);
+            if(wrote.size() > 0) {
+                log.info(j);
+            }
+            return new Triple<>(true, new StringTextComponent(c), wrote.size());
+        } catch (IOException e) {
+            log.error("Couldn't write KubeJS lang");
+            e.printStackTrace();
+            return new Triple<>(false, new StringTextComponent("Unable to write KubeJS lang: " + e.getClass().getSimpleName() + "\nMore info in logs"), wrote.size());
+        }
     }
 
     @Override
@@ -139,4 +192,10 @@ public class PonderJS extends KubeJSPlugin {
 //            return "lang";
 //        }
 //    }
+
+    public static class Settings {
+        public static Settings instance = new Settings();
+
+        public boolean autoGenerateLang = true;
+    }
 }
