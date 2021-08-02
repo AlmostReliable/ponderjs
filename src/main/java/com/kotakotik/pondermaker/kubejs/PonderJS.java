@@ -4,12 +4,19 @@ import com.google.gson.JsonObject;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.ponder.PonderLocalization;
 import com.simibubi.create.foundation.ponder.PonderRegistry;
+import com.simibubi.create.foundation.ponder.content.PonderPalette;
+import com.simibubi.create.foundation.ponder.elements.ParrotElement;
+import dev.latvian.kubejs.BuiltinKubeJSPlugin;
 import dev.latvian.kubejs.KubeJSObjects;
+import dev.latvian.kubejs.KubeJSPlugin;
 import dev.latvian.kubejs.client.KubeJSClientResourcePack;
 import dev.latvian.kubejs.client.KubeJSResourcePackFinder;
+import dev.latvian.kubejs.script.BindingsEvent;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.util.BuilderBase;
+import dev.latvian.kubejs.util.ClassFilter;
 import me.shedaniel.architectury.hooks.PackRepositoryHooks;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.LanguageManager;
 import net.minecraft.resources.IReloadableResourceManager;
@@ -27,7 +34,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-public class PonderJS {
+public class PonderJS extends KubeJSPlugin {
     private static PonderJS INSTANCE;
     public PonderRegistryEventJS ponderEvent;
 
@@ -36,6 +43,13 @@ public class PonderJS {
         ponderEvent = new PonderRegistryEventJS();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ponderEvent::register);
         DeferredWorkQueue.runLater(() -> ponderEvent.post(ScriptType.CLIENT, "ponder.registry"));
+    }
+
+    @Override
+    public void addBindings(BindingsEvent event) {
+        event.add("PonderPalette", PonderPalette.class);
+        event.addFunction("DancePose", ($) -> new ParrotElement.DancePose());
+        super.addBindings(event);
     }
 
     public static PonderJS get() {

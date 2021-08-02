@@ -6,6 +6,7 @@ import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
 import com.simibubi.create.foundation.ponder.content.PonderTag;
 import com.simibubi.create.foundation.ponder.content.PonderTagRegistry;
+import com.simibubi.create.foundation.ponder.elements.ParrotElement;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
 import dev.latvian.kubejs.BuiltinKubeJSPlugin;
 import dev.latvian.kubejs.client.KubeJSClientResourcePack;
@@ -23,6 +24,7 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+import org.apache.logging.log4j.util.TriConsumer;
 
 import java.security.Provider;
 import java.util.ArrayList;
@@ -59,14 +61,14 @@ public class PonderBuilderJS<T extends Item> {
 //        });
 //    }
 
-    protected PonderBuilderJS<T> addStoryBoard(ResourceLocation item, String schematic, BiConsumer<SceneBuilder, SceneBuildingUtil> scene) {
+    protected PonderBuilderJS<T> addStoryBoard(ResourceLocation item, String schematic, SceneConsumer scene) {
         return step(($) -> PonderRegistry.addStoryBoard(PonderRegistryEventJS.createItemProvider(RegistryObject.of(item, ForgeRegistries.ITEMS)), schematic, scene::accept));
     }
 
-    protected PonderBuilderJS<T> addStoryBoard(String name, String displayName, ResourceLocation item, String schematic, BiConsumer<SceneBuilder, SceneBuildingUtil> scene) {
-        return addStoryBoard(item, schematic, (builder, util) -> {
+    protected PonderBuilderJS<T> addStoryBoard(String name, String displayName, ResourceLocation item, String schematic, SceneConsumer scene) {
+        return addStoryBoard(item, schematic, (builder, util, jsUtil) -> {
             builder.title(name, displayName);
-            scene.accept(builder, util);
+            scene.accept(builder, util, jsUtil);
         });
     }
 
@@ -82,12 +84,8 @@ public class PonderBuilderJS<T extends Item> {
     }
 
     public PonderBuilderJS<T> scene(String name, String displayName, String schematic, SceneConsumer scene) {
-        items.forEach(id -> addStoryBoard(this.name + "." + name, displayName, id, schematic, scene::call));
+        items.forEach(id -> addStoryBoard(this.name + "." + name, displayName, id, schematic, scene::accept));
         return this;
-    }
-
-    public PonderBuilderJS<T> scene(String name, String  displayName, String schematic, Object args) {
-        return scene(name, displayName, schematic, (SceneConsumer) args); // umm what
     }
 
     public PonderBuilderJS<T> tag(String... tags) {
@@ -107,7 +105,9 @@ public class PonderBuilderJS<T extends Item> {
     }
 
     @FunctionalInterface
-    public interface SceneConsumer {
-        void call(SceneBuilder b, SceneBuildingUtil u);
+    public interface SceneConsumer extends TriConsumer<SceneBuilder, SceneBuildingUtil, PonderBuilderSceneBuildingUtil> {
+        default void accept(SceneBuilder b, SceneBuildingUtil u) {
+            accept(b, u, new PonderBuilderSceneBuildingUtil(b, u));
+        }
     }
 }
