@@ -4,9 +4,17 @@ import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
 import com.simibubi.create.foundation.ponder.content.PonderPalette;
 import com.simibubi.create.foundation.ponder.elements.ParrotElement;
+import dev.latvian.kubejs.KubeJS;
+import dev.latvian.kubejs.KubeJSRegistries;
+import dev.latvian.kubejs.docs.MinecraftClass;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -26,6 +34,23 @@ public class PonderBuilderSceneBuildingUtil {
 
     public RegistryObject<Item> item(ResourceLocation id) {
         return RegistryObject.of(id, ForgeRegistries.ITEMS);
+    }
+
+    @MinecraftClass // not sure what this does but kubejs uses it so
+    public EntityType<?> getEntity(ResourceLocation id) {
+        return KubeJSRegistries.entityTypes().get(id);
+    }
+
+    @MinecraftClass
+    public Entity createEntity(World world, ResourceLocation id, Vector3d pos) {
+        Entity entity = getEntity(id).create(world);
+        entity.setPos(pos.x, pos.y, pos.z);
+        return entity;
+    }
+
+    @MinecraftClass
+    public Entity createEntity(World world, ResourceLocation id, BlockPos pos) {
+        return createEntity(world, id, new Vector3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5));
     }
 
     public ParrotElement.DancePose dancePose() {

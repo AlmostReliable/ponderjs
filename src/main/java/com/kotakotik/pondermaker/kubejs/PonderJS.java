@@ -31,6 +31,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
@@ -38,11 +39,19 @@ public class PonderJS extends KubeJSPlugin {
     private static PonderJS INSTANCE;
     public PonderRegistryEventJS ponderEvent;
 
+    static boolean posted = false;
+
     public PonderJS() {
+        if(INSTANCE != null) return;
         INSTANCE = this;
         ponderEvent = new PonderRegistryEventJS();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ponderEvent::register);
-        DeferredWorkQueue.runLater(() -> ponderEvent.post(ScriptType.CLIENT, "ponder.registry"));
+        DeferredWorkQueue.runLater(() -> {
+            if(!posted) {
+                ponderEvent.post(ScriptType.STARTUP, "ponder.registry");
+            }
+            posted = true;
+        });
     }
 
     @Override
@@ -50,6 +59,12 @@ public class PonderJS extends KubeJSPlugin {
         event.add("PonderPalette", PonderPalette.class);
         event.addFunction("DancePose", ($) -> new ParrotElement.DancePose());
         super.addBindings(event);
+    }
+
+    @Override
+    public void addClasses(ScriptType type, ClassFilter filter) {
+        filter.allow(Entity.class);
+        super.addClasses(type, filter);
     }
 
     public static PonderJS get() {
