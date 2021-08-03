@@ -1,4 +1,4 @@
-package com.kotakotik.pondermaker.kubejs;
+package com.kotakotik.pondermaker.kubejs.util;
 
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.types.Func;

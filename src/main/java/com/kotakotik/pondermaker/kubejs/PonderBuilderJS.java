@@ -1,46 +1,22 @@
 package com.kotakotik.pondermaker.kubejs;
 
 import com.kotakotik.pondermaker.PonderMaker;
-import com.simibubi.create.AllBlocks;
+import com.kotakotik.pondermaker.kubejs.util.PonderBuilderSceneBuildingUtil;
 import com.simibubi.create.foundation.ponder.PonderRegistry;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
-import com.simibubi.create.foundation.ponder.content.MechanicalSawScenes;
 import com.simibubi.create.foundation.ponder.content.PonderTag;
-import com.simibubi.create.foundation.ponder.content.PonderTagRegistry;
-import com.simibubi.create.foundation.ponder.elements.ParrotElement;
-import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
-import dev.latvian.kubejs.BuiltinKubeJSPlugin;
-import dev.latvian.kubejs.bindings.BlockWrapper;
-import dev.latvian.kubejs.client.KubeJSClientResourcePack;
-import dev.latvian.kubejs.recipe.RecipeEventJS;
-import dev.latvian.kubejs.util.BuilderBase;
-import dev.latvian.mods.rhino.Function;
-import dev.latvian.mods.rhino.Scriptable;
-import dev.latvian.mods.rhino.ScriptableObject;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Unit;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.logging.log4j.util.TriConsumer;
 
-import java.security.Provider;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class PonderBuilderJS<T extends Item> {
     protected String name;
