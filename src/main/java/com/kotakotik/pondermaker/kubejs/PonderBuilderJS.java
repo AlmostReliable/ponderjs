@@ -1,6 +1,7 @@
 package com.kotakotik.pondermaker.kubejs;
 
 import com.kotakotik.pondermaker.PonderMaker;
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.foundation.ponder.PonderRegistry;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
@@ -10,6 +11,7 @@ import com.simibubi.create.foundation.ponder.content.PonderTagRegistry;
 import com.simibubi.create.foundation.ponder.elements.ParrotElement;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
 import dev.latvian.kubejs.BuiltinKubeJSPlugin;
+import dev.latvian.kubejs.bindings.BlockWrapper;
 import dev.latvian.kubejs.client.KubeJSClientResourcePack;
 import dev.latvian.kubejs.recipe.RecipeEventJS;
 import dev.latvian.kubejs.util.BuilderBase;
@@ -17,10 +19,12 @@ import dev.latvian.mods.rhino.Function;
 import dev.latvian.mods.rhino.Scriptable;
 import dev.latvian.mods.rhino.ScriptableObject;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Unit;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -39,9 +43,12 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class PonderBuilderJS<T extends Item> {
-    protected final String name;
+    protected String name;
+
+    public List<ResourceLocation> items = new ArrayList<>();
 
     protected Consumer<Unit> function = ($) -> {
+        PonderMaker.LOGGER.info("Starting ponder registration \"" + name + "\" with items " + Arrays.toString(items.toArray()));
     };
 
     public PonderBuilderJS(String name, ResourceLocation... ids) {
@@ -78,11 +85,10 @@ public class PonderBuilderJS<T extends Item> {
         added.add(n);
         return addStoryBoard(n, item, schematic, (builder, util, jsUtil) -> {
             builder.title(name, displayName);
+            builder.world.setBlock(new BlockPos(1,1,1), AllBlocks.DEPLOYER.getDefaultState(), true);
             scene.accept(builder, util, jsUtil);
         });
     }
-
-    public List<ResourceLocation> items = new ArrayList<>();
 
     public PonderBuilderJS<T> addItem(ResourceLocation... ids) {
         items.addAll(Arrays.asList(ids));
@@ -94,7 +100,7 @@ public class PonderBuilderJS<T extends Item> {
     }
 
     public PonderBuilderJS<T> scene(String name, String displayName, String schematic, SceneConsumer scene) {
-        items.forEach(id -> addStoryBoard(getName(name), displayName, id, schematic, scene::accept));
+        items.forEach(id -> addStoryBoard(getName(name), displayName, id, schematic, scene));
         return this;
     }
 
