@@ -5,7 +5,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import com.kotakotik.pondermaker.PonderMaker;
+import com.kotakotik.pondermaker.kubejs.util.DyeColorWrapper;
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.ponder.PonderLocalization;
 import com.simibubi.create.foundation.ponder.content.PonderPalette;
 import com.simibubi.create.foundation.ponder.elements.ParrotElement;
@@ -13,6 +15,7 @@ import com.simibubi.create.foundation.utility.Pair;
 import dev.latvian.kubejs.BuiltinKubeJSPlugin;
 import dev.latvian.kubejs.KubeJSPlugin;
 import dev.latvian.kubejs.bindings.BlockWrapper;
+import dev.latvian.kubejs.bindings.FacingWrapper;
 import dev.latvian.kubejs.block.predicate.BlockIDPredicate;
 import dev.latvian.kubejs.client.KubeJSClientResourcePack;
 import dev.latvian.kubejs.script.BindingsEvent;
@@ -20,9 +23,12 @@ import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.util.ClassFilter;
 import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
 import jdk.jfr.EventType;
+import me.shedaniel.architectury.hooks.DyeColorHooks;
 import me.shedaniel.architectury.hooks.PackRepositoryHooks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.DyeColor;
 import net.minecraft.resources.ResourcePackList;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -65,11 +71,15 @@ public class PonderJS extends KubeJSPlugin {
 
     @Override
     public void addBindings(BindingsEvent event) {
-        event.add("PonderPalette", PonderPalette.class);
+        event.addClass("PonderPalette", PonderPalette.class);
         event.addFunction("DancePose", ($) -> new ParrotElement.DancePose());
         if(event.type == ScriptType.STARTUP) {
             event.add("pondersettings", Settings.instance);
         }
+        event.addClass("DyeColor", DyeColorWrapper.class);
+        event.addClass("ParrotElement", ParrotElement.class);
+        event.addClass("Direction", Direction.class); // ik about the facing wrapper, i just prefer to call it direction
+//        event.addClass("ParrotElement.FacePointOfInterestPose", ParrotElement.FacePointOfInterestPose.class);
         super.addBindings(event);
     }
 

@@ -162,14 +162,6 @@ public class PonderBuilderSceneBuildingUtil {
         return ItemStackJS.of(item);
     }
 
-    public ParrotElement.DancePose dancePose() {
-        return new ParrotElement.DancePose();
-    }
-
-    public ParrotElement.FacePointOfInterestPose pointOfInterestPose() {
-        return new ParrotElement.FacePointOfInterestPose();
-    }
-
     public static class PonderPaletteWrapper {
         public final PonderPalette white = PonderPalette.WHITE;
         public final PonderPalette black = PonderPalette.BLACK;
