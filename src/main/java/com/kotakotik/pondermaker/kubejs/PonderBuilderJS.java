@@ -85,7 +85,6 @@ public class PonderBuilderJS<T extends Item> {
         added.add(n);
         return addStoryBoard(n, item, schematic, (builder, util, jsUtil) -> {
             builder.title(name, displayName);
-            builder.world.setBlock(new BlockPos(1,1,1), AllBlocks.DEPLOYER.getDefaultState(), true);
             scene.accept(builder, util, jsUtil);
         });
     }
