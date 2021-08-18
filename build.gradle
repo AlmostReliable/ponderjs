@@ -24,6 +24,9 @@ apply plugin: 'eclipse'
 
 group = "com.kotakotik.${modid}"
 version = "${minecraft_version}-${mod_version}"
+if (System.getenv("ENV_VERSION") != null) {
+    version = "${minecraft_version}-${System.getenv("ENV_VERSION")}"
+}
 archivesBaseName = modid
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8) // Mojang ships Java 8 to end users, so your mod should target Java 8.
