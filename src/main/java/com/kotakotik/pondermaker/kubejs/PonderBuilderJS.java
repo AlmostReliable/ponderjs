@@ -2,7 +2,7 @@ package com.kotakotik.pondermaker.kubejs;
 
 import com.kotakotik.pondermaker.PonderMaker;
 import com.kotakotik.pondermaker.common.AbstractPonderBuilder;
-import com.kotakotik.pondermaker.kubejs.util.PonderBuilderSceneBuildingUtil;
+import com.kotakotik.pondermaker.kubejs.util.SceneBuilderJS;
 import com.simibubi.create.foundation.ponder.PonderStoryBoardEntry;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
@@ -10,12 +10,12 @@ import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.util.TriConsumer;
 
 import java.util.Arrays;
+import java.util.function.BiConsumer;
 
 public class PonderBuilderJS extends
-        AbstractPonderBuilder<ResourceLocation, PonderBuilderJS, PonderBuilderJS.SceneConsumer, PonderBuilderSceneBuildingUtil> {
+        AbstractPonderBuilder<ResourceLocation, PonderBuilderJS, PonderBuilderJS.SceneConsumer> {
     public PonderBuilderJS(String name, ResourceLocation... ids) {
         super(name, Arrays.asList(ids));
     }
@@ -58,18 +58,23 @@ public class PonderBuilderJS extends
 
     @Override
     protected PonderStoryBoardEntry.PonderStoryBoard storyBoard(PonderBuilderJS.SceneConsumer scene) {
-        return (a, b) -> scene.accept(a, b, name);
+        return scene::run;
     }
 
     @Override
-    protected PonderBuilderJS.SceneConsumer createConsumer(TriConsumer<SceneBuilder, SceneBuildingUtil, PonderBuilderSceneBuildingUtil> consumer) {
-        return consumer::accept;
+    protected PonderBuilderJS.SceneConsumer createConsumer(BiConsumer<SceneBuilder, SceneBuildingUtil> consumer) {
+        return (b, u) -> consumer.accept(b.getInternal(), u);
+    }
+
+    @Override // expose protected method
+    public PonderBuilderJS tag(String... tags) {
+        return super.tag(tags);
     }
 
     @FunctionalInterface
-    public interface SceneConsumer extends TriConsumer<SceneBuilder, SceneBuildingUtil, PonderBuilderSceneBuildingUtil> {
-        default void accept(SceneBuilder b, SceneBuildingUtil u, String name) {
-            accept(b, u, new PonderBuilderSceneBuildingUtil(b, u));
+    public interface SceneConsumer extends BiConsumer<SceneBuilderJS, SceneBuildingUtil> {
+        default void run(SceneBuilder b, SceneBuildingUtil u) {
+            accept(new SceneBuilderJS(b), u);
         }
     }
 }

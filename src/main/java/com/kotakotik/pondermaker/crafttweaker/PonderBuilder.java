@@ -10,20 +10,19 @@ import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Unit;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.util.TriConsumer;
 import org.openzen.zencode.java.ZenCodeType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 @ZenRegister(modDeps = {"create"})
 @ZenCodeType.Name("mods.pondermaker.PonderBuilder")
 public class PonderBuilder extends
-        AbstractPonderBuilder<IItemStack, PonderBuilder, TriConsumer<SceneBuilderWrapper, SceneBuildingUtil, Unit>, Unit>{
+        AbstractPonderBuilder<IItemStack, PonderBuilder, BiConsumer<SceneBuilderWrapper, SceneBuildingUtil>>{
     @ZenCodeType.Constructor
     public PonderBuilder(String name, List<IItemStack> items) {
         super(name, items);
@@ -63,13 +62,13 @@ public class PonderBuilder extends
     }
 
     @Override
-    protected PonderStoryBoardEntry.PonderStoryBoard storyBoard(TriConsumer<SceneBuilderWrapper, SceneBuildingUtil, Unit> scene) {
-        return (a, b) -> scene.accept(new SceneBuilderWrapper(a), b, Unit.INSTANCE);
+    protected PonderStoryBoardEntry.PonderStoryBoard storyBoard(BiConsumer<SceneBuilderWrapper, SceneBuildingUtil> scene) {
+        return (a, b) -> scene.accept(new SceneBuilderWrapper(a), b);
     }
 
     @Override
-    protected TriConsumer<SceneBuilderWrapper, SceneBuildingUtil, Unit> createConsumer(TriConsumer<SceneBuilder, SceneBuildingUtil, Unit> consumer) {
-        return (a, b, c) -> consumer.accept(a.getInternal(), b, c);
+    protected BiConsumer<SceneBuilderWrapper, SceneBuildingUtil> createConsumer(BiConsumer<SceneBuilder, SceneBuildingUtil> consumer) {
+        return (a, b) -> consumer.accept(a.getInternal(), b);
     }
 
     List<String> t = new ArrayList<>();
@@ -82,7 +81,7 @@ public class PonderBuilder extends
     }
 
     @ZenCodeType.Method
-    public PonderBuilder scene(String name, String displayName, String schematic, TriConsumer<SceneBuilderWrapper, SceneBuildingUtil, Unit> scene) {
+    public PonderBuilder scene(String name, String displayName, String schematic, BiConsumer<SceneBuilderWrapper, SceneBuildingUtil> scene) {
         items.forEach(id -> addNamedStoryBoard(getName(name), displayName, id, schematic, scene));
         return this;
     }

@@ -6,38 +6,26 @@ import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import com.kotakotik.pondermaker.PonderMaker;
 import com.kotakotik.pondermaker.kubejs.util.DyeColorWrapper;
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.ponder.PonderLocalization;
 import com.simibubi.create.foundation.ponder.content.PonderPalette;
 import com.simibubi.create.foundation.ponder.elements.ParrotElement;
-import com.simibubi.create.foundation.utility.Pair;
-import dev.latvian.kubejs.BuiltinKubeJSPlugin;
 import dev.latvian.kubejs.KubeJSPlugin;
-import dev.latvian.kubejs.bindings.BlockWrapper;
-import dev.latvian.kubejs.bindings.FacingWrapper;
-import dev.latvian.kubejs.block.predicate.BlockIDPredicate;
-import dev.latvian.kubejs.client.KubeJSClientResourcePack;
+import dev.latvian.kubejs.entity.EntityJS;
 import dev.latvian.kubejs.script.BindingsEvent;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.util.ClassFilter;
 import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
-import jdk.jfr.EventType;
-import me.shedaniel.architectury.hooks.DyeColorHooks;
 import me.shedaniel.architectury.hooks.PackRepositoryHooks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.DyeColor;
 import net.minecraft.resources.ResourcePackList;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.antlr.v4.runtime.misc.Triple;
-import org.apache.commons.codec.language.bm.Languages;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
 
@@ -47,8 +35,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class PonderJS extends KubeJSPlugin {
     private static PonderJS INSTANCE;
@@ -209,6 +198,22 @@ public class PonderJS extends KubeJSPlugin {
 //            return "lang";
 //        }
 //    }
+
+
+    @Override
+    public void addTypeWrappers(ScriptType type, TypeWrappers typeWrappers) {
+        typeWrappers.register(Vector3d.class, o -> {
+            if (o instanceof Vector3d) {
+                return (Vector3d) o;
+            } else if (o instanceof EntityJS) {
+                return ((EntityJS) o).minecraftEntity.position();
+            } else if (o instanceof List && ((List<?>) o).size() >= 3) {
+                return new Vector3d(((Number) ((List<?>) o).get(0)).doubleValue(), ((Number) ((List<?>) o).get(1)).doubleValue(), ((Number) ((List<?>) o).get(2)).doubleValue());
+            }
+
+            return Vector3d.ZERO;
+        });
+    }
 
     public static class Settings {
         public static Settings instance = new Settings();

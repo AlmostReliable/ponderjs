@@ -1,4 +1,4 @@
-package com.kotakotik.pondermaker.crafttweaker.wrappers.interfaces;
+package com.kotakotik.pondermaker.common.wrappers;
 
 import com.blamejared.crafttweaker.api.annotations.ZenRegister;
 import com.blamejared.crafttweaker_annotations.annotations.ZenWrapper;

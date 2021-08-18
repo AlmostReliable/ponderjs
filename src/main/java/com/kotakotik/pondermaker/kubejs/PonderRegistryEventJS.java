@@ -29,13 +29,11 @@ public class PonderRegistryEventJS extends EventJS {
     public void register(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             PonderRegistry.startRegistration("kubejs");
-            for(PonderBuilderJS b : ALL) {
-                b.execute();
+            for(PonderBuilderJS b : ALL) b.execute();
 //                PonderRegistry.forComponents(itemProvider)
 //                        .addStoryBoard("test", b.function::accept);
 //                PonderRegistry.TAGS.forTag(PonderTag.KINETIC_RELAYS)
 //                        .add(itemProvider);
-            }
             PonderRegistry.endRegistration();
             if(PonderJS.Settings.instance.autoGenerateLang) {
                 JsonObject json = new JsonObject();

@@ -10,11 +10,11 @@ import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Unit;
 import net.minecraftforge.fml.RegistryObject;
-import org.apache.logging.log4j.util.TriConsumer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -22,12 +22,11 @@ import java.util.function.Consumer;
  *
  * @param <T> The Item type
  * @param <S> Self
- * @param <C> The scene tri-consumer
- * @param <U> The third parameter in the tri-consumer, probably the util
+ * @param <C> The scene bi-consumer
  */
 public abstract class AbstractPonderBuilder<T,
-        S extends AbstractPonderBuilder<T, S, C, U>,
-        C extends TriConsumer<?, SceneBuildingUtil, U>, U> {
+        S extends AbstractPonderBuilder<T, S, C>,
+        C extends BiConsumer<?, SceneBuildingUtil>> {
     protected String name;
     protected List<T> items;
 
@@ -95,7 +94,7 @@ public abstract class AbstractPonderBuilder<T,
         String n = getName(name);
         if(added.contains(n)) return getSelf();
         added.add(n);
-        return addStoryBoard(item, schematic, createConsumer((builder, util, p3) -> {
+        return addStoryBoard(item, schematic, createConsumer((builder, util) -> {
                         builder.title(n, displayName);
                         storyBoard(scene).program(builder, util);
                     }));
@@ -106,5 +105,5 @@ public abstract class AbstractPonderBuilder<T,
         return getSelf();
     }
 
-    protected abstract C createConsumer(TriConsumer<SceneBuilder, SceneBuildingUtil, U> consumer);
+    protected abstract C createConsumer(BiConsumer<SceneBuilder, SceneBuildingUtil> consumer);
 }
