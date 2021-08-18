@@ -34,7 +34,6 @@ jobs:
                 with:
                     arguments: jar --max-workers 1
                     wrapper-cache-enabled: true
-                    configuration-cache-enabled: true
                 env:
                     ENV_VERSION: preview-${{ steps.get_commit.outputs.commit }}
             -   name: Send built file to discord
