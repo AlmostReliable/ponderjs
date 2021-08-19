@@ -42,8 +42,16 @@ public class PonderMaker {
     }
 
     public static Optional<PonderTag> getTagByName(ResourceLocation res) {
-        System.out.println(PonderRegistry.TAGS.getListedTags());
         return PonderRegistry.TAGS.getListedTags().stream().filter(tag -> tag.getId().equals(res)).findFirst();
+    }
+
+    public static ResourceLocation appendCreateToId(String tag) {
+        if(!tag.contains(":")) tag = "create:" + tag;
+        return new ResourceLocation(tag);
+    }
+
+    public static Optional<PonderTag> getTagByName(String tag) {
+        return getTagByName(appendCreateToId(tag));
     }
 
     public static <T extends IForgeRegistryEntry<? super T> & IItemProvider> ItemProviderEntry<T> createItemProvider(RegistryObject<T> item) {

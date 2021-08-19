@@ -31,25 +31,31 @@ public class PonderRegistryEventJS extends EventJS {
 //                PonderRegistry.TAGS.forTag(PonderTag.KINETIC_RELAYS)
 //                        .add(itemProvider);
         event.enqueueWork(() -> {
-            for(PonderBuilderJS b : ALL) b.execute();
+            try {
+                PonderJS.get().tagRegistryEvent.runSteps();
+                PonderJS.get().tagItemEvent.runSteps();
+                for(PonderBuilderJS b : ALL) b.execute();
 
-            if(PonderJS.Settings.instance.autoGenerateLang) {
-                JsonObject json = new JsonObject();
-                PonderLocalization.generateSceneLang();
-                PonderLocalization.record("kubejs", json);
-                Triple<Boolean, ITextComponent, Integer> result = PonderJS.generateJsonLang(new Gson().fromJson(json, HashMap.class));
-                boolean success = result.a;
-                int count = result.c;
-                if(success) {
-                    if(count > 0) {
-                        KubeJS.PROXY.reloadLang();
-                        Minecraft.getInstance().reloadResourcePacks();
+                if(PonderJS.Settings.instance.autoGenerateLang) {
+                    JsonObject json = new JsonObject();
+                    PonderLocalization.generateSceneLang();
+                    PonderLocalization.record("kubejs", json);
+                    Triple<Boolean, ITextComponent, Integer> result = PonderJS.generateJsonLang(new Gson().fromJson(json, HashMap.class));
+                    boolean success = result.a;
+                    int count = result.c;
+                    if(success) {
+                        if(count > 0) {
+                            KubeJS.PROXY.reloadLang();
+                            Minecraft.getInstance().reloadResourcePacks();
+                        }
+                    } else {
+                        PonderJS.generatePonderLang();
                     }
                 } else {
                     PonderJS.generatePonderLang();
                 }
-            } else {
-                PonderJS.generatePonderLang();
+            } catch (Exception e) { // i think theres a way to do this with the completable future but this is easier
+                e.printStackTrace();
             }
         });
     }

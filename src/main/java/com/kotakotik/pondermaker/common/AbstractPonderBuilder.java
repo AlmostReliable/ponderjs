@@ -2,7 +2,6 @@ package com.kotakotik.pondermaker.common;
 
 import com.kotakotik.pondermaker.PonderMaker;
 import com.simibubi.create.foundation.ponder.*;
-import com.simibubi.create.foundation.ponder.content.PonderTag;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Unit;
@@ -53,15 +52,13 @@ public abstract class AbstractPonderBuilder<T,
     protected abstract ResourceLocation[] itemsToIdArray();
 
     /**
-     * @param tags The list of tags to add, any not found will be replaced with {@link PonderTag#CREATIVE}
+     * @param tags The list of tags to add
      * @return Self
      */
     protected S tag(String... tags) {
         return step(($) -> {
             for(String tag : tags) {
-                if(!tag.contains(":")) tag = "create:" + tag;
-                ResourceLocation id = new ResourceLocation(tag);
-                PonderRegistry.TAGS.forItems(itemsToIdArray()).add(PonderMaker.getTagByName(id).orElse(PonderTag.CREATIVE));
+                PonderRegistry.TAGS.forItems(itemsToIdArray()).add(PonderMaker.getTagByName(tag).get());
             }
         });
     }

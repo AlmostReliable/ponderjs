@@ -45,6 +45,8 @@ import java.util.List;
 public class PonderJS extends KubeJSPlugin {
     private static PonderJS INSTANCE;
     public PonderRegistryEventJS ponderEvent;
+    public PonderTagRegistryEventJS tagRegistryEvent;
+    public PonderItemTagEventJS tagItemEvent;
 
     static boolean posted = false;
 
@@ -52,9 +54,13 @@ public class PonderJS extends KubeJSPlugin {
         if(INSTANCE != null) return;
         INSTANCE = this;
         ponderEvent = new PonderRegistryEventJS();
+        tagRegistryEvent = new PonderTagRegistryEventJS();
+        tagItemEvent = new PonderItemTagEventJS();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ponderEvent::register);
         DeferredWorkQueue.runLater(() -> {
             if(!posted) {
+                tagItemEvent.post(ScriptType.STARTUP, "ponder.tag");
+                tagRegistryEvent.post(ScriptType.STARTUP, "ponder.tag.registry");
                 ponderEvent.post(ScriptType.STARTUP, "ponder.registry");
             }
             posted = true;
