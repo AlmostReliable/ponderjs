@@ -3,7 +3,7 @@ package com.kotakotik.pondermaker.kubejs;
 import com.kotakotik.pondermaker.PonderMaker;
 import com.kotakotik.pondermaker.common.AbstractPonderBuilder;
 import com.kotakotik.pondermaker.kubejs.util.SceneBuilderJS;
-import com.simibubi.create.foundation.ponder.PonderStoryBoardEntry;
+import com.kotakotik.pondermaker.kubejs.util.SceneBuildingUtilJS;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
@@ -37,7 +37,7 @@ public class PonderBuilderJS extends
     }
 
     public PonderBuilderJS scene(String name, String displayName, String schematic, SceneConsumer scene) {
-        items.forEach(id -> addNamedStoryBoard(getName(name), displayName, id, schematic, scene));
+        items.forEach(id -> addNamedStoryBoard(getName(name), displayName, id, schematic, (b, u) -> programStoryBoard(scene, b, u)));
         return this;
     }
 
@@ -57,13 +57,13 @@ public class PonderBuilderJS extends
     }
 
     @Override
-    protected PonderStoryBoardEntry.PonderStoryBoard storyBoard(PonderBuilderJS.SceneConsumer scene) {
-        return scene::run;
+    protected void programStoryBoard(SceneConsumer scene, SceneBuilder builder, SceneBuildingUtil util) {
+        scene.accept(new SceneBuilderJS(builder), new SceneBuildingUtilJS(util));
     }
 
     @Override
     protected PonderBuilderJS.SceneConsumer createConsumer(BiConsumer<SceneBuilder, SceneBuildingUtil> consumer) {
-        return (b, u) -> consumer.accept(b.getInternal(), u);
+        return (b, u) -> consumer.accept(b.getInternal(), u.getInternal());
     }
 
     @Override // expose protected method
@@ -72,9 +72,6 @@ public class PonderBuilderJS extends
     }
 
     @FunctionalInterface
-    public interface SceneConsumer extends BiConsumer<SceneBuilderJS, SceneBuildingUtil> {
-        default void run(SceneBuilder b, SceneBuildingUtil u) {
-            accept(new SceneBuilderJS(b), u);
-        }
+    public interface SceneConsumer extends BiConsumer<SceneBuilderJS, SceneBuildingUtilJS> {
     }
 }

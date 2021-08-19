@@ -7,6 +7,7 @@ import com.google.gson.stream.JsonReader;
 import com.kotakotik.pondermaker.PonderMaker;
 import com.kotakotik.pondermaker.kubejs.util.DyeColorWrapper;
 import com.simibubi.create.foundation.ponder.PonderLocalization;
+import com.simibubi.create.foundation.ponder.Selection;
 import com.simibubi.create.foundation.ponder.content.PonderPalette;
 import com.simibubi.create.foundation.ponder.elements.ParrotElement;
 import dev.latvian.kubejs.KubeJSPlugin;
@@ -20,6 +21,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourcePackList;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -209,9 +212,22 @@ public class PonderJS extends KubeJSPlugin {
                 return ((EntityJS) o).minecraftEntity.position();
             } else if (o instanceof List && ((List<?>) o).size() >= 3) {
                 return new Vector3d(((Number) ((List<?>) o).get(0)).doubleValue(), ((Number) ((List<?>) o).get(1)).doubleValue(), ((Number) ((List<?>) o).get(2)).doubleValue());
+            } else if (o instanceof BlockPos) {
+                BlockPos bp = (BlockPos) o;
+                return new Vector3d(bp.getX() + .5, bp.getY() + .5, bp.getZ() + .5);
             }
 
             return Vector3d.ZERO;
+        });
+        typeWrappers.register(Selection.class, o -> {
+            if(o instanceof Selection) return (Selection) o;
+            if(o instanceof MutableBoundingBox) {
+                return Selection.of((MutableBoundingBox) o);
+            }
+            if(o instanceof BlockPos) {
+                return Selection.of(new MutableBoundingBox((BlockPos) o, BlockPos.ZERO));
+            }
+            return Selection.of(new MutableBoundingBox(0, 0, 0, 0,0, 0));
         });
     }
 

@@ -1,10 +1,7 @@
 package com.kotakotik.pondermaker.common;
 
 import com.kotakotik.pondermaker.PonderMaker;
-import com.simibubi.create.foundation.ponder.PonderRegistry;
-import com.simibubi.create.foundation.ponder.PonderStoryBoardEntry;
-import com.simibubi.create.foundation.ponder.SceneBuilder;
-import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
+import com.simibubi.create.foundation.ponder.*;
 import com.simibubi.create.foundation.ponder.content.PonderTag;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
 import net.minecraft.util.ResourceLocation;
@@ -26,7 +23,7 @@ import java.util.function.Consumer;
  */
 public abstract class AbstractPonderBuilder<T,
         S extends AbstractPonderBuilder<T, S, C>,
-        C extends BiConsumer<?, SceneBuildingUtil>> {
+        C extends BiConsumer<?, ?>> {
     protected String name;
     protected List<T> items;
 
@@ -82,22 +79,30 @@ public abstract class AbstractPonderBuilder<T,
      * @return The item provider. There's a utility method for that: {@link PonderMaker#createItemProvider(RegistryObject)}
      */
     protected abstract ItemProviderEntry<?> getItemProviderEntry(T item);
-    protected abstract PonderStoryBoardEntry.PonderStoryBoard storyBoard(C scene);
+//    protected abstract PonderStoryBoardEntry.PonderStoryBoard storyBoard(C scene);
+    protected abstract void programStoryBoard(C scene, SceneBuilder builder, SceneBuildingUtil util);
 
-    protected S addStoryBoard(T item, String schematic, C scene) {
-        return step(($) -> PonderRegistry.addStoryBoard(getItemProviderEntry(item), schematic, storyBoard(scene)));
+    protected S addStoryBoard(T item, String schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
+        return step(($) -> {
+            new PonderRegistrationHelper("kubejs")
+                .forComponents(getItemProviderEntry(item))
+                .addStoryBoard(schematic, scene);
+//            PonderRegistry.addStoryBoard(getItemProviderEntry(item), schematic, scene)
+        });
     }
 
     protected static List<String> added = new ArrayList<>();
 
-    protected S addNamedStoryBoard(String name, String displayName, T item, String schematic, C scene) {
+    protected S addNamedStoryBoard(String name, String displayName, T item, String schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
         String n = getName(name);
         if(added.contains(n)) return getSelf();
         added.add(n);
-        return addStoryBoard(item, schematic, createConsumer((builder, util) -> {
+        return addStoryBoard(item, schematic, (builder, util) -> {
                         builder.title(n, displayName);
-                        storyBoard(scene).program(builder, util);
-                    }));
+                        scene.program(builder, util);
+//                        programStoryBoard(scene, builder, util);
+//                        storyBoard(scene).program(builder, util);
+                    });
     }
 
     public S execute() {

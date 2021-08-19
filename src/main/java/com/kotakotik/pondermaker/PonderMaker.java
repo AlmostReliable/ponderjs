@@ -2,6 +2,7 @@ package com.kotakotik.pondermaker;
 
 
 import com.simibubi.create.Create;
+import com.simibubi.create.foundation.ponder.PonderRegistry;
 import com.simibubi.create.foundation.ponder.content.PonderTag;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
 import net.minecraft.util.IItemProvider;
@@ -41,7 +42,8 @@ public class PonderMaker {
     }
 
     public static Optional<PonderTag> getTagByName(ResourceLocation res) {
-        return PonderTag.LISTED_TAGS.stream().filter(tag -> tag.getId().equals(res)).findFirst();
+        System.out.println(PonderRegistry.TAGS.getListedTags());
+        return PonderRegistry.TAGS.getListedTags().stream().filter(tag -> tag.getId().equals(res)).findFirst();
     }
 
     public static <T extends IForgeRegistryEntry<? super T> & IItemProvider> ItemProviderEntry<T> createItemProvider(RegistryObject<T> item) {

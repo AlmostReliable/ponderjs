@@ -5,7 +5,6 @@ import com.blamejared.crafttweaker.api.item.IItemStack;
 import com.kotakotik.pondermaker.PonderMaker;
 import com.kotakotik.pondermaker.common.AbstractPonderBuilder;
 import com.kotakotik.pondermaker.crafttweaker.wrappers.implementing.SceneBuilderWrapper;
-import com.simibubi.create.foundation.ponder.PonderStoryBoardEntry;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
@@ -62,9 +61,14 @@ public class PonderBuilder extends
     }
 
     @Override
-    protected PonderStoryBoardEntry.PonderStoryBoard storyBoard(BiConsumer<SceneBuilderWrapper, SceneBuildingUtil> scene) {
-        return (a, b) -> scene.accept(new SceneBuilderWrapper(a), b);
+    protected void programStoryBoard(BiConsumer<SceneBuilderWrapper, SceneBuildingUtil> scene, SceneBuilder builder, SceneBuildingUtil util) {
+       scene.accept(new SceneBuilderWrapper(builder), util);
     }
+
+//    @Override
+//    protected PonderStoryBoardEntry.PonderStoryBoard storyBoard(BiConsumer<SceneBuilderWrapper, SceneBuildingUtil> scene) {
+//        return (a, b) -> scene.accept(new SceneBuilderWrapper(a), b);
+//    }
 
     @Override
     protected BiConsumer<SceneBuilderWrapper, SceneBuildingUtil> createConsumer(BiConsumer<SceneBuilder, SceneBuildingUtil> consumer) {
@@ -82,7 +86,7 @@ public class PonderBuilder extends
 
     @ZenCodeType.Method
     public PonderBuilder scene(String name, String displayName, String schematic, BiConsumer<SceneBuilderWrapper, SceneBuildingUtil> scene) {
-        items.forEach(id -> addNamedStoryBoard(getName(name), displayName, id, schematic, scene));
+        items.forEach(id -> addNamedStoryBoard(getName(name), displayName, id, schematic, (b, u) -> programStoryBoard(scene, b, u)));
         return this;
     }
 

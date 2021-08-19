@@ -10,20 +10,18 @@ import dev.latvian.kubejs.block.predicate.BlockIDPredicate;
 import dev.latvian.kubejs.entity.EntityJS;
 import dev.latvian.kubejs.util.MapJS;
 import dev.latvian.kubejs.util.UtilsJS;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.LazyValue;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
@@ -33,14 +31,6 @@ public class SceneBuilderJS implements ISceneBuilderJS {
 
     public SceneBuilderJS(SceneBuilder scene) {
         this.internal = scene;
-    }
-
-    public RegistryObject<Block> block(ResourceLocation id) {
-        return RegistryObject.of(id, ForgeRegistries.BLOCKS);
-    }
-
-    public RegistryObject<Item> item(ResourceLocation id) {
-        return RegistryObject.of(id, ForgeRegistries.ITEMS);
     }
 
 //    public EntityJS createEntityJS(World world, Entity entity) {
@@ -79,13 +69,53 @@ public class SceneBuilderJS implements ISceneBuilderJS {
 
 
     @Override
-    public SceneBuilderJS asSceneBuilderJS() {
-        return this;
+    public SceneBuilder getInternal() {
+        return internal;
     }
 
     @Override
-    public SceneBuilder getInternal() {
-        return internal;
+    public SceneBuilder.OverlayInstructions getOverlay() {
+        return getInternal().overlay;
+    }
+
+    public LazyValue<WorldInstructionsJS> worldInstructionsJS = new LazyValue<>(() ->
+            new WorldInstructionsJS(getInternal().world, this));
+
+    @Override
+    public WorldInstructionsJS getWorld() {
+       return worldInstructionsJS.get();
+    }
+
+    @Override
+    public SceneBuilder.DebugInstructions getDebug() {
+        return getInternal().debug;
+    }
+
+    @Override
+    public SceneBuilder.EffectInstructions getEffects() {
+        return getInternal().effects;
+    }
+
+    public LazyValue<SpecialInstructionsJS> specialInstructionsJS = new LazyValue<>(() ->
+            new SpecialInstructionsJS(getInternal().special));
+
+    @Override
+    public SpecialInstructionsJS getSpecial() {
+        return specialInstructionsJS.get();
+    }
+
+    public static class SpecialInstructionsJS implements ISpecialInstructionsJS {
+
+        private SceneBuilder.SpecialInstructions internal;
+
+        public SpecialInstructionsJS(SceneBuilder.SpecialInstructions internal) {
+            this.internal = internal;
+        }
+
+        @Override
+        public SceneBuilder.SpecialInstructions getInternal() {
+            return internal;
+        }
     }
 
     public static class WorldInstructionsJS implements ISceneBuilderJS.IWorldInstructionsJS {
@@ -100,9 +130,16 @@ public class SceneBuilderJS implements ISceneBuilderJS {
 
         public void modifyTileNBT(Selection selection, UnaryOperator<MapJS> sup) {
             modifyTileNBT(selection, TileEntity.class, nbt -> {
+                Objects.requireNonNull(nbt, "Could not find NBT in selection " +
+                        selection.toString() + ", your selection might include non-tiles!");
                 CompoundNBT n = MapJS.nbt(sup.apply(MapJS.of(nbt)));
+                assert n != null;
                 nbt.merge(n);
             });
+        }
+
+        public void modifyTileNBT(Selection selection, MapJS obj) {
+            modifyTileNBT(selection, $ -> obj);
         }
 
         @Override
@@ -128,22 +165,21 @@ public class SceneBuilderJS implements ISceneBuilderJS {
             modifyBlock(pos, false, mod);
         }
 
-        // BlockWrapper.id(...).getBlockstate() throws an NPE because properties are null, so it's much easier to do it this way
-        public BlockState getDefaultState(ResourceLocation id) {
-            return BlockWrapper.getBlock(id).defaultBlockState();
-        }
-
         public void modifyEntity(ElementLink<EntityElement> entity, Consumer<EntityJS> mod) {
             internal.modifyEntity(entity, (e) ->
                     mod.accept(new EntityJS(
                             UtilsJS.getWorld(e.level), e)));
         }
 
-        public ElementLink<EntityElement> createEntity(ResourceLocation id, Vector3d pos) {
-            return internal.createEntity(w -> createEntity(w, id, pos).minecraftEntity);
+        public ElementLink<EntityElement> createEntity(ResourceLocation id, Vector3d pos, UnaryOperator<EntityJS> mod) {
+            return internal.createEntity(w -> mod.apply(createEntityJS(w, id, pos)).minecraftEntity);
         }
 
-        public EntityJS createEntity(World world, ResourceLocation id, Vector3d pos) {
+        public ElementLink<EntityElement> createEntity(ResourceLocation id, Vector3d pos) {
+            return createEntity(id, pos, e -> e);
+        }
+
+        public EntityJS createEntityJS(World world, ResourceLocation id, Vector3d pos) {
             Entity entity = getEntity(id).create(world);
             entity.setPos(pos.x, pos.y, pos.z);
             return new EntityJS(UtilsJS.getWorld(world), entity);

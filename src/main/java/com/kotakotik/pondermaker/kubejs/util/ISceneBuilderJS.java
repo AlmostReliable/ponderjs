@@ -5,9 +5,7 @@ import com.simibubi.create.content.logistics.block.mechanicalArm.ArmTileEntity;
 import com.simibubi.create.foundation.ponder.ElementLink;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.Selection;
-import com.simibubi.create.foundation.ponder.elements.BeltItemElement;
-import com.simibubi.create.foundation.ponder.elements.EntityElement;
-import com.simibubi.create.foundation.ponder.elements.WorldSectionElement;
+import com.simibubi.create.foundation.ponder.elements.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -21,6 +19,7 @@ import net.minecraft.world.World;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 /**
@@ -29,8 +28,56 @@ import java.util.function.UnaryOperator;
 public interface ISceneBuilderJS extends ISceneBuilder {
     SceneBuilder getInternal();
 
+    interface ISpecialInstructionsJS {
+        SceneBuilder.SpecialInstructions getInternal();
+
+        default ElementLink<ParrotElement> birbOnTurntable(BlockPos pos) {
+            return getInternal().birbOnTurntable(pos);
+        }
+
+        default ElementLink<ParrotElement> birbOnSpinnyShaft(BlockPos pos) {
+            return getInternal().birbOnSpinnyShaft(pos);
+        }
+
+        default ElementLink<ParrotElement> createBirb(Vector3d location, Supplier<? extends ParrotElement.ParrotPose> pose) {
+            return getInternal().createBirb(location, pose);
+        }
+
+        default void changeBirbPose(ElementLink<ParrotElement> birb, Supplier<? extends ParrotElement.ParrotPose> pose) {
+            getInternal().changeBirbPose(birb, pose);
+        }
+
+        default void movePointOfInterest(Vector3d location) {
+            getInternal().movePointOfInterest(location);
+        }
+
+        default void rotateParrot(ElementLink<ParrotElement> link, double xRotation, double yRotation, double zRotation, int duration) {
+            getInternal().rotateParrot(link, xRotation, yRotation, zRotation, duration);
+        }
+
+        default void moveParrot(ElementLink<ParrotElement> link, Vector3d offset, int duration) {
+            getInternal().moveParrot(link, offset, duration);
+        }
+
+        default ElementLink<MinecartElement> createCart(Vector3d location, float angle, MinecartElement.MinecartConstructor type) {
+            return getInternal().createCart(location, angle, type);
+        }
+
+        default void rotateCart(ElementLink<MinecartElement> link, float yRotation, int duration) {
+            getInternal().rotateCart(link, yRotation, duration);
+        }
+
+        default void moveCart(ElementLink<MinecartElement> link, Vector3d offset, int duration) {
+            getInternal().moveCart(link, offset, duration);
+        }
+
+        default <T extends AnimatedSceneElement> void hideElement(ElementLink<T> link, Direction direction) {
+            getInternal().hideElement(link, direction);
+        }
+    }
+
     /**
-     * Boilerplate code for {@link com.kotakotik.pondermaker.kubejs.util.SceneBuilderJS.WorldInstructionsJS}
+     * Boilerplate code for {@link SceneBuilderJS.WorldInstructionsJS}
      */
     interface IWorldInstructionsJS {
         SceneBuilder.WorldInstructions getInternal();
@@ -208,7 +255,7 @@ public interface ISceneBuilderJS extends ISceneBuilder {
         }
 
         default void modifyTileNBT(Selection selection, Class<? extends TileEntity> teType, Consumer<CompoundNBT> consumer, boolean reDrawBlocks) {
-            getInternal().modifyTileNBT(selection, teType, consumer, reDrawBlocks);
+            getInternal().modifyTileNBT(selection, teType, consumer, reDrawBlocks); // amogus
         }
 
         default void instructArm(BlockPos armLocation, ArmTileEntity.Phase phase, ItemStack heldItem, int targetedPoint) {
@@ -228,25 +275,24 @@ public interface ISceneBuilderJS extends ISceneBuilder {
         }
     }
 
-    default SceneBuilder.OverlayInstructions getOverlay() {
-        return getInternal().overlay;
+    SceneBuilder.OverlayInstructions getOverlay();
+    default SceneBuilder.OverlayInstructions overlay() {
+        return getOverlay();
     }
-
-    SceneBuilderJS asSceneBuilderJS();
-
-    default SceneBuilderJS.WorldInstructionsJS getWorld() {
-        return new SceneBuilderJS.WorldInstructionsJS(getInternal().world, asSceneBuilderJS());
+    SceneBuilderJS.WorldInstructionsJS getWorld();
+    default SceneBuilderJS.WorldInstructionsJS world() {
+        return getWorld();
     }
-
-    default SceneBuilder.DebugInstructions getDebug() {
-        return getInternal().debug;
+    SceneBuilder.DebugInstructions getDebug();
+    default SceneBuilder.DebugInstructions debug() {
+        return getDebug();
     }
-
-    default SceneBuilder.EffectInstructions getEffects() {
-        return getInternal().effects;
+    SceneBuilder.EffectInstructions getEffects();
+    default SceneBuilder.EffectInstructions effects() {
+        return getEffects();
     }
-
-    default SceneBuilder.SpecialInstructions getSpecial() {
-        return getInternal().special;
+    SceneBuilderJS.SpecialInstructionsJS getSpecial();
+    default SceneBuilderJS.SpecialInstructionsJS special() {
+        return getSpecial();
     }
 }

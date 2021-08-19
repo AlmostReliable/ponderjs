@@ -3,7 +3,6 @@ package com.kotakotik.pondermaker.kubejs;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.simibubi.create.foundation.ponder.PonderLocalization;
-import com.simibubi.create.foundation.ponder.PonderRegistry;
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.event.EventJS;
 import net.minecraft.client.Minecraft;
@@ -27,14 +26,13 @@ public class PonderRegistryEventJS extends EventJS {
     }
 
     public void register(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            PonderRegistry.startRegistration("kubejs");
-            for(PonderBuilderJS b : ALL) b.execute();
 //                PonderRegistry.forComponents(itemProvider)
 //                        .addStoryBoard("test", b.function::accept);
 //                PonderRegistry.TAGS.forTag(PonderTag.KINETIC_RELAYS)
 //                        .add(itemProvider);
-            PonderRegistry.endRegistration();
+        event.enqueueWork(() -> {
+            for(PonderBuilderJS b : ALL) b.execute();
+
             if(PonderJS.Settings.instance.autoGenerateLang) {
                 JsonObject json = new JsonObject();
                 PonderLocalization.generateSceneLang();
