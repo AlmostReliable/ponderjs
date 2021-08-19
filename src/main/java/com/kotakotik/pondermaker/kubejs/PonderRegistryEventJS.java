@@ -34,7 +34,7 @@ public class PonderRegistryEventJS extends EventJS {
             try {
                 PonderJS.get().tagRegistryEvent.runSteps();
                 PonderJS.get().tagItemEvent.runSteps();
-                for(PonderBuilderJS b : ALL) b.execute();
+                for(PonderBuilderJS b : ALL) b.runSteps();
 
                 if(PonderJS.Settings.instance.autoGenerateLang) {
                     JsonObject json = new JsonObject();

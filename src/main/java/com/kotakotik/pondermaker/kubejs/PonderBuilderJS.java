@@ -42,7 +42,7 @@ public class PonderBuilderJS extends
     }
 
     @Override
-    protected PonderBuilderJS getSelf() {
+    public PonderBuilderJS getSelf() {
         return this;
     }
 

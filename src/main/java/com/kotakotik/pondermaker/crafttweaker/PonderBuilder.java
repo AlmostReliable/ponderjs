@@ -41,12 +41,12 @@ public class PonderBuilder extends
     @ZenCodeType.Method("register")
     public PonderBuilder register() {
         PonderTweaker.addFunctionToRegister(function);
-        function = ($) -> {};
+        function = () -> {};
         return this;
     }
 
     @Override
-    protected PonderBuilder getSelf() {
+    public PonderBuilder getSelf() {
         return this;
     }
 

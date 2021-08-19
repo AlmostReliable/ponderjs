@@ -4,14 +4,12 @@ import com.kotakotik.pondermaker.PonderMaker;
 import com.simibubi.create.foundation.ponder.*;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Unit;
 import net.minecraftforge.fml.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 /**
  * Also known as type param hell
@@ -22,7 +20,7 @@ import java.util.function.Consumer;
  */
 public abstract class AbstractPonderBuilder<T,
         S extends AbstractPonderBuilder<T, S, C>,
-        C extends BiConsumer<?, ?>> {
+        C extends BiConsumer<?, ?>> implements IDelegatedWithSteps<S> {
     protected String name;
     protected List<T> items;
 
@@ -38,7 +36,17 @@ public abstract class AbstractPonderBuilder<T,
         return "Starting ponder registration \"" + name + "\" with items " + Arrays.toString(items.toArray());
     }
 
-    protected Consumer<Unit> function = ($) -> {
+    @Override
+    public Runnable getSteps() {
+        return function;
+    }
+
+    @Override
+    public void setSteps(Runnable steps) {
+        function = steps;
+    }
+
+    protected Runnable function = () -> {
         String s = getStartMessage();
         if(s != null) PonderMaker.LOGGER.info(s);
     };
@@ -47,8 +55,6 @@ public abstract class AbstractPonderBuilder<T,
         return name + "." + scene;
     }
 
-    protected abstract S getSelf();
-
     protected abstract ResourceLocation[] itemsToIdArray();
 
     /**
@@ -56,20 +62,11 @@ public abstract class AbstractPonderBuilder<T,
      * @return Self
      */
     protected S tag(String... tags) {
-        return step(($) -> {
+        return step(() -> {
             for(String tag : tags) {
                 PonderRegistry.TAGS.forItems(itemsToIdArray()).add(PonderMaker.getTagByName(tag).get());
             }
         });
-    }
-
-    /**
-     * @param step Next thing to do in the function
-     * @return Self
-     */
-    public S step(Consumer<Unit> step) {
-        function = function.andThen(step);
-        return getSelf();
     }
 
     /**
@@ -80,7 +77,7 @@ public abstract class AbstractPonderBuilder<T,
     protected abstract void programStoryBoard(C scene, SceneBuilder builder, SceneBuildingUtil util);
 
     protected S addStoryBoard(T item, String schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
-        return step(($) -> {
+        return step(() -> {
             new PonderRegistrationHelper("kubejs")
                 .forComponents(getItemProviderEntry(item))
                 .addStoryBoard(schematic, scene);
@@ -100,11 +97,6 @@ public abstract class AbstractPonderBuilder<T,
 //                        programStoryBoard(scene, builder, util);
 //                        storyBoard(scene).program(builder, util);
                     });
-    }
-
-    public S execute() {
-        function.accept(Unit.INSTANCE);
-        return getSelf();
     }
 
     protected abstract C createConsumer(BiConsumer<SceneBuilder, SceneBuildingUtil> consumer);
