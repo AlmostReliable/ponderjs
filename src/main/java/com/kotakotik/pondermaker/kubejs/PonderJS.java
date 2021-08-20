@@ -229,6 +229,10 @@ public class PonderJS extends KubeJSPlugin {
             }
             return Selection.of(new MutableBoundingBox(0, 0, 0, 0,0, 0));
         });
+        typeWrappers.register(AllIcons.class, o -> {
+            if(o instanceof AllIcons) return (AllIcons) o;
+            return PonderMaker.getIconByName(o.toString());
+        });
     }
 
     public static class Settings {

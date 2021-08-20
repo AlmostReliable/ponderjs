@@ -2,15 +2,14 @@ package com.kotakotik.pondermaker.crafttweaker.wrappers.interfaces;
 
 import com.blamejared.crafttweaker.api.annotations.ZenRegister;
 import com.blamejared.crafttweaker_annotations.annotations.ZenWrapper;
+import com.kotakotik.pondermaker.PonderMaker;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.ponder.PonderScene;
 import com.simibubi.create.foundation.ponder.elements.InputWindowElement;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.openzen.zencode.java.ZenCodeType;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
+import java.util.NoSuchElementException;
 
 @ZenRegister
 @ZenCodeType.Name("pondermaker.IInputWindowElement")
@@ -43,29 +42,11 @@ public interface IInputWindowElement {
         return getInternal().showing(icon);
     }
 
-    HashMap<String, AllIcons> cachedIcons = new HashMap<>();
-
     @ZenCodeType.Method
     default InputWindowElement showing(String icon) {
-        String str = icon.toUpperCase();
-        if(!str.startsWith("I_")) {
-            str = "I_" + str;
-        }
-        if(cachedIcons.containsKey(str)) {
-            AllIcons cached = cachedIcons.get(str);
-            if(cached != null) {
-                return showing(cached);
-            }
-            return getInternal();
-        }
-        Field f = ObfuscationReflectionHelper.findField(AllIcons.class, str);
-        try {
-            cachedIcons.put(str, (AllIcons) f.get(null));
-            return showing(cachedIcons.get(str));
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return getInternal();
+        AllIcons s = PonderMaker.getIconByName(icon);
+        if(s == null) throw new NoSuchElementException("No icon found matching " + icon);
+        return showing(s);
     }
 
     @ZenCodeType.Method
