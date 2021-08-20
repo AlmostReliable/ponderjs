@@ -47,6 +47,10 @@ public abstract class AbstractPonderBuilder<T,
         return name + "." + scene;
     }
 
+    protected String getName(String scene, T item) {
+        return getName(scene) + "." + itemToString(item);
+    }
+
     protected abstract ResourceLocation[] itemsToIdArray();
 
     /**
@@ -78,7 +82,7 @@ public abstract class AbstractPonderBuilder<T,
     protected static List<String> added = new ArrayList<>();
 
     protected S addNamedStoryBoard(String name, String displayName, T item, String schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
-        String n = getName(name);
+        String n = getName(name, item);
         if(added.contains(n)) return getSelf();
         added.add(n);
         return addStoryBoard(item, schematic, (builder, util) -> {
@@ -89,5 +93,6 @@ public abstract class AbstractPonderBuilder<T,
                     });
     }
 
+    protected abstract String itemToString(T item);
     protected abstract C createConsumer(BiConsumer<SceneBuilder, SceneBuildingUtil> consumer);
 }

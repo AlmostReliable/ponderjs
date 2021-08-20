@@ -64,6 +64,11 @@ public class PonderBuilder extends
        scene.accept(new SceneBuilderWrapper(builder), util);
     }
 
+    @Override
+    protected String itemToString(IItemStack item) {
+        return item.getRegistryName().toString().replace(":", ".");
+    }
+
 //    @Override
 //    protected PonderStoryBoardEntry.PonderStoryBoard storyBoard(BiConsumer<SceneBuilderWrapper, SceneBuildingUtil> scene) {
 //        return (a, b) -> scene.accept(new SceneBuilderWrapper(a), b);

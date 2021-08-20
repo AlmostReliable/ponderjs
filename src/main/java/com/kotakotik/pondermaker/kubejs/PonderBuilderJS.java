@@ -42,7 +42,8 @@ public class PonderBuilderJS extends
     }
 
     public PonderBuilderJS scene(String name, String displayName, String schematic, SceneConsumer scene) {
-        items.forEach(id -> addNamedStoryBoard(getName(name), displayName, id, schematic, (b, u) -> programStoryBoard(scene, b, u)));
+        for (ResourceLocation id : items)
+            addNamedStoryBoard(getName(name), displayName, id, schematic, (b, u) -> programStoryBoard(scene, b, u));
         return this;
     }
 
@@ -64,6 +65,11 @@ public class PonderBuilderJS extends
     @Override
     protected void programStoryBoard(SceneConsumer scene, SceneBuilder builder, SceneBuildingUtil util) {
         scene.accept(new SceneBuilderJS(builder), new SceneBuildingUtilJS(util));
+    }
+
+    @Override
+    protected String itemToString(ResourceLocation item) {
+        return item.toString().replace(":", ".");
     }
 
     @Override

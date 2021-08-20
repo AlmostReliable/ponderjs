@@ -6,10 +6,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import com.kotakotik.pondermaker.PonderMaker;
 import com.kotakotik.pondermaker.kubejs.util.DyeColorWrapper;
+import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.ponder.PonderLocalization;
 import com.simibubi.create.foundation.ponder.Selection;
 import com.simibubi.create.foundation.ponder.content.PonderPalette;
+import com.simibubi.create.foundation.ponder.elements.InputWindowElement;
 import com.simibubi.create.foundation.ponder.elements.ParrotElement;
+import com.simibubi.create.foundation.utility.Pointing;
 import dev.latvian.kubejs.KubeJSPlugin;
 import dev.latvian.kubejs.entity.EntityJS;
 import dev.latvian.kubejs.script.BindingsEvent;
@@ -66,6 +69,9 @@ public class PonderJS extends KubeJSPlugin {
         event.addClass("ParrotElement", ParrotElement.class);
         event.addClass("Direction", Direction.class); // ik about the facing wrapper, i just prefer to call it direction
 //        event.addClass("ParrotElement.FacePointOfInterestPose", ParrotElement.FacePointOfInterestPose.class);
+        event.addClass("InputWindowElement", InputWindowElement.class);
+        event.addClass("PonderIcons", AllIcons.class);
+        event.addClass("Pointing", Pointing.class);
         super.addBindings(event);
     }
 
