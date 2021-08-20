@@ -27,15 +27,31 @@ public class PonderTagRegistryEventJS extends EventJS {
             return this;
     }
 
-    public PonderTagRegistryEventJS remove(String... id) {
+    public PonderTagRegistryEventJS remove(boolean clearItems, String... id) {
             List<ResourceLocation> res = Arrays.stream(id)
                     .map(PonderMaker::appendCreateToId)
                     .collect(Collectors.toList());
             if(!PonderRegistry.TAGS.getListedTags()
-                    .removeIf(tag -> res.contains(tag.getId()))) {
+                    .removeIf(tag -> {
+                        if(res.contains(tag.getId())) {
+                            if(clearItems) {
+                                try {
+                                    PonderJS.get().tagItemEvent.remove(tag.getId().toString(), ListJS.of(PonderRegistry.TAGS.getItems(tag)));
+                                } catch (IllegalAccessException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            return true;
+                        }
+                        return false;
+                    })) {
                 throw new NullPointerException("No tags found matching " + id);
             }
             return this;
+    }
+
+    public PonderTagRegistryEventJS remove(String... id) {
+        return remove(true, id);
     }
 
     public PonderTagRegistryEventJS create(String name, ResourceLocation displayItem, String title, String description) {
