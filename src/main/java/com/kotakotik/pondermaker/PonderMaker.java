@@ -32,9 +32,6 @@ public class PonderMaker {
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
                 () -> () -> {
-                    if(ModList.get().isLoaded("kubejs")) {
-                        new com.kotakotik.pondermaker.kubejs.PonderJS();
-                    }
                     if(ModList.get().isLoaded("crafttweaker")) {
                         com.kotakotik.pondermaker.crafttweaker.PonderTweaker.register();
                     }

@@ -1,7 +1,6 @@
 package com.kotakotik.pondermaker.kubejs;
 
 import com.kotakotik.pondermaker.PonderMaker;
-import com.kotakotik.pondermaker.common.IDelegatedWithSteps;
 import com.simibubi.create.foundation.ponder.PonderRegistry;
 import com.simibubi.create.foundation.ponder.content.PonderTag;
 import dev.latvian.kubejs.KubeJSRegistries;
@@ -13,22 +12,22 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PonderTagRegistryEventJS extends EventJS implements IDelegatedWithSteps<PonderTagRegistryEventJS> {
-    private Runnable steps = () -> {};
-
+public class PonderTagRegistryEventJS extends EventJS {
     public PonderTagRegistryEventJS create(String name, ResourceLocation displayItem, String title, String description, Object defaultItems) {
-        ResourceLocation id = new ResourceLocation("kubejs", name);
-        PonderJS.get().tagItemEvent.add(id.toString(), defaultItems);
-        return step(() -> {
+        try {
+            ResourceLocation id = new ResourceLocation("kubejs", name);
             PonderTag tag = new PonderTag(id)
                     .item(KubeJSRegistries.items().get(displayItem))
                     .defaultLang(title, description);
             PonderRegistry.TAGS.listTag(tag);
-        });
+            PonderJS.get().tagItemEvent.add(id.toString(), defaultItems);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+            return this;
     }
 
     public PonderTagRegistryEventJS remove(String... id) {
-        return step(() -> {
             List<ResourceLocation> res = Arrays.stream(id)
                     .map(PonderMaker::appendCreateToId)
                     .collect(Collectors.toList());
@@ -36,25 +35,10 @@ public class PonderTagRegistryEventJS extends EventJS implements IDelegatedWithS
                     .removeIf(tag -> res.contains(tag.getId()))) {
                 throw new NullPointerException("No tags found matching " + id);
             }
-        });
+            return this;
     }
 
     public PonderTagRegistryEventJS create(String name, ResourceLocation displayItem, String title, String description) {
         return create(name, displayItem, title, description, new ListJS());
-    }
-
-    @Override
-    public Runnable getSteps() {
-        return steps;
-    }
-
-    @Override
-    public void setSteps(Runnable steps) {
-        this.steps = steps;
-    }
-
-    @Override
-    public PonderTagRegistryEventJS getSelf() {
-        return this;
     }
 }

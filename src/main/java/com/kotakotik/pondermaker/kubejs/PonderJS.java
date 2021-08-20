@@ -26,7 +26,6 @@ import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.antlr.v4.runtime.misc.Triple;
 import org.apache.commons.io.FileUtils;
@@ -48,23 +47,12 @@ public class PonderJS extends KubeJSPlugin {
     public PonderTagRegistryEventJS tagRegistryEvent;
     public PonderItemTagEventJS tagItemEvent;
 
-    static boolean posted = false;
-
     public PonderJS() {
-        if(INSTANCE != null) return;
         INSTANCE = this;
         ponderEvent = new PonderRegistryEventJS();
         tagRegistryEvent = new PonderTagRegistryEventJS();
         tagItemEvent = new PonderItemTagEventJS();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ponderEvent::register);
-        DeferredWorkQueue.runLater(() -> {
-            if(!posted) {
-                tagItemEvent.post(ScriptType.STARTUP, "ponder.tag");
-                tagRegistryEvent.post(ScriptType.STARTUP, "ponder.tag.registry");
-                ponderEvent.post(ScriptType.STARTUP, "ponder.registry");
-            }
-            posted = true;
-        });
     }
 
     @Override

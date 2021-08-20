@@ -20,9 +20,11 @@ import java.util.function.BiConsumer;
  */
 public abstract class AbstractPonderBuilder<T,
         S extends AbstractPonderBuilder<T, S, C>,
-        C extends BiConsumer<?, ?>> implements IDelegatedWithSteps<S> {
+        C extends BiConsumer<?, ?>> {
     protected String name;
     protected List<T> items;
+
+    protected abstract S getSelf();
 
     public AbstractPonderBuilder(String name, List<T> items) {
         this.name = name;
@@ -34,16 +36,6 @@ public abstract class AbstractPonderBuilder<T,
      */
     protected String getStartMessage() {
         return "Starting ponder registration \"" + name + "\" with items " + Arrays.toString(items.toArray());
-    }
-
-    @Override
-    public Runnable getSteps() {
-        return function;
-    }
-
-    @Override
-    public void setSteps(Runnable steps) {
-        function = steps;
     }
 
     protected Runnable function = () -> {
@@ -62,11 +54,10 @@ public abstract class AbstractPonderBuilder<T,
      * @return Self
      */
     protected S tag(String... tags) {
-        return step(() -> {
             for(String tag : tags) {
                 PonderRegistry.TAGS.forItems(itemsToIdArray()).add(PonderMaker.getTagByName(tag).get());
             }
-        });
+            return getSelf();
     }
 
     /**
@@ -77,12 +68,11 @@ public abstract class AbstractPonderBuilder<T,
     protected abstract void programStoryBoard(C scene, SceneBuilder builder, SceneBuildingUtil util);
 
     protected S addStoryBoard(T item, String schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
-        return step(() -> {
             new PonderRegistrationHelper("kubejs")
                 .forComponents(getItemProviderEntry(item))
                 .addStoryBoard(schematic, scene);
 //            PonderRegistry.addStoryBoard(getItemProviderEntry(item), schematic, scene)
-        });
+        return getSelf();
     }
 
     protected static List<String> added = new ArrayList<>();

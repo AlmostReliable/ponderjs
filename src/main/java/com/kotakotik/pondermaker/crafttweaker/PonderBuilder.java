@@ -25,7 +25,6 @@ public class PonderBuilder extends
     @ZenCodeType.Constructor
     public PonderBuilder(String name, List<IItemStack> items) {
         super(name, items);
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     }
 
     @Override
