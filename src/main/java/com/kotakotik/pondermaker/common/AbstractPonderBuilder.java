@@ -82,11 +82,11 @@ public abstract class AbstractPonderBuilder<T,
     protected static List<String> added = new ArrayList<>();
 
     protected S addNamedStoryBoard(String name, String displayName, T item, String schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
-        String n = getName(name, item);
-        if(added.contains(n)) return getSelf();
-        added.add(n);
+        String cacheName = getName(name, item);
+        if(added.contains(cacheName)) return getSelf();
+        added.add(cacheName);
         return addStoryBoard(item, schematic, (builder, util) -> {
-                        builder.title(n, displayName);
+                        builder.title(name, displayName);
                         scene.program(builder, util);
 //                        programStoryBoard(scene, builder, util);
 //                        storyBoard(scene).program(builder, util);
