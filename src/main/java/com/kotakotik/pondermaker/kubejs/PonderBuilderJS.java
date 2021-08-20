@@ -7,17 +7,22 @@ import com.kotakotik.pondermaker.kubejs.util.SceneBuildingUtilJS;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
+import dev.latvian.kubejs.util.ListJS;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Arrays;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 public class PonderBuilderJS extends
         AbstractPonderBuilder<ResourceLocation, PonderBuilderJS, PonderBuilderJS.SceneConsumer> {
-    public PonderBuilderJS(String name, ResourceLocation... ids) {
-        super(name, Arrays.asList(ids));
+    public PonderBuilderJS(String name, ListJS ids) {
+        super(name, ids.stream()
+                .map(Object::toString)
+                .map(ResourceLocation::new)
+                .collect(Collectors.toList()));
     }
 
 //    public PonderBuilderJS<T> scene(List<ResourceLocation> items, List<List<Object>> storyBoards, BiConsumer<SceneBuilder, SceneBuildingUtil> scene) {
