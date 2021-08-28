@@ -2,6 +2,7 @@ package com.kotakotik.pondermaker.kubejs;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.kotakotik.pondermaker.config.ModConfigs;
 import com.simibubi.create.foundation.ponder.PonderLocalization;
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.event.EventJS;
@@ -35,7 +36,7 @@ public class PonderRegistryEventJS extends EventJS {
                 mainJS.tagItemEvent.post(scriptType, "ponder.tag");
                 mainJS.ponderEvent.post(scriptType, "ponder.registry");
 
-                if(PonderJS.Settings.instance.autoGenerateLang) {
+                if(ModConfigs.COMMON.autoGenerateLang.get()) {
                     JsonObject json = new JsonObject();
                     PonderLocalization.generateSceneLang();
                     PonderLocalization.record("kubejs", json);

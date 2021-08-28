@@ -1,6 +1,7 @@
 package com.kotakotik.pondermaker;
 
 
+import com.kotakotik.pondermaker.config.ModConfigs;
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.ponder.PonderRegistry;
@@ -31,6 +32,9 @@ public class PonderMaker {
     public PonderMaker() {
         modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        modEventBus.addListener(ModConfigs::onLoad);
+        modEventBus.addListener(ModConfigs::onReload);
+        ModConfigs.register();
 //        DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
 //                () -> () -> {
 //                    if(ModList.get().isLoaded("crafttweaker")) {

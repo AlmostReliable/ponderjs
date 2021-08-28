@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import com.kotakotik.pondermaker.PonderMaker;
+import com.kotakotik.pondermaker.config.ModConfigs;
 import com.kotakotik.pondermaker.kubejs.util.DyeColorWrapper;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.ponder.PonderLocalization;
@@ -62,9 +63,9 @@ public class PonderJS extends KubeJSPlugin {
     public void addBindings(BindingsEvent event) {
         event.addClass("PonderPalette", PonderPalette.class);
         event.addFunction("DancePose", ($) -> new ParrotElement.DancePose());
-        if(event.type == ScriptType.STARTUP) {
-            event.add("pondersettings", Settings.instance);
-        }
+//        if(event.type == ScriptType.STARTUP) {
+//            event.add("pondersettings", Settings.instance);
+//        }
         event.addClass("DyeColor", DyeColorWrapper.class);
         event.addClass("ParrotElement", ParrotElement.class);
         event.addClass("Direction", Direction.class); // ik about the facing wrapper, i just prefer to call it direction
@@ -78,10 +79,10 @@ public class PonderJS extends KubeJSPlugin {
     public static Triple<Boolean, ITextComponent, Integer> generateJsonLang(HashMap<String, String> from) {
         Logger log = PonderMaker.LOGGER;
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        File file = new File("kubejs/assets/kubejs/lang/en_us.json");
+        File file = new File(ModConfigs.COMMON.getLangPath());
         JsonObject json = new JsonObject();
         if(file.exists()) {
-            log.info("Found KubeJS en_us.json, reading!");
+            log.info("Found KubeJS lang, reading!");
 //            Files.writeString(file.toPath(), "", Charset.defaultCharset(), StandardOpenOption.WRITE);
 //            file.
             try {
@@ -136,7 +137,8 @@ public class PonderJS extends KubeJSPlugin {
     public static JsonObject getKubeJSAssetLang(Gson g) {
         JsonObject assetLang = new JsonObject();
         try {
-            Reader reader = new InputStreamReader(Minecraft.getInstance().getResourceManager().getResource(new ResourceLocation("kubejs", "lang/en_us.json")).getInputStream(), StandardCharsets.UTF_8);
+            Reader reader = new InputStreamReader(Minecraft.getInstance().getResourceManager().getResource(
+                    new ResourceLocation("kubejs", "lang/" + ModConfigs.COMMON.lang.get() + ".json")).getInputStream(), StandardCharsets.UTF_8);
             assetLang = g.getAdapter(JsonObject.class).read(new JsonReader(reader));
         } catch (IOException e) {
             e.printStackTrace();
@@ -144,24 +146,32 @@ public class PonderJS extends KubeJSPlugin {
         return assetLang;
     }
 
-    public static void generatePonderLang() {
-        Gson g = new GsonBuilder().setPrettyPrinting().create();
-        Minecraft mc = Minecraft.getInstance();
+    public static void fillPonderLang(Gson gson) {
         JsonObject json = new JsonObject();
         PonderLocalization.generateSceneLang();
         PonderLocalization.record("kubejs", json);
 
 //        JsonObject assetLang = ((KubeJSClientResourcePack) mc.getResourcePackRepository().getPack("kubejs:resource_pack").open())
 //                .getCachedResources().get(new ResourceLocation("kubejs", "lang/en_us")).getAsJsonObject();
-        JsonObject assetLang = getKubeJSAssetLang(g);
+        JsonObject assetLang = getKubeJSAssetLang(gson);
         json.entrySet().forEach(e -> {
             // kubejs.ponder.ponder_builder.test.header
-                if(!assetLang.has(e.getKey())) {
-                    String key = e.getKey();
-                    String val = e.getValue().getAsString();
-                    addLang(key, val);
-                }
+            if(!assetLang.has(e.getKey())) {
+                String key = e.getKey();
+                String val = e.getValue().getAsString();
+                addLang(key, val);
+            }
         });
+    }
+
+    public static void fillPonderLang() {
+        fillPonderLang(new GsonBuilder().setPrettyPrinting().create());
+    }
+
+    public static void generatePonderLang() {
+        Gson g = new GsonBuilder().setPrettyPrinting().create();
+        Minecraft mc = Minecraft.getInstance();
+        fillPonderLang(g);
         if(LANG.size() > 0) {
             PonderMaker.LOGGER.warn("Found missing ponder lang, registering resource pack and reloading" +
                     "\nMissing: " + g.toJson(LANG) +
@@ -233,11 +243,5 @@ public class PonderJS extends KubeJSPlugin {
             if(o instanceof AllIcons) return (AllIcons) o;
             return PonderMaker.getIconByName(o.toString());
         });
-    }
-
-    public static class Settings {
-        public static Settings instance = new Settings();
-
-        public boolean autoGenerateLang = true;
     }
 }
