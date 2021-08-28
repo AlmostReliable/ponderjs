@@ -1,7 +1,7 @@
 package com.kotakotik.pondermaker.kubejs;
 
 import com.kotakotik.pondermaker.PonderMaker;
-import com.kotakotik.pondermaker.common.AbstractPonderBuilder;
+import com.kotakotik.pondermaker.api.AbstractPonderBuilder;
 import com.kotakotik.pondermaker.kubejs.util.SceneBuilderJS;
 import com.kotakotik.pondermaker.kubejs.util.SceneBuildingUtilJS;
 import com.simibubi.create.foundation.ponder.SceneBuilder;

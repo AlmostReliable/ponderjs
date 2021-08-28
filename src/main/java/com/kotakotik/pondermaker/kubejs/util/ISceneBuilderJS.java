@@ -1,6 +1,5 @@
 package com.kotakotik.pondermaker.kubejs.util;
 
-import com.kotakotik.pondermaker.common.wrappers.ISceneBuilder;
 import com.simibubi.create.content.logistics.block.mechanicalArm.ArmTileEntity;
 import com.simibubi.create.foundation.ponder.ElementLink;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
@@ -25,8 +24,52 @@ import java.util.function.UnaryOperator;
 /**
  * Boilerplate code for {@link SceneBuilderJS}
  */
-public interface ISceneBuilderJS extends ISceneBuilder {
+public interface ISceneBuilderJS {
     SceneBuilder getInternal();
+
+    default void title(String sceneId, String title) {
+        getInternal().title(sceneId, title);
+    }
+
+    default void configureBasePlate(int xOffset, int zOffset, int basePlateSize) {
+        getInternal().configureBasePlate(xOffset, zOffset, basePlateSize);
+    }
+
+    default void scaleSceneView(float factor) {
+        getInternal().scaleSceneView(factor);
+    }
+
+    default void setSceneOffsetY(float yOffset) {
+        getInternal().setSceneOffsetY(yOffset);
+    }
+
+    default void showBasePlate() {
+        getInternal().showBasePlate();
+    }
+
+    default void idle(int ticks) {
+        getInternal().idle(ticks);
+    }
+
+    default void idleSeconds(int seconds) {
+        getInternal().idleSeconds(seconds);
+    }
+
+    default void markAsFinished() {
+        getInternal().markAsFinished();
+    }
+
+    default void rotateCameraY(float degrees) {
+        getInternal().rotateCameraY(degrees);
+    }
+
+    default void addKeyframe() {
+        getInternal().addKeyframe();
+    }
+
+    default void addLazyKeyframe() {
+        getInternal().addLazyKeyframe();
+    }
 
     interface ISpecialInstructionsJS {
         SceneBuilder.SpecialInstructions getInternal();

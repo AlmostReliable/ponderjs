@@ -1,4 +1,4 @@
-package com.kotakotik.pondermaker.common;
+package com.kotakotik.pondermaker.api;
 
 import com.kotakotik.pondermaker.PonderMaker;
 import com.simibubi.create.foundation.ponder.*;

@@ -137,7 +137,7 @@ dependencies {
     implementation fg.deobf("dev.latvian.mods:kubejs-forge:${kubejs_version}")
     implementation "dev.latvian.mods:rhino:${rhino_version}"
     implementation fg.deobf("me.shedaniel:architectury-forge:${architectury_version}")
-    compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-${crafttweaker_version}")
+//    compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-${crafttweaker_version}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8:processor'
 }

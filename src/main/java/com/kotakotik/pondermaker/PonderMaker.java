@@ -8,10 +8,7 @@ import com.simibubi.create.foundation.ponder.content.PonderTag;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -34,12 +31,12 @@ public class PonderMaker {
     public PonderMaker() {
         modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-                () -> () -> {
-                    if(ModList.get().isLoaded("crafttweaker")) {
-                        com.kotakotik.pondermaker.crafttweaker.PonderTweaker.register();
-                    }
-                });
+//        DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+//                () -> () -> {
+//                    if(ModList.get().isLoaded("crafttweaker")) {
+//                        com.kotakotik.pondermaker.crafttweaker.PonderTweaker.register();
+//                    }
+//                });
     }
 
     public static Optional<PonderTag> getTagByName(ResourceLocation res) {
