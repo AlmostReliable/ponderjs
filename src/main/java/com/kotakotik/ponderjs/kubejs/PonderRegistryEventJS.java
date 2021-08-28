@@ -1,8 +1,8 @@
-package com.kotakotik.pondermaker.kubejs;
+package com.kotakotik.ponderjs.kubejs;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.kotakotik.pondermaker.config.ModConfigs;
+import com.kotakotik.ponderjs.config.ModConfigs;
 import com.simibubi.create.foundation.ponder.PonderLocalization;
 import dev.latvian.kubejs.KubeJS;
 import dev.latvian.kubejs.event.EventJS;
@@ -30,7 +30,7 @@ public class PonderRegistryEventJS extends EventJS {
 //                        .add(itemProvider);
         event.enqueueWork(() -> {
             try {
-                PonderJS mainJS = PonderJS.get();
+                PonderJSPlugin mainJS = PonderJSPlugin.get();
                 ScriptType scriptType = ScriptType.STARTUP;
                 mainJS.tagRegistryEvent.post(scriptType, "ponder.tag.registry");
                 mainJS.tagItemEvent.post(scriptType, "ponder.tag");
@@ -40,7 +40,7 @@ public class PonderRegistryEventJS extends EventJS {
                     JsonObject json = new JsonObject();
                     PonderLocalization.generateSceneLang();
                     PonderLocalization.record("kubejs", json);
-                    Triple<Boolean, ITextComponent, Integer> result = PonderJS.generateJsonLang(new Gson().fromJson(json, HashMap.class));
+                    Triple<Boolean, ITextComponent, Integer> result = PonderJSPlugin.generateJsonLang(new Gson().fromJson(json, HashMap.class));
                     boolean success = result.a;
                     int count = result.c;
                     if(success) {
@@ -49,10 +49,10 @@ public class PonderRegistryEventJS extends EventJS {
                             Minecraft.getInstance().reloadResourcePacks();
                         }
                     } else {
-                        PonderJS.generatePonderLang();
+                        PonderJSPlugin.generatePonderLang();
                     }
                 } else {
-                    PonderJS.generatePonderLang();
+                    PonderJSPlugin.generatePonderLang();
                 }
             } catch (Exception e) { // i think theres a way to do this with the completable future but this is easier
                 e.printStackTrace();

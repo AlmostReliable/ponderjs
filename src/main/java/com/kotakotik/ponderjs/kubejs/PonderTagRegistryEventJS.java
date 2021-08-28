@@ -1,6 +1,6 @@
-package com.kotakotik.pondermaker.kubejs;
+package com.kotakotik.ponderjs.kubejs;
 
-import com.kotakotik.pondermaker.PonderMaker;
+import com.kotakotik.ponderjs.PonderJS;
 import com.simibubi.create.foundation.ponder.PonderRegistry;
 import com.simibubi.create.foundation.ponder.content.PonderTag;
 import dev.latvian.kubejs.KubeJSRegistries;
@@ -20,7 +20,7 @@ public class PonderTagRegistryEventJS extends EventJS {
                     .item(KubeJSRegistries.items().get(displayItem))
                     .defaultLang(title, description);
             PonderRegistry.TAGS.listTag(tag);
-            PonderJS.get().tagItemEvent.add(id.toString(), defaultItems);
+            PonderJSPlugin.get().tagItemEvent.add(id.toString(), defaultItems);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -29,14 +29,14 @@ public class PonderTagRegistryEventJS extends EventJS {
 
     public PonderTagRegistryEventJS remove(boolean clearItems, String... id) {
             List<ResourceLocation> res = Arrays.stream(id)
-                    .map(PonderMaker::appendCreateToId)
+                    .map(PonderJS::appendCreateToId)
                     .collect(Collectors.toList());
             if(!PonderRegistry.TAGS.getListedTags()
                     .removeIf(tag -> {
                         if(res.contains(tag.getId())) {
                             if(clearItems) {
                                 try {
-                                    PonderJS.get().tagItemEvent.remove(tag.getId().toString(), ListJS.of(PonderRegistry.TAGS.getItems(tag)));
+                                    PonderJSPlugin.get().tagItemEvent.remove(tag.getId().toString(), ListJS.of(PonderRegistry.TAGS.getItems(tag)));
                                 } catch (IllegalAccessException e) {
                                     e.printStackTrace();
                                 }

@@ -1,7 +1,7 @@
-package com.kotakotik.pondermaker;
+package com.kotakotik.ponderjs;
 
 
-import com.kotakotik.pondermaker.config.ModConfigs;
+import com.kotakotik.ponderjs.config.ModConfigs;
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.ponder.PonderRegistry;
@@ -23,13 +23,13 @@ import java.util.HashMap;
 import java.util.Optional;
 
 @Mod(BuildConfig.MODID)
-public class PonderMaker {
+public class PonderJS {
 
     // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger(BuildConfig.MODID);
     public static IEventBus modEventBus;
 
-    public PonderMaker() {
+    public PonderJS() {
         modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         modEventBus.addListener(ModConfigs::onLoad);

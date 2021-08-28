@@ -1,1 +1,1 @@
-com.kotakotik.pondermaker.kubejs.PonderJS
+com.kotakotik.ponderjs.kubejs.PonderJSPlugin

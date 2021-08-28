@@ -1,7 +1,7 @@
-package com.kotakotik.pondermaker.kubejs;
+package com.kotakotik.ponderjs.kubejs;
 
 import com.google.common.collect.Multimap;
-import com.kotakotik.pondermaker.PonderMaker;
+import com.kotakotik.ponderjs.PonderJS;
 import com.simibubi.create.foundation.ponder.PonderRegistry;
 import com.simibubi.create.foundation.ponder.content.PonderTag;
 import com.simibubi.create.foundation.ponder.content.PonderTagRegistry;
@@ -21,7 +21,7 @@ public class PonderItemTagEventJS extends EventJS {
             PonderRegistry.TAGS.forItems(ListJS.orSelf(toAdd).stream()
                     .map(Object::toString)
                     .map(ResourceLocation::new).toArray(ResourceLocation[]::new))
-                    .add(PonderMaker.getTagByName(id).get());
+                    .add(PonderJS.getTagByName(id).get());
             return this;
     }
 
@@ -32,7 +32,7 @@ public class PonderItemTagEventJS extends EventJS {
                         .map(Object::toString)
                         .map(ResourceLocation::new).toArray(ResourceLocation[]::new)) {
                     if(!tags.get(itemId)
-                            .removeIf(t -> t.getId().equals(PonderMaker.appendCreateToId(id)))) {
+                            .removeIf(t -> t.getId().equals(PonderJS.appendCreateToId(id)))) {
                         throw new NullPointerException("No tags found matching " + id + " in item " + itemId);
                     }
                 }

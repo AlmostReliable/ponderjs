@@ -1,9 +1,9 @@
-package com.kotakotik.pondermaker.kubejs;
+package com.kotakotik.ponderjs.kubejs;
 
-import com.kotakotik.pondermaker.PonderMaker;
-import com.kotakotik.pondermaker.api.AbstractPonderBuilder;
-import com.kotakotik.pondermaker.kubejs.util.SceneBuilderJS;
-import com.kotakotik.pondermaker.kubejs.util.SceneBuildingUtilJS;
+import com.kotakotik.ponderjs.PonderJS;
+import com.kotakotik.ponderjs.api.AbstractPonderBuilder;
+import com.kotakotik.ponderjs.kubejs.util.SceneBuilderJS;
+import com.kotakotik.ponderjs.kubejs.util.SceneBuildingUtilJS;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
@@ -59,7 +59,7 @@ public class PonderBuilderJS extends
 
     @Override
     protected ItemProviderEntry<?> getItemProviderEntry(ResourceLocation item) {
-        return PonderMaker.createItemProvider(RegistryObject.of(item, ForgeRegistries.ITEMS));
+        return PonderJS.createItemProvider(RegistryObject.of(item, ForgeRegistries.ITEMS));
     }
 
     @Override

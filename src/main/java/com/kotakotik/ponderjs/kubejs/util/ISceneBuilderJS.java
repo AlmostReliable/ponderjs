@@ -1,4 +1,4 @@
-package com.kotakotik.pondermaker.kubejs.util;
+package com.kotakotik.ponderjs.kubejs.util;
 
 import com.simibubi.create.content.logistics.block.mechanicalArm.ArmTileEntity;
 import com.simibubi.create.foundation.ponder.ElementLink;

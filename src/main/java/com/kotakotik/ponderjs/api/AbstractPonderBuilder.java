@@ -1,6 +1,6 @@
-package com.kotakotik.pondermaker.api;
+package com.kotakotik.ponderjs.api;
 
-import com.kotakotik.pondermaker.PonderMaker;
+import com.kotakotik.ponderjs.PonderJS;
 import com.simibubi.create.foundation.ponder.*;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
 import net.minecraft.util.ResourceLocation;
@@ -40,7 +40,7 @@ public abstract class AbstractPonderBuilder<T,
 
     protected Runnable function = () -> {
         String s = getStartMessage();
-        if(s != null) PonderMaker.LOGGER.info(s);
+        if(s != null) PonderJS.LOGGER.info(s);
     };
 
     protected String getName(String scene) {
@@ -59,13 +59,13 @@ public abstract class AbstractPonderBuilder<T,
      */
     protected S tag(String... tags) {
             for(String tag : tags) {
-                PonderRegistry.TAGS.forItems(itemsToIdArray()).add(PonderMaker.getTagByName(tag).get());
+                PonderRegistry.TAGS.forItems(itemsToIdArray()).add(PonderJS.getTagByName(tag).get());
             }
             return getSelf();
     }
 
     /**
-     * @return The item provider. There's a utility method for that: {@link PonderMaker#createItemProvider(RegistryObject)}
+     * @return The item provider. There's a utility method for that: {@link PonderJS#createItemProvider(RegistryObject)}
      */
     protected abstract ItemProviderEntry<?> getItemProviderEntry(T item);
 //    protected abstract PonderStoryBoardEntry.PonderStoryBoard storyBoard(C scene);

@@ -1,4 +1,4 @@
-package com.kotakotik.pondermaker.config;
+package com.kotakotik.ponderjs.config;
 
 import com.simibubi.create.foundation.config.ConfigBase;
 import net.minecraftforge.common.ForgeConfigSpec;

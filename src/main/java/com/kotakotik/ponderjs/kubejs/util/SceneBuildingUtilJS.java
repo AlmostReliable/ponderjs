@@ -1,4 +1,4 @@
-package com.kotakotik.pondermaker.kubejs.util;
+package com.kotakotik.ponderjs.kubejs.util;
 
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
 import dev.latvian.kubejs.bindings.BlockWrapper;

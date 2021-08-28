@@ -1,6 +1,6 @@
-package com.kotakotik.pondermaker.kubejs.commands;
+package com.kotakotik.ponderjs.kubejs.commands;
 
-import com.kotakotik.pondermaker.kubejs.PonderJS;
+import com.kotakotik.ponderjs.kubejs.PonderJSPlugin;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.command.CommandSource;
@@ -10,8 +10,8 @@ import org.antlr.v4.runtime.misc.Triple;
 public class GenerateKubeJSLangCommand implements Command<CommandSource> {
     @Override
     public int run(CommandContext<CommandSource> context) {
-        PonderJS.fillPonderLang();
-        Triple<Boolean, ITextComponent, Integer> result = PonderJS.generateJsonLang(PonderJS.LANG);
+        PonderJSPlugin.fillPonderLang();
+        Triple<Boolean, ITextComponent, Integer> result = PonderJSPlugin.generateJsonLang(PonderJSPlugin.LANG);
         if(result.a) {
             context.getSource().sendSuccess(result.b, false);
         } else {

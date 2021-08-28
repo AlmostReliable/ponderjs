@@ -1,12 +1,12 @@
-package com.kotakotik.pondermaker.kubejs;
+package com.kotakotik.ponderjs.kubejs;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
-import com.kotakotik.pondermaker.PonderMaker;
-import com.kotakotik.pondermaker.config.ModConfigs;
-import com.kotakotik.pondermaker.kubejs.util.DyeColorWrapper;
+import com.kotakotik.ponderjs.PonderJS;
+import com.kotakotik.ponderjs.config.ModConfigs;
+import com.kotakotik.ponderjs.kubejs.util.DyeColorWrapper;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.ponder.PonderLocalization;
 import com.simibubi.create.foundation.ponder.Selection;
@@ -45,13 +45,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class PonderJS extends KubeJSPlugin {
-    private static PonderJS INSTANCE;
+public class PonderJSPlugin extends KubeJSPlugin {
+    private static PonderJSPlugin INSTANCE;
     public PonderRegistryEventJS ponderEvent;
     public PonderTagRegistryEventJS tagRegistryEvent;
     public PonderItemTagEventJS tagItemEvent;
 
-    public PonderJS() {
+    public PonderJSPlugin() {
         INSTANCE = this;
         ponderEvent = new PonderRegistryEventJS();
         tagRegistryEvent = new PonderTagRegistryEventJS();
@@ -77,7 +77,7 @@ public class PonderJS extends KubeJSPlugin {
     }
 
     public static Triple<Boolean, ITextComponent, Integer> generateJsonLang(HashMap<String, String> from) {
-        Logger log = PonderMaker.LOGGER;
+        Logger log = PonderJS.LOGGER;
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         File file = new File(ModConfigs.COMMON.getLangPath());
         JsonObject json = new JsonObject();
@@ -124,7 +124,7 @@ public class PonderJS extends KubeJSPlugin {
         super.addClasses(type, filter);
     }
 
-    public static PonderJS get() {
+    public static PonderJSPlugin get() {
         return INSTANCE;
     }
 
@@ -173,15 +173,15 @@ public class PonderJS extends KubeJSPlugin {
         Minecraft mc = Minecraft.getInstance();
         fillPonderLang(g);
         if(LANG.size() > 0) {
-            PonderMaker.LOGGER.warn("Found missing ponder lang, registering resource pack and reloading" +
+            PonderJS.LOGGER.warn("Found missing ponder lang, registering resource pack and reloading" +
                     "\nMissing: " + g.toJson(LANG) +
                     "\nKeys only: " + g.toJson(LANG.keySet()));
             ResourcePackList list = mc.getResourcePackRepository();
-            PonderMakerResourcePack pack = new PonderMakerResourcePack();
+            PonderJSResourcePack pack = new PonderJSResourcePack();
             PackRepositoryHooks.addSource(list, pack);
             Minecraft.getInstance().reloadResourcePacks();
         } else {
-            PonderMaker.LOGGER.info("No ponder lang missing, skipping resource pack registration");
+            PonderJS.LOGGER.info("No ponder lang missing, skipping resource pack registration");
         }
 
 //        list.reload();
@@ -241,7 +241,7 @@ public class PonderJS extends KubeJSPlugin {
         });
         typeWrappers.register(AllIcons.class, o -> {
             if(o instanceof AllIcons) return (AllIcons) o;
-            return PonderMaker.getIconByName(o.toString());
+            return PonderJS.getIconByName(o.toString());
         });
     }
 }

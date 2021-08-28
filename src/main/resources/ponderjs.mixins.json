@@ -1,8 +1,8 @@
 {
   "required": true,
-  "package": "com.kotakotik.pondermaker.mixin",
+  "package": "com.kotakotik.ponderjs.mixin",
   "compatibilityLevel": "JAVA_8",
-  "refmap": "pondermaker.refmap.json",
+  "refmap": "ponderjs.refmap.json",
   "mixins": [
   ],
   "injectors": {
