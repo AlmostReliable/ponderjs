@@ -47,10 +47,10 @@ public class ModConfigs {
         return config;
     }
 
-    public static ModCommonConfigs COMMON;
+    public static ModClientConfigs CLIENT;
 
     public static void register() {
-        COMMON = register(ModCommonConfigs::new, ModConfig.Type.COMMON);
+        CLIENT = register(ModClientConfigs::new, ModConfig.Type.CLIENT);
 
         for (Map.Entry<AutoConfigBase, ModConfig.Type> pair : configs.entrySet())
             ModLoadingContext.get()

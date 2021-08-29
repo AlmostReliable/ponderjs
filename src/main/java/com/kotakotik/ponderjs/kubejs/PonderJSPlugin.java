@@ -30,6 +30,8 @@ import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.antlr.v4.runtime.misc.Triple;
 import org.apache.commons.io.FileUtils;
@@ -52,11 +54,13 @@ public class PonderJSPlugin extends KubeJSPlugin {
     public PonderItemTagEventJS tagItemEvent;
 
     public PonderJSPlugin() {
-        INSTANCE = this;
-        ponderEvent = new PonderRegistryEventJS();
-        tagRegistryEvent = new PonderTagRegistryEventJS();
-        tagItemEvent = new PonderItemTagEventJS();
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ponderEvent::register);
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+            INSTANCE = this;
+            ponderEvent = new PonderRegistryEventJS();
+            tagRegistryEvent = new PonderTagRegistryEventJS();
+            tagItemEvent = new PonderItemTagEventJS();
+            FMLJavaModLoadingContext.get().getModEventBus().addListener(ponderEvent::register);
+        });
     }
 
     @Override
@@ -79,7 +83,7 @@ public class PonderJSPlugin extends KubeJSPlugin {
     public static Triple<Boolean, ITextComponent, Integer> generateJsonLang(HashMap<String, String> from) {
         Logger log = PonderJS.LOGGER;
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        File file = new File(ModConfigs.COMMON.getLangPath());
+        File file = new File(ModConfigs.CLIENT.getLangPath());
         JsonObject json = new JsonObject();
         if(file.exists()) {
             log.info("Found KubeJS lang, reading!");
@@ -138,7 +142,7 @@ public class PonderJSPlugin extends KubeJSPlugin {
         JsonObject assetLang = new JsonObject();
         try {
             Reader reader = new InputStreamReader(Minecraft.getInstance().getResourceManager().getResource(
-                    new ResourceLocation("kubejs", "lang/" + ModConfigs.COMMON.lang.get() + ".json")).getInputStream(), StandardCharsets.UTF_8);
+                    new ResourceLocation("kubejs", "lang/" + ModConfigs.CLIENT.lang.get() + ".json")).getInputStream(), StandardCharsets.UTF_8);
             assetLang = g.getAdapter(JsonObject.class).read(new JsonReader(reader));
         } catch (IOException e) {
             e.printStackTrace();

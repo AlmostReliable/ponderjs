@@ -31,12 +31,12 @@ public class PonderRegistryEventJS extends EventJS {
         event.enqueueWork(() -> {
             try {
                 PonderJSPlugin mainJS = PonderJSPlugin.get();
-                ScriptType scriptType = ScriptType.STARTUP;
+                ScriptType scriptType = ScriptType.CLIENT;
                 mainJS.tagRegistryEvent.post(scriptType, "ponder.tag.registry");
                 mainJS.tagItemEvent.post(scriptType, "ponder.tag");
                 mainJS.ponderEvent.post(scriptType, "ponder.registry");
 
-                if(ModConfigs.COMMON.autoGenerateLang.get()) {
+                if(ModConfigs.CLIENT.autoGenerateLang.get()) {
                     JsonObject json = new JsonObject();
                     PonderLocalization.generateSceneLang();
                     PonderLocalization.record("kubejs", json);

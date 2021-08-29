@@ -15,8 +15,6 @@ import java.lang.reflect.Field;
 public class PonderItemTagEventJS extends EventJS {
     public static Field tagField = ObfuscationReflectionHelper.findField(PonderTagRegistry.class, "tags");
 
-    private static Runnable function = () -> {};
-
     public PonderItemTagEventJS add(String id, Object toAdd) {
             PonderRegistry.TAGS.forItems(ListJS.orSelf(toAdd).stream()
                     .map(Object::toString)
