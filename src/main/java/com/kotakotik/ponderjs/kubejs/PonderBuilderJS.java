@@ -12,7 +12,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -31,15 +30,6 @@ public class PonderBuilderJS extends
 //                        multiSceneBuilder.addStoryBoard("test", scene::accept);
 //        });
 //    }
-
-    public PonderBuilderJS addItem(ResourceLocation... ids) {
-        items.addAll(Arrays.asList(ids));
-        return this;
-    }
-
-    public PonderBuilderJS addItems(ResourceLocation... ids) {
-        return addItem(ids);
-    }
 
     public PonderBuilderJS scene(String name, String displayName, String schematic, SceneConsumer scene) {
         for (ResourceLocation id : items)
