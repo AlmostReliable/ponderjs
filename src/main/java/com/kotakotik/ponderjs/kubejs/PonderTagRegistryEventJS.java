@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PonderTagRegistryEventJS extends EventJS {
+    public static boolean rerun = false;
+
     public PonderTagRegistryEventJS create(String name, ResourceLocation displayItem, String title, String description, Object defaultItems) {
         try {
             ResourceLocation id = PonderJS.appendKubeToId(name);
@@ -31,7 +33,7 @@ public class PonderTagRegistryEventJS extends EventJS {
             List<ResourceLocation> res = Arrays.stream(id)
                     .map(PonderJS::appendCreateToId)
                     .collect(Collectors.toList());
-            if(!PonderRegistry.TAGS.getListedTags()
+            if(!rerun && !PonderRegistry.TAGS.getListedTags()
                     .removeIf(tag -> {
                         if(res.contains(tag.getId())) {
                             if(clearItems) {

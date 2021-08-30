@@ -12,6 +12,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.HashMap;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -29,11 +30,17 @@ public class PonderBuilderJS extends
 //           PonderRegistry.MultiSceneBuilder multiSceneBuilder = PonderRegistry.forComponents(items.stream().map((id) -> PonderRegistryEventJS.createItemProvider(RegistryObject.of(id, ForgeRegistries.ITEMS))).collect(Collectors.toList()));
 //                        multiSceneBuilder.addStoryBoard("test", scene::accept);
 //        });
-//    }
+//    }]
+
+    public static HashMap<String, SceneConsumer> scenes = new HashMap<>();
 
     public PonderBuilderJS scene(String name, String displayName, String schematic, SceneConsumer scene) {
+        String fullName = getName(name);
+        SceneConsumer oldScene = scenes.get(fullName);
+        if(oldScene != null) PonderJS.LOGGER.info("Overwriting scene " + fullName + " with new one");
+        scenes.put(fullName, scene);
         for (ResourceLocation id : items)
-            addNamedStoryBoard(getName(name), displayName, id, PonderJS.appendKubeToId(schematic), (b, u) -> programStoryBoard(scene, b, u));
+            addNamedStoryBoard(getName(name), displayName, id, PonderJS.appendKubeToId(schematic), (b, u) -> programStoryBoard(scenes.get(fullName), b, u));
         return this;
     }
 

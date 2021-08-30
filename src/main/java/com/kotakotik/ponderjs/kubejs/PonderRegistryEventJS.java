@@ -23,6 +23,53 @@ public class PonderRegistryEventJS extends EventJS {
         return new PonderBuilderJS(name, ListJS.orSelf(items));
     }
 
+    public static void rerunScripts(ScriptType scriptType, String tagRegistry, String tagItem, String ponder, PonderJSPlugin mainJS) {
+        mainJS.tagRegistryEvent.post(scriptType, tagRegistry);
+        mainJS.tagItemEvent.post(scriptType, tagItem);
+        mainJS.ponderEvent.post(scriptType, ponder);
+    }
+
+    public static void rerunScripts() {
+        rerunScripts(ScriptType.CLIENT, "ponder.tag.registry", "ponder.tag", "ponder.registry", PonderJSPlugin.get());
+    }
+
+    public static void regenerateLangIntoFile() {
+        JsonObject json = new JsonObject();
+        PonderLocalization.generateSceneLang();
+        PonderLocalization.record(KubeJS.MOD_ID, json);
+        Triple<Boolean, ITextComponent, Integer> result = PonderJSPlugin.generateJsonLang(new Gson().fromJson(json, HashMap.class));
+        boolean success = result.a;
+        int count = result.c;
+        if(success) {
+            if(count > 0) {
+                KubeJS.PROXY.reloadLang();
+                if(!rerun) {
+                    Minecraft.getInstance().reloadResourcePacks();
+                }
+            }
+        } else {
+            PonderJSPlugin.generatePonderLang();
+        }
+    }
+
+    public static void regenerateLang() {
+            if(ModConfigs.CLIENT.autoGenerateLang.get()) {
+                regenerateLangIntoFile();
+            } else {
+                PonderJSPlugin.generatePonderLang();
+            }
+    }
+
+    protected static boolean rerun = false;
+
+    public static void runAllRegistration() {
+        PonderTagRegistryEventJS.rerun = rerun;
+        PonderItemTagEventJS.rerun = rerun;
+        rerunScripts();
+        regenerateLang();
+        rerun = true;
+    }
+
     public void register(FMLClientSetupEvent event) {
 //                PonderRegistry.forComponents(itemProvider)
 //                        .addStoryBoard("test", b.function::accept);
@@ -30,30 +77,7 @@ public class PonderRegistryEventJS extends EventJS {
 //                        .add(itemProvider);
         event.enqueueWork(() -> {
             try {
-                PonderJSPlugin mainJS = PonderJSPlugin.get();
-                ScriptType scriptType = ScriptType.CLIENT;
-                mainJS.tagRegistryEvent.post(scriptType, "ponder.tag.registry");
-                mainJS.tagItemEvent.post(scriptType, "ponder.tag");
-                mainJS.ponderEvent.post(scriptType, "ponder.registry");
-
-                if(ModConfigs.CLIENT.autoGenerateLang.get()) {
-                    JsonObject json = new JsonObject();
-                    PonderLocalization.generateSceneLang();
-                    PonderLocalization.record(KubeJS.MOD_ID, json);
-                    Triple<Boolean, ITextComponent, Integer> result = PonderJSPlugin.generateJsonLang(new Gson().fromJson(json, HashMap.class));
-                    boolean success = result.a;
-                    int count = result.c;
-                    if(success) {
-                        if(count > 0) {
-                            KubeJS.PROXY.reloadLang();
-                            Minecraft.getInstance().reloadResourcePacks();
-                        }
-                    } else {
-                        PonderJSPlugin.generatePonderLang();
-                    }
-                } else {
-                    PonderJSPlugin.generatePonderLang();
-                }
+                runAllRegistration();
             } catch (Exception e) { // i think theres a way to do this with the completable future but this is easier
                 e.printStackTrace();
             }

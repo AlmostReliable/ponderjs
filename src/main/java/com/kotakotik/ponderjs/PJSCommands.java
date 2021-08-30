@@ -1,6 +1,8 @@
 package com.kotakotik.ponderjs;
 
 import com.kotakotik.ponderjs.kubejs.commands.GenerateKubeJSLangCommand;
+import com.kotakotik.ponderjs.kubejs.commands.PJSPostCommand;
+import com.kotakotik.ponderjs.kubejs.commands.PJSReloadCommand;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.command.CommandSource;
@@ -18,9 +20,15 @@ public class PJSCommands {
         LiteralArgumentBuilder<CommandSource> b = Commands.literal(BuildConfig.MODID);
         if(ModList.get().isLoaded("kubejs")) {
             b.then(Commands.literal("kubejs")
+                    .then(Commands.literal("reload").executes(
+                            new PJSReloadCommand()
+                    ))
                     .then(Commands.literal("generate_lang")
                             .requires((source) -> source.getServer().isSingleplayer())
-                                .executes(new GenerateKubeJSLangCommand())));
+                            .executes(new GenerateKubeJSLangCommand()))
+                    .then(Commands.literal("postevents")
+                            .executes(new PJSPostCommand()))
+            );
         }
         dis.register(b);
     }
