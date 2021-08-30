@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class PonderBuilderJS extends
         AbstractPonderBuilder<ResourceLocation, PonderBuilderJS, PonderBuilderJS.SceneConsumer> {
     public PonderBuilderJS(String name, ListJS ids) {
-        super(name, ids.stream()
+        super(PonderJS.appendKubeToId(name), ids.stream()
                 .map(Object::toString)
                 .map(ResourceLocation::new)
                 .collect(Collectors.toList()));
@@ -40,7 +40,7 @@ public class PonderBuilderJS extends
         if(oldScene != null) PonderJS.LOGGER.info("Overwriting scene " + fullName + " with new one");
         scenes.put(fullName, scene);
         for (ResourceLocation id : items)
-            addNamedStoryBoard(getName(name), displayName, id, PonderJS.appendKubeToId(schematic), (b, u) -> programStoryBoard(scenes.get(fullName), b, u));
+            addNamedStoryBoard(getPathOnlyName(name), displayName, id, PonderJS.appendKubeToId(schematic), (b, u) -> programStoryBoard(scenes.get(fullName), b, u));
         return this;
     }
 

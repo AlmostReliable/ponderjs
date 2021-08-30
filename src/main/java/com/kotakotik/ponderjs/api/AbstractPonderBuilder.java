@@ -21,12 +21,12 @@ import java.util.function.BiConsumer;
 public abstract class AbstractPonderBuilder<T,
         S extends AbstractPonderBuilder<T, S, C>,
         C extends BiConsumer<?, ?>> {
-    protected String name;
+    protected ResourceLocation name;
     protected List<T> items;
 
     protected abstract S getSelf();
 
-    public AbstractPonderBuilder(String name, List<T> items) {
+    public AbstractPonderBuilder(ResourceLocation name, List<T> items) {
         this.name = name;
         this.items = items;
     }
@@ -40,11 +40,15 @@ public abstract class AbstractPonderBuilder<T,
 
     protected Runnable function = () -> {
         String s = getStartMessage();
-        if(s != null) PonderJS.LOGGER.info(s);
+        if (s != null) PonderJS.LOGGER.info(s);
     };
 
     protected String getName(String scene) {
-        return name + "." + scene;
+        return name.toString().replace(":", ".") + "." + scene;
+    }
+
+    protected String getPathOnlyName(String scene) {
+        return name.getPath() + "." + scene;
     }
 
     protected String getName(String scene, T item) {
@@ -72,7 +76,7 @@ public abstract class AbstractPonderBuilder<T,
     protected abstract void programStoryBoard(C scene, SceneBuilder builder, SceneBuildingUtil util);
 
     protected S addStoryBoard(T item, ResourceLocation schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
-            new PonderRegistrationHelper("kubejs")
+        new PonderRegistrationHelper(name.getNamespace())
                 .forComponents(getItemProviderEntry(item))
                 .addStoryBoard(schematic, scene);
 //            PonderRegistry.addStoryBoard(getItemProviderEntry(item), schematic, scene)

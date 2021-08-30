@@ -14,13 +14,30 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import org.antlr.v4.runtime.misc.Triple;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class PonderRegistryEventJS extends EventJS {
+    public static final List<String> namespaces = new ArrayList<>();
+
+    static {
+        namespaces.add(KubeJS.MOD_ID);
+    }
 
     public PonderBuilderJS create(String name, Object items) {
         return new PonderBuilderJS(name, ListJS.orSelf(items));
+    }
+
+    public void addNamespace(Object namespace) {
+        namespaces.addAll(ListJS.orSelf(namespace).stream().map(Objects::toString).filter((s) -> !namespaces.contains(s)).collect(Collectors.toList()));
+    }
+
+    public void addNamespaces(Object namespace) {
+        addNamespace(namespace);
     }
 
     public static void rerunScripts(ScriptType scriptType, String tagRegistry, String tagItem, String ponder, PonderJSPlugin mainJS) {
@@ -36,14 +53,16 @@ public class PonderRegistryEventJS extends EventJS {
     public static void regenerateLangIntoFile() {
         JsonObject json = new JsonObject();
         PonderLocalization.generateSceneLang();
-        PonderLocalization.record(KubeJS.MOD_ID, json);
+        for (String namespace : namespaces) {
+            PonderLocalization.record(namespace, json);
+        }
         Triple<Boolean, ITextComponent, Integer> result = PonderJSPlugin.generateJsonLang(new Gson().fromJson(json, HashMap.class));
         boolean success = result.a;
         int count = result.c;
-        if(success) {
-            if(count > 0) {
+        if (success) {
+            if (count > 0) {
                 KubeJS.PROXY.reloadLang();
-                if(!rerun) {
+                if (!rerun) {
                     Minecraft.getInstance().reloadResourcePacks();
                 }
             }
