@@ -59,13 +59,13 @@ side = "BOTH"
 [[dependencies.ponderjs]]
 modId = "create"
 mandatory = true
-versionRange = "mc1.16.5_v0.3.1c" # TODO: probably update this, maybe to a version range https://maven.apache.org/enforcer/enforcer-rules/versionRanges.html
+versionRange = "[v0.3.2d, v0.3.2e)"
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.ponderjs]]
 modId = "kubejs"
 mandatory = true
-versionRange = "fun fact you can just do this to allow any version"
+versionRange = "[1605.3.15-build.100,)"
 ordering = "NONE"
 side = "BOTH"
 #[[dependencies.ponderjs]]
