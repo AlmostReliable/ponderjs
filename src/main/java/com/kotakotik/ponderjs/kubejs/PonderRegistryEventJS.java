@@ -39,7 +39,7 @@ public class PonderRegistryEventJS extends EventJS {
                 if(ModConfigs.CLIENT.autoGenerateLang.get()) {
                     JsonObject json = new JsonObject();
                     PonderLocalization.generateSceneLang();
-                    PonderLocalization.record("kubejs", json);
+                    PonderLocalization.record(KubeJS.MOD_ID, json);
                     Triple<Boolean, ITextComponent, Integer> result = PonderJSPlugin.generateJsonLang(new Gson().fromJson(json, HashMap.class));
                     boolean success = result.a;
                     int count = result.c;

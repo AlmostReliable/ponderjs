@@ -7,6 +7,7 @@ import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.ponder.PonderRegistry;
 import com.simibubi.create.foundation.ponder.content.PonderTag;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
+import dev.latvian.kubejs.KubeJS;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -56,9 +57,17 @@ public class PonderJS {
         return PonderRegistry.TAGS.getListedTags().stream().filter(tag -> tag.getId().equals(res)).findFirst();
     }
 
+    protected static ResourceLocation appendNamespaceToId(String namespace, String id) {
+        if(!id.contains(":")) id = namespace + ":" + id;
+        return new ResourceLocation(id);
+    }
+
     public static ResourceLocation appendCreateToId(String tag) {
-        if(!tag.contains(":")) tag = "create:" + tag;
-        return new ResourceLocation(tag);
+        return appendNamespaceToId(Create.ID, tag);
+    }
+
+    public static ResourceLocation appendKubeToId(String id) {
+        return appendNamespaceToId(KubeJS.MOD_ID, id);
     }
 
     public static Optional<PonderTag> getTagByName(String tag) {

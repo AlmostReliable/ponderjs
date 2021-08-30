@@ -128,18 +128,41 @@ public class SceneBuilderJS implements ISceneBuilderJS {
             this.sceneBuilder = sceneBuilder;
         }
 
-        public void modifyTileNBT(Selection selection, UnaryOperator<MapJS> sup) {
-            modifyTileNBT(selection, TileEntity.class, nbt -> {
+        public Consumer<CompoundNBT> mapJsConsumerToNBT(Object pos, UnaryOperator<MapJS> sup) {
+            return nbt -> {
                 Objects.requireNonNull(nbt, "Could not find NBT in selection " +
-                        selection.toString() + ", your selection might include non-tiles!");
-                CompoundNBT n = MapJS.nbt(sup.apply(MapJS.of(nbt)));
-                assert n != null;
+                        pos + ", your selection might include non-tiles!");
+                CompoundNBT n = MapJS.nbt(
+                        Objects.requireNonNull(sup.apply(Objects.requireNonNull(MapJS.of(nbt))),
+                                "Null returned for tile NBT")
+                );
                 nbt.merge(n);
-            });
+            };
+        }
+
+        public void updateTileNBT(Selection selection, UnaryOperator<MapJS> sup) {
+            modifyTileNBT(selection, TileEntity.class, mapJsConsumerToNBT(selection, sup));
         }
 
         public void modifyTileNBT(Selection selection, MapJS obj) {
-            modifyTileNBT(selection, $ -> obj);
+            updateTileNBT(selection, $ -> obj);
+        }
+
+        public void updateTileNBT(Selection selection, Class<? extends TileEntity> teType, UnaryOperator<MapJS> sup, boolean reDrawBlocks) {
+//            TypeToken<?> t = TypeSetKubeJSRegistries.blockEntities().get(teType);
+            modifyTileNBT(selection, teType, mapJsConsumerToNBT(selection, sup), reDrawBlocks);
+        }
+
+        public void updateTileNBT(Selection selection, UnaryOperator<MapJS> sup, boolean reDrawBlocks) {
+            updateTileNBT(selection, TileEntity.class, sup, reDrawBlocks);
+        }
+
+        public void modifyTileNBT(Selection selection, Class<? extends TileEntity> teType, MapJS obj, boolean reDrawBlocks) {
+            updateTileNBT(selection, teType, $ -> obj, reDrawBlocks);
+        }
+
+        public void modifyTileNBT(Selection selection, MapJS obj, boolean reDrawBlocks) {
+            modifyTileNBT(selection, TileEntity.class, obj, reDrawBlocks);
         }
 
         @Override

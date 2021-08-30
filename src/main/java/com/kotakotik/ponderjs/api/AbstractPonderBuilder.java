@@ -71,7 +71,7 @@ public abstract class AbstractPonderBuilder<T,
 //    protected abstract PonderStoryBoardEntry.PonderStoryBoard storyBoard(C scene);
     protected abstract void programStoryBoard(C scene, SceneBuilder builder, SceneBuildingUtil util);
 
-    protected S addStoryBoard(T item, String schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
+    protected S addStoryBoard(T item, ResourceLocation schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
             new PonderRegistrationHelper("kubejs")
                 .forComponents(getItemProviderEntry(item))
                 .addStoryBoard(schematic, scene);
@@ -81,7 +81,7 @@ public abstract class AbstractPonderBuilder<T,
 
     protected static List<String> added = new ArrayList<>();
 
-    protected S addNamedStoryBoard(String name, String displayName, T item, String schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
+    protected S addNamedStoryBoard(String name, String displayName, T item, ResourceLocation schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
         String cacheName = getName(name, item);
         if(added.contains(cacheName)) return getSelf();
         added.add(cacheName);

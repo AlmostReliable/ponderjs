@@ -33,7 +33,7 @@ public class PonderBuilderJS extends
 
     public PonderBuilderJS scene(String name, String displayName, String schematic, SceneConsumer scene) {
         for (ResourceLocation id : items)
-            addNamedStoryBoard(getName(name), displayName, id, schematic, (b, u) -> programStoryBoard(scene, b, u));
+            addNamedStoryBoard(getName(name), displayName, id, PonderJS.appendKubeToId(schematic), (b, u) -> programStoryBoard(scene, b, u));
         return this;
     }
 

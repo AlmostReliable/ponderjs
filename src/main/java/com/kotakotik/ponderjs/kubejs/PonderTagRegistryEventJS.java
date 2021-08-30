@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class PonderTagRegistryEventJS extends EventJS {
     public PonderTagRegistryEventJS create(String name, ResourceLocation displayItem, String title, String description, Object defaultItems) {
         try {
-            ResourceLocation id = new ResourceLocation("kubejs", name);
+            ResourceLocation id = PonderJS.appendKubeToId(name);
             PonderTag tag = new PonderTag(id)
                     .item(KubeJSRegistries.items().get(displayItem))
                     .defaultLang(title, description);

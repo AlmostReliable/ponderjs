@@ -298,7 +298,7 @@ public interface ISceneBuilderJS {
         }
 
         default void modifyTileNBT(Selection selection, Class<? extends TileEntity> teType, Consumer<CompoundNBT> consumer, boolean reDrawBlocks) {
-            getInternal().modifyTileNBT(selection, teType, consumer, reDrawBlocks); // amogus
+            getInternal().modifyTileNBT(selection, teType, consumer, reDrawBlocks);
         }
 
         default void instructArm(BlockPos armLocation, ArmTileEntity.Phase phase, ItemStack heldItem, int targetedPoint) {
