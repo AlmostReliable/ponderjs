@@ -16,8 +16,6 @@ import com.simibubi.create.foundation.ponder.elements.ParrotElement;
 import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.foundation.utility.Pointing;
 import dev.latvian.kubejs.KubeJSPlugin;
-import dev.latvian.kubejs.bindings.ColorWrapper;
-import dev.latvian.kubejs.entity.EntityJS;
 import dev.latvian.kubejs.script.BindingsEvent;
 import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.util.ClassFilter;
@@ -28,7 +26,6 @@ import net.minecraft.resources.ResourcePackList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -66,18 +63,17 @@ public class PonderJSPlugin extends KubeJSPlugin {
 
     @Override
     public void addBindings(BindingsEvent event) {
-        event.addClass("PonderPalette", PonderPalette.class);
-        event.addFunction("DancePose", ($) -> new ParrotElement.DancePose());
+        event.add("PonderPalette", PonderPalette.class);
 //        if(event.type == ScriptType.STARTUP) {
 //            event.add("pondersettings", Settings.instance);
 //        }
-        event.addClass("Color", ColorWrapper.class);
-        event.addClass("ParrotElement", ParrotElement.class);
+        event.add("ParrotElement", ParrotElement.class);
 //        event.addClass("Direction", Direction.class); // ik about the facing wrapper, i just prefer to call it direction
 //        event.addClass("ParrotElement.FacePointOfInterestPose", ParrotElement.FacePointOfInterestPose.class);
-        event.addClass("InputWindowElement", InputWindowElement.class);
-        event.addClass("PonderIcons", AllIcons.class);
-        event.addClass("Pointing", Pointing.class);
+        event.add("PonderInputWindowElement", InputWindowElement.class);
+        event.add("PonderInput", InputWindowElement.class);
+        event.add("PonderIcons", AllIcons.class);
+        event.add("PonderPointing", Pointing.class);
         super.addBindings(event);
     }
 
@@ -224,20 +220,6 @@ public class PonderJSPlugin extends KubeJSPlugin {
 
     @Override
     public void addTypeWrappers(ScriptType type, TypeWrappers typeWrappers) {
-        typeWrappers.register(Vector3d.class, o -> {
-            if (o instanceof Vector3d) {
-                return (Vector3d) o;
-            } else if (o instanceof EntityJS) {
-                return ((EntityJS) o).minecraftEntity.position();
-            } else if (o instanceof List && ((List<?>) o).size() >= 3) {
-                return new Vector3d(((Number) ((List<?>) o).get(0)).doubleValue(), ((Number) ((List<?>) o).get(1)).doubleValue(), ((Number) ((List<?>) o).get(2)).doubleValue());
-            } else if (o instanceof BlockPos) {
-                BlockPos bp = (BlockPos) o;
-                return new Vector3d(bp.getX() + .5, bp.getY() + .5, bp.getZ() + .5);
-            }
-
-            return Vector3d.ZERO;
-        });
         typeWrappers.register(Selection.class, o -> {
             if(o instanceof Selection) return (Selection) o;
             if(o instanceof MutableBoundingBox) {
