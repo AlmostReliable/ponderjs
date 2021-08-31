@@ -8,6 +8,7 @@ import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
 import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
+import dev.latvian.kubejs.script.ScriptType;
 import dev.latvian.kubejs.util.ListJS;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.RegistryObject;
@@ -50,7 +51,7 @@ public class PonderBuilderJS extends
             PonderJSPlugin.scenes.add(sceneId);
         }
         for (ResourceLocation id : items)
-            addNamedStoryBoard(pathOnlyName, displayName, id, PonderJS.appendKubeToId(schematic), (b, u) -> programStoryBoard(scenes.get(fullName), b, u));
+            addNamedStoryBoard(pathOnlyName, displayName, id, PonderJS.appendKubeToId(schematic), (b, u) -> programStoryBoard(fullName, b, u));
         return this;
     }
 
@@ -72,6 +73,15 @@ public class PonderBuilderJS extends
     @Override
     protected void programStoryBoard(SceneConsumer scene, SceneBuilder builder, SceneBuildingUtil util) {
         scene.accept(new SceneBuilderJS(builder), new SceneBuildingUtilJS(util));
+    }
+
+    protected void programStoryBoard(String name, SceneBuilder builder, SceneBuildingUtil util) {
+        try {
+            programStoryBoard(scenes.get(name), builder, util);
+        } catch (Throwable t) {
+            t.printStackTrace();
+            ScriptType.CLIENT.console.error("Error occurred in ponder " + name, t);
+        }
     }
 
     @Override
