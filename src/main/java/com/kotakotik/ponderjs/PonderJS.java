@@ -9,6 +9,7 @@ import com.simibubi.create.foundation.ponder.content.PonderTag;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
 import dev.latvian.kubejs.KubeJS;
 import net.minecraft.util.IItemProvider;
+import net.minecraft.util.LazyValue;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -26,8 +27,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Mod(BuildConfig.MODID)
 public class PonderJS {
@@ -96,5 +100,50 @@ public class PonderJS {
             e.printStackTrace();
         }
         return null;
+    }
+
+    static LazyValue<?> staticFinalFieldVal(Class<?> clazz, String field) {
+        return new LazyValue<>(() -> {
+            Field f;
+            try {
+                f = clazz.getDeclaredField(field);
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+                return null;
+            }
+            f.setAccessible(true);
+            try {
+                return f.get(null);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            return null;
+        });
+    }
+
+    static LazyValue<Method> staticMethodVal(Class<?> clazz, String method, Class<?>... classes) {
+        return new LazyValue<>(() -> {
+            Method f;
+            try {
+                f = clazz.getDeclaredMethod(method, classes);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+                return null;
+            }
+            f.setAccessible(true);
+            return f;
+        });
+    }
+
+    static <R, T> Function<T, R> staticOneArgMethod(Class<?> clazz, String method, Class<T> arg) {
+        LazyValue<Method> m = staticMethodVal(clazz, method, arg);
+        return (t) -> {
+            try {
+                return (R) m.get().invoke(null, t);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            return null;
+        };
     }
 }

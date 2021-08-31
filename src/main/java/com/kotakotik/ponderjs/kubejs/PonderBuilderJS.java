@@ -6,6 +6,7 @@ import com.kotakotik.ponderjs.kubejs.util.SceneBuilderJS;
 import com.kotakotik.ponderjs.kubejs.util.SceneBuildingUtilJS;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
+import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
 import dev.latvian.kubejs.util.ListJS;
 import net.minecraft.util.ResourceLocation;
@@ -23,6 +24,10 @@ public class PonderBuilderJS extends
                 .map(Object::toString)
                 .map(ResourceLocation::new)
                 .collect(Collectors.toList()));
+        String namespace = this.name.getNamespace();
+        if (!PonderJSPlugin.namespaces.contains(namespace)) {
+            PonderJSPlugin.namespaces.add(namespace);
+        }
     }
 
 //    public PonderBuilderJS<T> scene(List<ResourceLocation> items, List<List<Object>> storyBoards, BiConsumer<SceneBuilder, SceneBuildingUtil> scene) {
@@ -37,10 +42,15 @@ public class PonderBuilderJS extends
     public PonderBuilderJS scene(String name, String displayName, String schematic, SceneConsumer scene) {
         String fullName = getName(name);
         SceneConsumer oldScene = scenes.get(fullName);
-        if(oldScene != null) PonderJS.LOGGER.info("Overwriting scene " + fullName + " with new one");
+        if (oldScene != null) PonderJS.LOGGER.info("Overwriting scene " + fullName + " with new one");
         scenes.put(fullName, scene);
+        String pathOnlyName = getPathOnlyName(name);
+        Couple<String> sceneId = Couple.create(this.name.getNamespace(), pathOnlyName);
+        if (!PonderJSPlugin.scenes.contains(sceneId)) {
+            PonderJSPlugin.scenes.add(sceneId);
+        }
         for (ResourceLocation id : items)
-            addNamedStoryBoard(getPathOnlyName(name), displayName, id, PonderJS.appendKubeToId(schematic), (b, u) -> programStoryBoard(scenes.get(fullName), b, u));
+            addNamedStoryBoard(pathOnlyName, displayName, id, PonderJS.appendKubeToId(schematic), (b, u) -> programStoryBoard(scenes.get(fullName), b, u));
         return this;
     }
 

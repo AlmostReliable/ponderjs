@@ -18,6 +18,12 @@ public class PonderTagRegistryEventJS extends EventJS {
     public PonderTagRegistryEventJS create(String name, ResourceLocation displayItem, String title, String description, Object defaultItems) {
         try {
             ResourceLocation id = PonderJS.appendKubeToId(name);
+            if (!PonderJSPlugin.tags.contains(id)) {
+                PonderJSPlugin.tags.add(id);
+            }
+            if (!PonderJSPlugin.namespaces.contains(id.getNamespace())) {
+                PonderJSPlugin.namespaces.add(id.getNamespace());
+            }
             PonderTag tag = new PonderTag(id)
                     .item(KubeJSRegistries.items().get(displayItem))
                     .defaultLang(title, description);

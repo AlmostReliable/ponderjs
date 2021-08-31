@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
+import com.kotakotik.ponderjs.PJSLocalization;
 import com.kotakotik.ponderjs.PonderJS;
 import com.kotakotik.ponderjs.config.ModConfigs;
 import com.simibubi.create.foundation.gui.AllIcons;
@@ -12,6 +13,7 @@ import com.simibubi.create.foundation.ponder.Selection;
 import com.simibubi.create.foundation.ponder.content.PonderPalette;
 import com.simibubi.create.foundation.ponder.elements.InputWindowElement;
 import com.simibubi.create.foundation.ponder.elements.ParrotElement;
+import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.foundation.utility.Pointing;
 import dev.latvian.kubejs.KubeJSPlugin;
 import dev.latvian.kubejs.bindings.ColorWrapper;
@@ -149,10 +151,14 @@ public class PonderJSPlugin extends KubeJSPlugin {
         return assetLang;
     }
 
+    public static final List<String> namespaces = new ArrayList<>();
+    public static final List<ResourceLocation> tags = new ArrayList<>();
+    public static final List<Couple<String>> scenes = new ArrayList<>();
+
     public static void fillPonderLang(Gson gson) {
         JsonObject json = new JsonObject();
         PonderLocalization.generateSceneLang();
-        PonderLocalization.record("kubejs", json);
+        PJSLocalization.record(namespaces, tags, scenes, json);
 
 //        JsonObject assetLang = ((KubeJSClientResourcePack) mc.getResourcePackRepository().getPack("kubejs:resource_pack").open())
 //                .getCachedResources().get(new ResourceLocation("kubejs", "lang/en_us")).getAsJsonObject();
