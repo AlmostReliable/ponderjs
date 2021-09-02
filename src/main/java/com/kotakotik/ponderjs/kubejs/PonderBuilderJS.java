@@ -42,16 +42,20 @@ public class PonderBuilderJS extends
 
     public PonderBuilderJS scene(String name, String displayName, String schematic, SceneConsumer scene) {
         String fullName = getName(name);
-        SceneConsumer oldScene = scenes.get(fullName);
-        if (oldScene != null) PonderJS.LOGGER.info("Overwriting scene " + fullName + " with new one");
-        scenes.put(fullName, scene);
-        String pathOnlyName = getPathOnlyName(name);
-        Couple<String> sceneId = Couple.create(this.name.getNamespace(), pathOnlyName);
-        if (!PonderJSPlugin.scenes.contains(sceneId)) {
-            PonderJSPlugin.scenes.add(sceneId);
+        if (PonderRegistryEventJS.rerun && !scenes.containsKey(fullName)) {
+            ScriptType.CLIENT.console.error("Tried to register ponder scene " + fullName + " in a reload, you'll have to restart!");
+            return this;
         }
-        for (ResourceLocation id : items)
-            addNamedStoryBoard(pathOnlyName, displayName, id, PonderJS.appendKubeToId(schematic), (b, u) -> programStoryBoard(fullName, b, u));
+        scenes.put(fullName, scene);
+        if (!PonderRegistryEventJS.rerun) {
+            String pathOnlyName = getPathOnlyName(name);
+            Couple<String> sceneId = Couple.create(this.name.getNamespace(), pathOnlyName);
+            if (!PonderJSPlugin.scenes.contains(sceneId)) {
+                PonderJSPlugin.scenes.add(sceneId);
+            }
+            for (ResourceLocation id : items)
+                addNamedStoryBoard(pathOnlyName, displayName, id, PonderJS.appendKubeToId(schematic), (b, u) -> programStoryBoard(fullName, b, u));
+        }
         return this;
     }
 

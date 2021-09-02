@@ -15,8 +15,6 @@ import java.lang.reflect.Field;
 public class PonderItemTagEventJS extends EventJS {
     public static Field tagField = ObfuscationReflectionHelper.findField(PonderTagRegistry.class, "tags");
 
-    public static boolean rerun = false;
-
     public PonderItemTagEventJS add(String id, Object toAdd) {
             PonderRegistry.TAGS.forItems(ListJS.orSelf(toAdd).stream()
                     .map(Object::toString)
@@ -31,7 +29,7 @@ public class PonderItemTagEventJS extends EventJS {
                 for(ResourceLocation itemId : ListJS.orSelf(toRemove).stream()
                         .map(Object::toString)
                         .map(ResourceLocation::new).toArray(ResourceLocation[]::new)) {
-                    if(!rerun && !tags.get(itemId)
+                    if (!PonderRegistryEventJS.rerun && !tags.get(itemId)
                             .removeIf(t -> t.getId().equals(PonderJS.appendCreateToId(id)))) {
                         throw new NullPointerException("No tags found matching " + id + " in item " + itemId);
                     }

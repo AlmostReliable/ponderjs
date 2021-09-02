@@ -18,9 +18,15 @@ public class PonderRegistryEventJS extends EventJS {
     }
 
     public static void rerunScripts(ScriptType scriptType, String tagRegistry, String tagItem, String ponder, PonderJSPlugin mainJS) {
-        mainJS.tagRegistryEvent.post(scriptType, tagRegistry);
-        mainJS.tagItemEvent.post(scriptType, tagItem);
-        mainJS.ponderEvent.post(scriptType, ponder);
+        if (tagRegistry != null) {
+            mainJS.tagRegistryEvent.post(scriptType, tagRegistry);
+        }
+        if (tagItem != null) {
+            mainJS.tagItemEvent.post(scriptType, tagItem);
+        }
+        if (ponder != null) {
+            mainJS.ponderEvent.post(scriptType, ponder);
+        }
     }
 
     public static void rerunScripts() {
@@ -55,12 +61,14 @@ public class PonderRegistryEventJS extends EventJS {
             }
     }
 
-    protected static boolean rerun = false;
+    public static boolean rerun = false;
 
     public static void runAllRegistration() {
-        PonderTagRegistryEventJS.rerun = rerun;
-        PonderItemTagEventJS.rerun = rerun;
-        rerunScripts();
+        if (rerun) {
+            rerunScripts(ScriptType.CLIENT, null, null, "ponder.registry", PonderJSPlugin.get());
+        } else {
+            rerunScripts();
+        }
         regenerateLang();
         rerun = true;
     }

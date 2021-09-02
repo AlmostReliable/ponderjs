@@ -152,6 +152,7 @@ public class PonderJSPlugin extends KubeJSPlugin {
     public static final List<Couple<String>> scenes = new ArrayList<>();
 
     public static void fillPonderLang(Gson gson) {
+        LANG.clear();
         JsonObject json = new JsonObject();
         PonderLocalization.generateSceneLang();
         PJSLocalization.record(namespaces, tags, scenes, json);
@@ -161,7 +162,7 @@ public class PonderJSPlugin extends KubeJSPlugin {
         JsonObject assetLang = getKubeJSAssetLang(gson);
         json.entrySet().forEach(e -> {
             // kubejs.ponder.ponder_builder.test.header
-            if(!assetLang.has(e.getKey())) {
+            if (!assetLang.has(e.getKey()) || !assetLang.get(e.getKey()).equals(e.getValue())) {
                 String key = e.getKey();
                 String val = e.getValue().getAsString();
                 addLang(key, val);

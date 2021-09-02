@@ -1,5 +1,6 @@
 package com.kotakotik.ponderjs.kubejs.commands;
 
+import com.kotakotik.ponderjs.kubejs.PonderRegistryEventJS;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -14,6 +15,7 @@ public class PJSReloadCommand implements Command<CommandSource> {
         // HEY! HEY! IF YOU ARE READING THIS AND YOU ARENT KOTA, GO AWAY BECAUSE THIS CODE IS HORRIBLE AND WILL BURN YOUR EYES!!!
         KubeJS.PROXY.reloadClientInternal();
         String out = PJSPostCommand.r(false);
+        PonderRegistryEventJS.runAllRegistration();
         Minecraft.getInstance().reloadResourcePacks();
 
 //        out.append("RELOAD ASSETS: Asset reload ").append(noOut).append("\n");
