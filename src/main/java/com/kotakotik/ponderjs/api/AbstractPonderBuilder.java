@@ -1,6 +1,7 @@
 package com.kotakotik.ponderjs.api;
 
 import com.kotakotik.ponderjs.PonderJS;
+import com.kotakotik.ponderjs.PonderJSMod;
 import com.simibubi.create.foundation.ponder.*;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
 import net.minecraft.util.ResourceLocation;
@@ -40,7 +41,7 @@ public abstract class AbstractPonderBuilder<T,
 
     protected Runnable function = () -> {
         String s = getStartMessage();
-        if (s != null) PonderJS.LOGGER.info(s);
+        if (s != null) PonderJSMod.LOGGER.info(s);
     };
 
     protected String getName(String scene) {

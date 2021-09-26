@@ -1,9 +1,8 @@
-package com.kotakotik.ponderjs.kubejs;
+package com.kotakotik.ponderjs;
 
-import com.kotakotik.ponderjs.PonderJS;
 import com.kotakotik.ponderjs.api.AbstractPonderBuilder;
-import com.kotakotik.ponderjs.kubejs.util.SceneBuilderJS;
-import com.kotakotik.ponderjs.kubejs.util.SceneBuildingUtilJS;
+import com.kotakotik.ponderjs.util.SceneBuilderJS;
+import com.kotakotik.ponderjs.util.SceneBuildingUtilJS;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
 import com.simibubi.create.foundation.utility.Couple;
@@ -26,8 +25,8 @@ public class PonderBuilderJS extends
                 .map(ResourceLocation::new)
                 .collect(Collectors.toList()));
         String namespace = this.name.getNamespace();
-        if (!PonderJSPlugin.namespaces.contains(namespace)) {
-            PonderJSPlugin.namespaces.add(namespace);
+        if (!PonderJS.namespaces.contains(namespace)) {
+            PonderJS.namespaces.add(namespace);
         }
     }
 
@@ -50,8 +49,8 @@ public class PonderBuilderJS extends
         if (!PonderRegistryEventJS.rerun) {
             String pathOnlyName = getPathOnlyName(name);
             Couple<String> sceneId = Couple.create(this.name.getNamespace(), pathOnlyName);
-            if (!PonderJSPlugin.scenes.contains(sceneId)) {
-                PonderJSPlugin.scenes.add(sceneId);
+            if (!PonderJS.scenes.contains(sceneId)) {
+                PonderJS.scenes.add(sceneId);
             }
             for (ResourceLocation id : items)
                 addNamedStoryBoard(pathOnlyName, displayName, id, PonderJS.appendKubeToId(schematic), (b, u) -> programStoryBoard(fullName, b, u));

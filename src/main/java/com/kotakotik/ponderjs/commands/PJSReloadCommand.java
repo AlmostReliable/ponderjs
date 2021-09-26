@@ -1,6 +1,6 @@
-package com.kotakotik.ponderjs.kubejs.commands;
+package com.kotakotik.ponderjs.commands;
 
-import com.kotakotik.ponderjs.kubejs.PonderRegistryEventJS;
+import com.kotakotik.ponderjs.PonderRegistryEventJS;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;

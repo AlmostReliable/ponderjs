@@ -1,4 +1,4 @@
-package com.kotakotik.ponderjs.kubejs.util;
+package com.kotakotik.ponderjs.util;
 
 import net.minecraft.item.DyeColor;
 

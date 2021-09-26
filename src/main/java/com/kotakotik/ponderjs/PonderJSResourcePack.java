@@ -1,4 +1,4 @@
-package com.kotakotik.ponderjs.kubejs;
+package com.kotakotik.ponderjs;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -37,8 +37,8 @@ public class PonderJSResourcePack implements IPackFinder {
             // kubejs.ponder.ponder_builder.test.header
             JsonObject lang = new JsonObject();
 
-            for(String key : PonderJSPlugin.LANG.keySet()) {
-                lang.addProperty(key, PonderJSPlugin.LANG.get(key));
+            for (String key : PonderJS.LANG.keySet()) {
+                lang.addProperty(key, PonderJS.LANG.get(key));
             }
 //            for (BuilderBase builder : KubeJSObjects.ALL) {
 //                if (builder instanceof PonderJS.LangBuilderJS && !builder.displayName.isEmpty()) {

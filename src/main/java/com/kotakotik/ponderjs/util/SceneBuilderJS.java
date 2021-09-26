@@ -1,4 +1,4 @@
-package com.kotakotik.ponderjs.kubejs.util;
+package com.kotakotik.ponderjs.util;
 
 import com.simibubi.create.foundation.ponder.ElementLink;
 import com.simibubi.create.foundation.ponder.SceneBuilder;

@@ -1,4 +1,4 @@
-package com.kotakotik.ponderjs.kubejs;
+package com.kotakotik.ponderjs;
 
 import com.kotakotik.ponderjs.config.ModConfigs;
 import dev.latvian.kubejs.KubeJS;
@@ -17,28 +17,28 @@ public class PonderRegistryEventJS extends EventJS {
         return new PonderBuilderJS(name, ListJS.orSelf(items));
     }
 
-    public static void rerunScripts(ScriptType scriptType, String tagRegistry, String tagItem, String ponder, PonderJSPlugin mainJS) {
+    public static void rerunScripts(ScriptType scriptType, String tagRegistry, String tagItem, String ponder) {
         if (tagRegistry != null) {
-            mainJS.tagRegistryEvent.post(scriptType, tagRegistry);
+            PonderJS.tagRegistryEvent.post(scriptType, tagRegistry);
         }
         if (tagItem != null) {
-            mainJS.tagItemEvent.post(scriptType, tagItem);
+            PonderJS.tagItemEvent.post(scriptType, tagItem);
         }
         if (ponder != null) {
-            mainJS.ponderEvent.post(scriptType, ponder);
+            PonderJS.ponderEvent.post(scriptType, ponder);
         }
     }
 
     public static void rerunScripts() {
-        rerunScripts(ScriptType.CLIENT, "ponder.tag.registry", "ponder.tag", "ponder.registry", PonderJSPlugin.get());
+        rerunScripts(ScriptType.CLIENT, "ponder.tag.registry", "ponder.tag", "ponder.registry");
     }
 
     public static void regenerateLangIntoFile() {
 //        JsonObject json = new JsonObject();
 //        PonderLocalization.generateSceneLang();
-        PonderJSPlugin.fillPonderLang();
+        PonderJS.fillPonderLang();
 //        PJSLocalization.record(PonderJSPlugin.namespaces,);
-        Triple<Boolean, ITextComponent, Integer> result = PonderJSPlugin.generateJsonLang(PonderJSPlugin.LANG);
+        Triple<Boolean, ITextComponent, Integer> result = PonderJS.generateJsonLang(PonderJS.LANG);
         boolean success = result.a;
         int count = result.c;
         if (success) {
@@ -49,7 +49,7 @@ public class PonderRegistryEventJS extends EventJS {
                 }
             }
         } else {
-            PonderJSPlugin.generatePonderLang();
+            PonderJS.generatePonderLang();
         }
     }
 
@@ -57,7 +57,7 @@ public class PonderRegistryEventJS extends EventJS {
             if(ModConfigs.CLIENT.autoGenerateLang.get()) {
                 regenerateLangIntoFile();
             } else {
-                PonderJSPlugin.generatePonderLang();
+                PonderJS.generatePonderLang();
             }
     }
 
@@ -65,7 +65,7 @@ public class PonderRegistryEventJS extends EventJS {
 
     public static void runAllRegistration() {
         if (rerun) {
-            rerunScripts(ScriptType.CLIENT, null, null, "ponder.registry", PonderJSPlugin.get());
+            rerunScripts(ScriptType.CLIENT, null, null, "ponder.registry");
         } else {
             rerunScripts();
         }

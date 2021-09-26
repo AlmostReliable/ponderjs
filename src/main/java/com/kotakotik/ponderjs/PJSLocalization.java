@@ -46,9 +46,9 @@ public class PJSLocalization {
 //    protected static Function<ResourceLocation, String> langKeyForShared =
 //            PonderJS.staticOneArgMethod(PonderLocalization.class, "langKeyForShared", ResourceLocation.class);
     protected static Function<ResourceLocation, String> langKeyForTag =
-            PonderJS.staticOneArgMethod(PonderLocalization.class, "langKeyForTag", ResourceLocation.class);
+            PonderJSMod.staticOneArgMethod(PonderLocalization.class, "langKeyForTag", ResourceLocation.class);
     protected static Function<ResourceLocation, String> langKeyForTagDescription =
-            PonderJS.staticOneArgMethod(PonderLocalization.class, "langKeyForTagDescription", ResourceLocation.class);
+            PonderJSMod.staticOneArgMethod(PonderLocalization.class, "langKeyForTagDescription", ResourceLocation.class);
 //    protected static Function<ResourceLocation, String> langKeyForChapter =
 //            PonderJS.staticOneArgMethod(PonderLocalization.class, "langKeyForChapter", ResourceLocation.class);
 //    protected static LazyValue<Method> langKeyForSpecificVal = PonderJS.staticMethodVal(PonderLocalization.class, "langKeyForSpecific", ResourceLocation.class, String.class);

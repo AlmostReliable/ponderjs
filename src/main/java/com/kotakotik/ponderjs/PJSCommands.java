@@ -1,8 +1,8 @@
 package com.kotakotik.ponderjs;
 
-import com.kotakotik.ponderjs.kubejs.commands.GenerateKubeJSLangCommand;
-import com.kotakotik.ponderjs.kubejs.commands.PJSPostCommand;
-import com.kotakotik.ponderjs.kubejs.commands.PJSReloadCommand;
+import com.kotakotik.ponderjs.commands.GenerateKubeJSLangCommand;
+import com.kotakotik.ponderjs.commands.PJSPostCommand;
+import com.kotakotik.ponderjs.commands.PJSReloadCommand;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.command.CommandSource;

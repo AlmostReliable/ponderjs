@@ -1,6 +1,5 @@
-package com.kotakotik.ponderjs.kubejs;
+package com.kotakotik.ponderjs;
 
-import com.kotakotik.ponderjs.PonderJS;
 import com.simibubi.create.foundation.ponder.PonderRegistry;
 import com.simibubi.create.foundation.ponder.content.PonderTag;
 import dev.latvian.kubejs.KubeJSRegistries;
@@ -16,17 +15,17 @@ public class PonderTagRegistryEventJS extends EventJS {
     public PonderTagRegistryEventJS create(String name, ResourceLocation displayItem, String title, String description, Object defaultItems) {
         try {
             ResourceLocation id = PonderJS.appendKubeToId(name);
-            if (!PonderJSPlugin.tags.contains(id)) {
-                PonderJSPlugin.tags.add(id);
+            if (!PonderJS.tags.contains(id)) {
+                PonderJS.tags.add(id);
             }
-            if (!PonderJSPlugin.namespaces.contains(id.getNamespace())) {
-                PonderJSPlugin.namespaces.add(id.getNamespace());
+            if (!PonderJS.namespaces.contains(id.getNamespace())) {
+                PonderJS.namespaces.add(id.getNamespace());
             }
             PonderTag tag = new PonderTag(id)
                     .item(KubeJSRegistries.items().get(displayItem))
                     .defaultLang(title, description);
             PonderRegistry.TAGS.listTag(tag);
-            PonderJSPlugin.get().tagItemEvent.add(id.toString(), defaultItems);
+            PonderJS.tagItemEvent.add(id.toString(), defaultItems);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -42,7 +41,7 @@ public class PonderTagRegistryEventJS extends EventJS {
                         if (res.contains(tag.getId())) {
                             if (clearItems) {
                                 try {
-                                    PonderJSPlugin.get().tagItemEvent.remove(tag.getId().toString(), ListJS.of(PonderRegistry.TAGS.getItems(tag)));
+                                    PonderJS.tagItemEvent.remove(tag.getId().toString(), ListJS.of(PonderRegistry.TAGS.getItems(tag)));
                                 } catch (IllegalAccessException e) {
                                     e.printStackTrace();
                                 }

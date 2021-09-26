@@ -1,7 +1,6 @@
-package com.kotakotik.ponderjs.kubejs;
+package com.kotakotik.ponderjs;
 
 import com.google.common.collect.Multimap;
-import com.kotakotik.ponderjs.PonderJS;
 import com.simibubi.create.foundation.ponder.PonderRegistry;
 import com.simibubi.create.foundation.ponder.content.PonderTag;
 import com.simibubi.create.foundation.ponder.content.PonderTagRegistry;
