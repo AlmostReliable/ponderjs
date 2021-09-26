@@ -20,7 +20,7 @@ public class ModClientConfigs extends ModConfigs.AutoConfigBase {
         langPath =
                 builder.comment(" ", "The path to the lang file where lang entries are automatically generated" +
                         " %lang% is replaced by the value of the lang config value")
-                .define("langPath", "kubejs/assets/kubejs/lang/%lang%.json");
+                        .define("langPath", "kubejs/assets/ponderjs_generated/lang/%lang%.json");
 
         lang =
                 builder.comment(" ", "Used for the langPath config value, and if autoGenerateLang is false this is where it will generate lang in the generated pack")
