@@ -59,7 +59,7 @@ side = "BOTH"
 [[dependencies.ponderjs]]
 modId = "create"
 mandatory = true
-versionRange = "[v0.3.2d, v0.3.2e)"
+versionRange = "[v0.3.2d, v0.3.2f)"
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.ponderjs]]
