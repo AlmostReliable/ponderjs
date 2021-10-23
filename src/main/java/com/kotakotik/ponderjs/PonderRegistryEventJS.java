@@ -83,6 +83,7 @@ public class PonderRegistryEventJS extends EventJS {
                 runAllRegistration();
             } catch (Exception e) { // i think theres a way to do this with the completable future but this is easier
                 e.printStackTrace();
+                ScriptType.CLIENT.console.error("Error occurred while running ponder events", e);
             }
         });
     }
