@@ -1,4 +1,4 @@
-package com.kotakotik.ponderjs.util;
+ package com.kotakotik.ponderjs.util;
 
 import com.simibubi.create.foundation.ponder.ElementLink;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
@@ -8,7 +8,6 @@ import dev.latvian.kubejs.KubeJSRegistries;
 import dev.latvian.kubejs.bindings.BlockWrapper;
 import dev.latvian.kubejs.block.predicate.BlockIDPredicate;
 import dev.latvian.kubejs.entity.EntityJS;
-import dev.latvian.kubejs.util.MapJS;
 import dev.latvian.kubejs.util.UtilsJS;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -128,40 +127,38 @@ public class SceneBuilderJS implements ISceneBuilderJS {
             this.sceneBuilder = sceneBuilder;
         }
 
-        public Consumer<CompoundNBT> mapJsConsumerToNBT(Object pos, UnaryOperator<MapJS> sup) {
+        public Consumer<CompoundNBT> mapJsConsumerToNBT(Object pos, UnaryOperator<CompoundNBT> sup) {
             return nbt -> {
                 Objects.requireNonNull(nbt, "Could not find NBT in selection " +
                         pos + ", your selection might include non-tiles!");
-                CompoundNBT n = MapJS.nbt(
-                        Objects.requireNonNull(sup.apply(Objects.requireNonNull(MapJS.of(nbt))),
-                                "Null returned for tile NBT")
-                );
+                CompoundNBT n = Objects.requireNonNull(sup.apply(Objects.requireNonNull(nbt)),
+                        "Null returned for tile NBT");
                 nbt.merge(n);
             };
         }
 
-        public void updateTileNBT(Selection selection, UnaryOperator<MapJS> sup) {
+        public void updateTileNBT(Selection selection, UnaryOperator<CompoundNBT> sup) {
             modifyTileNBT(selection, TileEntity.class, mapJsConsumerToNBT(selection, sup));
         }
 
-        public void modifyTileNBT(Selection selection, MapJS obj) {
+        public void modifyTileNBT(Selection selection, CompoundNBT obj) {
             updateTileNBT(selection, $ -> obj);
         }
 
-        public void updateTileNBT(Selection selection, Class<? extends TileEntity> teType, UnaryOperator<MapJS> sup, boolean reDrawBlocks) {
+        public void updateTileNBT(Selection selection, Class<? extends TileEntity> teType, UnaryOperator<CompoundNBT> sup, boolean reDrawBlocks) {
 //            TypeToken<?> t = TypeSetKubeJSRegistries.blockEntities().get(teType);
             modifyTileNBT(selection, teType, mapJsConsumerToNBT(selection, sup), reDrawBlocks);
         }
 
-        public void updateTileNBT(Selection selection, UnaryOperator<MapJS> sup, boolean reDrawBlocks) {
+        public void updateTileNBT(Selection selection, UnaryOperator<CompoundNBT> sup, boolean reDrawBlocks) {
             updateTileNBT(selection, TileEntity.class, sup, reDrawBlocks);
         }
 
-        public void modifyTileNBT(Selection selection, Class<? extends TileEntity> teType, MapJS obj, boolean reDrawBlocks) {
+        public void modifyTileNBT(Selection selection, Class<? extends TileEntity> teType, CompoundNBT obj, boolean reDrawBlocks) {
             updateTileNBT(selection, teType, $ -> obj, reDrawBlocks);
         }
 
-        public void modifyTileNBT(Selection selection, MapJS obj, boolean reDrawBlocks) {
+        public void modifyTileNBT(Selection selection, CompoundNBT obj, boolean reDrawBlocks) {
             modifyTileNBT(selection, TileEntity.class, obj, reDrawBlocks);
         }
 
