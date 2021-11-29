@@ -39,10 +39,7 @@ import org.antlr.v4.runtime.misc.Triple;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -155,7 +152,9 @@ public class PonderJS {
             Reader reader = new InputStreamReader(Minecraft.getInstance().getResourceManager().getResource(
                     new ResourceLocation("kubejs", "lang/" + ModConfigs.CLIENT.lang.get() + ".json")).getInputStream(), StandardCharsets.UTF_8);
             assetLang = g.getAdapter(JsonObject.class).read(new JsonReader(reader));
-        } catch (IOException e) {
+        } catch(FileNotFoundException ignored) {
+
+        } catch(IOException e) {
             e.printStackTrace();
         }
         return assetLang;
