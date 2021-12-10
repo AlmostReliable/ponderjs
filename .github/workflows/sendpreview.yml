@@ -33,7 +33,7 @@ jobs:
                 uses: eskatos/gradle-command-action@v1
                 with:
                     arguments: jar --max-workers 1
-                    wrapper-cache-enabled: true
+                    distributions-cache-enabled: true
                 env:
                     ENV_VERSION: preview-${{ steps.get_commit.outputs.commit }}
             -   name: Send built file to discord
