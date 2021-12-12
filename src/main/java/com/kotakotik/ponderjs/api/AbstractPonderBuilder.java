@@ -4,8 +4,7 @@ import com.kotakotik.ponderjs.PonderJS;
 import com.kotakotik.ponderjs.PonderJSMod;
 import com.simibubi.create.foundation.ponder.*;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.Arrays;

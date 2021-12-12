@@ -1,11 +1,11 @@
 package com.kotakotik.ponderjs;
 
 import com.simibubi.create.foundation.ponder.PonderRegistry;
-import com.simibubi.create.foundation.ponder.content.PonderTag;
-import dev.latvian.kubejs.KubeJSRegistries;
-import dev.latvian.kubejs.event.EventJS;
-import dev.latvian.kubejs.util.ListJS;
-import net.minecraft.util.ResourceLocation;
+import com.simibubi.create.foundation.ponder.PonderTag;
+import dev.latvian.mods.kubejs.KubeJSRegistries;
+import dev.latvian.mods.kubejs.event.EventJS;
+import dev.latvian.mods.kubejs.util.ListJS;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Arrays;
 import java.util.List;

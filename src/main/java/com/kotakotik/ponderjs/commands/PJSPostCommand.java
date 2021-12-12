@@ -4,10 +4,10 @@ import com.kotakotik.ponderjs.PonderRegistryEventJS;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.TextComponent;
 
-public class PJSPostCommand implements Command<CommandSource> {
+public class PJSPostCommand implements Command<CommandSourceStack> {
     public static String r(boolean requireReload) {
         try {
             PonderRegistryEventJS.runAllRegistration();
@@ -20,10 +20,10 @@ public class PJSPostCommand implements Command<CommandSource> {
     }
 
     @Override
-    public int run(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
+    public int run(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         String r = r(true);
         if(r.equals("err")) return 0;
-        ctx.getSource().sendSuccess(new StringTextComponent(r), false);
+        ctx.getSource().sendSuccess(new TextComponent(r), false);
         return 1;
     }
 }

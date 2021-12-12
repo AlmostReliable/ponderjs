@@ -1,15 +1,17 @@
 package com.kotakotik.ponderjs;
 
 import com.kotakotik.ponderjs.config.ModConfigs;
-import dev.latvian.kubejs.KubeJS;
-import dev.latvian.kubejs.event.EventJS;
-import dev.latvian.kubejs.script.ScriptType;
-import dev.latvian.kubejs.util.ListJS;
+import dev.latvian.mods.kubejs.KubeJS;
+import dev.latvian.mods.kubejs.event.EventJS;
+import dev.latvian.mods.kubejs.script.ScriptType;
+import dev.latvian.mods.kubejs.util.ListJS;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import org.antlr.v4.runtime.misc.Triple;
+
+import java.awt.*;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class PonderRegistryEventJS extends EventJS {
@@ -33,12 +35,12 @@ public class PonderRegistryEventJS extends EventJS {
         rerunScripts(ScriptType.CLIENT, "ponder.tag.registry", "ponder.tag", "ponder.registry");
     }
 
-    public static void regenerateLangIntoFile() {
+    public static void regenerateLang() {
 //        JsonObject json = new JsonObject();
 //        PonderLocalization.generateSceneLang();
         PonderJS.fillPonderLang();
 //        PJSLocalization.record(PonderJSPlugin.namespaces,);
-        Triple<Boolean, ITextComponent, Integer> result = PonderJS.generateJsonLang(PonderJS.LANG);
+        Triple<Boolean, Component, Integer> result = PonderJS.generateJsonLang(PonderJS.LANG);
         boolean success = result.a;
         int count = result.c;
         if (success) {
@@ -49,16 +51,9 @@ public class PonderRegistryEventJS extends EventJS {
                 }
             }
         } else {
-            PonderJS.generatePonderLang();
+            PonderJSMod.LOGGER.error("Could not generate PonderJS lang!");
+//            PonderJS.generatePonderLang();
         }
-    }
-
-    public static void regenerateLang() {
-            if(ModConfigs.CLIENT.autoGenerateLang.get()) {
-                regenerateLangIntoFile();
-            } else {
-                PonderJS.generatePonderLang();
-            }
     }
 
     public static boolean rerun = false;

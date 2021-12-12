@@ -7,11 +7,11 @@ import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
 import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
-import dev.latvian.kubejs.script.ScriptType;
-import dev.latvian.kubejs.util.ListJS;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.RegistryObject;
+import dev.latvian.mods.kubejs.script.ScriptType;
+import dev.latvian.mods.kubejs.util.ListJS;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.HashMap;
 import java.util.function.BiConsumer;

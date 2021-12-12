@@ -6,10 +6,6 @@ import net.minecraftforge.common.ForgeConfigSpec;
 public class ModClientConfigs extends ModConfigs.AutoConfigBase {
     public ForgeConfigSpec.ConfigValue<String> langPath;
     public ForgeConfigSpec.ConfigValue<String> lang;
-    public ConfigBool autoGenerateLang = b(true, "autoGenerateLang",
-            "Whether or not to automatically generate lang " +
-                    "into the path in the langPath config value, if disabled, a resource pack is generated at runtime for this" +
-                    ", however this should really be true", ConfigAnnotations.RequiresRestart.CLIENT.asComment());
 
     public String getLangPath() {
         return langPath.get().replace("%lang%", lang.get());

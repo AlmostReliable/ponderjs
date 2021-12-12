@@ -7,34 +7,32 @@ import com.google.gson.stream.JsonReader;
 import com.kotakotik.ponderjs.config.ModConfigs;
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.ponder.PonderLocalization;
-import com.simibubi.create.foundation.ponder.PonderRegistry;
-import com.simibubi.create.foundation.ponder.Selection;
-import com.simibubi.create.foundation.ponder.content.PonderPalette;
-import com.simibubi.create.foundation.ponder.content.PonderTag;
-import com.simibubi.create.foundation.ponder.elements.InputWindowElement;
-import com.simibubi.create.foundation.ponder.elements.ParrotElement;
+import com.simibubi.create.foundation.ponder.*;
+import com.simibubi.create.foundation.ponder.element.InputWindowElement;
+import com.simibubi.create.foundation.ponder.element.ParrotElement;
 import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.foundation.utility.Pointing;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
-import dev.latvian.kubejs.KubeJS;
-import dev.latvian.kubejs.script.BindingsEvent;
-import dev.latvian.kubejs.script.ScriptType;
+import dev.architectury.hooks.PackRepositoryHooks;
+import dev.latvian.mods.kubejs.KubeJS;
+import dev.latvian.mods.kubejs.script.BindingsEvent;
+import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
-import me.shedaniel.architectury.hooks.PackRepositoryHooks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourcePackList;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.repository.PackRepository;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraftforge.registries.RegistryObject;
 import org.antlr.v4.runtime.misc.Triple;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
@@ -86,13 +84,13 @@ public class PonderJS {
     static void addTypeWrappers(ScriptType type, TypeWrappers typeWrappers) {
         typeWrappers.register(Selection.class, o -> {
             if (o instanceof Selection) return (Selection) o;
-            if (o instanceof MutableBoundingBox) {
-                return Selection.of((MutableBoundingBox) o);
+            if (o instanceof AABB) {
+                return Selection.of((BoundingBox) o);
             }
             if (o instanceof BlockPos) {
-                return Selection.of(new MutableBoundingBox((BlockPos) o, BlockPos.ZERO));
+                return Selection.of(new BoundingBox((BlockPos) o));
             }
-            return Selection.of(new MutableBoundingBox(0, 0, 0, 0, 0, 0));
+            return Selection.of(new BoundingBox(0, 0, 0, 0, 0, 0));
         });
         typeWrappers.register(AllIcons.class, o -> {
             if (o instanceof AllIcons) return (AllIcons) o;
@@ -100,7 +98,7 @@ public class PonderJS {
         });
     }
 
-    public static Triple<Boolean, ITextComponent, Integer> generateJsonLang(HashMap<String, String> from) {
+    public static Triple<Boolean, Component, Integer> generateJsonLang(HashMap<String, String> from) {
         Logger log = PonderJSMod.LOGGER;
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         File file = new File(ModConfigs.CLIENT.getLangPath());
@@ -134,11 +132,11 @@ public class PonderJS {
             if (wrote.size() > 0) {
                 log.info(j);
             }
-            return new Triple<>(true, new StringTextComponent(c), wrote.size());
+            return new Triple<>(true, new TextComponent(c), wrote.size());
         } catch (IOException e) {
             log.error("Couldn't write KubeJS lang");
             e.printStackTrace();
-            return new Triple<>(false, new StringTextComponent("Unable to write KubeJS lang: " + e.getClass().getSimpleName() + "\nMore info in logs"), wrote.size());
+            return new Triple<>(false, new TextComponent("Unable to write KubeJS lang: " + e.getClass().getSimpleName() + "\nMore info in logs"), wrote.size());
         }
     }
 
@@ -183,35 +181,6 @@ public class PonderJS {
         fillPonderLang(new GsonBuilder().setPrettyPrinting().create());
     }
 
-    public static void generatePonderLang() {
-        Gson g = new GsonBuilder().setPrettyPrinting().create();
-        Minecraft mc = Minecraft.getInstance();
-        fillPonderLang(g);
-        if (LANG.size() > 0) {
-            PonderJSMod.LOGGER.warn("Found missing ponder lang, registering resource pack and reloading" +
-                    "\nMissing: " + g.toJson(LANG) +
-                    "\nKeys only: " + g.toJson(LANG.keySet()));
-            ResourcePackList list = mc.getResourcePackRepository();
-            PonderJSResourcePack pack = new PonderJSResourcePack();
-            PackRepositoryHooks.addSource(list, pack);
-            Minecraft.getInstance().reloadResourcePacks();
-        } else {
-            PonderJSMod.LOGGER.info("No ponder lang missing, skipping resource pack registration");
-        }
-
-//        list.reload();
-//        List<IResourcePack> list1 = list.openAllSelected();
-//        CompletableFuture<Unit> completablePain = CompletableFuture.completedFuture(Unit.INSTANCE);
-//        ((IReloadableResourceManager) mc.getResourceManager()).createFullReload(Util.backgroundExecutor(), mc,completablePain , list1).done().complete(Unit.INSTANCE);
-//        completablePain.complete(Unit.INSTANCE);
-//        list.reload();
-//        Collection<String> s = list.getSelectedIds();
-//        List<String> sl = new ArrayList<>(s);
-//        sl.add(pack.id);
-//        list.setSelected(sl);
-//        Minecraft.getInstance().getLanguageManager().onResourceManagerReload(Minecraft.getInstance().getResourceManager());
-    }
-
     public static Optional<PonderTag> getTagByName(ResourceLocation res) {
         return PonderRegistry.TAGS.getListedTags().stream().filter(tag -> tag.getId().equals(res)).findFirst();
     }
@@ -233,7 +202,7 @@ public class PonderJS {
         return getTagByName(appendCreateToId(tag));
     }
 
-    public static <T extends IForgeRegistryEntry<? super T> & IItemProvider> ItemProviderEntry<T> createItemProvider(RegistryObject<T> item) {
+    public static <T extends IForgeRegistryEntry<? super T> & ItemLike> ItemProviderEntry<T> createItemProvider(RegistryObject<T> item) {
         return new ItemProviderEntry<>(Create.registrate(), item);
     }
 

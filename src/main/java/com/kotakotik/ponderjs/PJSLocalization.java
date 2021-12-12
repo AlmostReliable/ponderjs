@@ -3,7 +3,7 @@ package com.kotakotik.ponderjs;
 import com.google.gson.JsonObject;
 import com.simibubi.create.foundation.ponder.PonderLocalization;
 import com.simibubi.create.foundation.utility.Couple;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 import java.util.function.Function;
@@ -34,13 +34,13 @@ public class PJSLocalization {
     }
 
     // hell
-//    protected static LazyValue<Map<ResourceLocation, String>> sharedField = (LazyValue<Map<ResourceLocation,java.lang.String>>)
+//    protected static Lazy<Map<ResourceLocation, String>> sharedField = (Lazy<Map<ResourceLocation,java.lang.String>>)
 //            PonderJS.staticFinalFieldVal(PonderLocalization.class, "SHARED");
-//    protected static LazyValue<Map<ResourceLocation, Couple<String>>> tagField = (LazyValue<Map<ResourceLocation, Couple<String>>>)
+//    protected static Lazy<Map<ResourceLocation, Couple<String>>> tagField = (Lazy<Map<ResourceLocation, Couple<String>>>)
 //            PonderJS.staticFinalFieldVal(PonderLocalization.class, "TAG");
-//    protected static LazyValue<Map<ResourceLocation, String>> chapterField = (LazyValue<Map<ResourceLocation, String>>)
+//    protected static Lazy<Map<ResourceLocation, String>> chapterField = (Lazy<Map<ResourceLocation, String>>)
 //            PonderJS.staticFinalFieldVal(PonderLocalization.class, "CHAPTER");
-//    protected static LazyValue<Map<ResourceLocation, Map<String, String>>> specificField = (LazyValue<Map<ResourceLocation, Map<String, String>>>)
+//    protected static Lazy<Map<ResourceLocation, Map<String, String>>> specificField = (Lazy<Map<ResourceLocation, Map<String, String>>>)
 //            PonderJS.staticFinalFieldVal(PonderLocalization.class, "SPECIFIC");
 //
 //    protected static Function<ResourceLocation, String> langKeyForShared =
@@ -51,7 +51,7 @@ public class PJSLocalization {
             PonderJSMod.staticOneArgMethod(PonderLocalization.class, "langKeyForTagDescription", ResourceLocation.class);
 //    protected static Function<ResourceLocation, String> langKeyForChapter =
 //            PonderJS.staticOneArgMethod(PonderLocalization.class, "langKeyForChapter", ResourceLocation.class);
-//    protected static LazyValue<Method> langKeyForSpecificVal = PonderJS.staticMethodVal(PonderLocalization.class, "langKeyForSpecific", ResourceLocation.class, String.class);
+//    protected static Lazy<Method> langKeyForSpecificVal = PonderJS.staticMethodVal(PonderLocalization.class, "langKeyForSpecific", ResourceLocation.class, String.class);
 //    protected static BiFunction<ResourceLocation, String, String> langKeyForSpecific = (r, s) -> {
 //        try {
 //            return (String) langKeyForSpecificVal.get().invoke(null, r, s);

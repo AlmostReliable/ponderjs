@@ -4,17 +4,18 @@ import com.simibubi.create.content.logistics.block.mechanicalArm.ArmTileEntity;
 import com.simibubi.create.foundation.ponder.ElementLink;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.Selection;
-import com.simibubi.create.foundation.ponder.elements.*;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.Property;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import com.simibubi.create.foundation.ponder.element.*;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -82,7 +83,7 @@ public interface ISceneBuilderJS {
             return getInternal().birbOnSpinnyShaft(pos);
         }
 
-        default ElementLink<ParrotElement> createBirb(Vector3d location, Supplier<? extends ParrotElement.ParrotPose> pose) {
+        default ElementLink<ParrotElement> createBirb(Vec3 location, Supplier<? extends ParrotElement.ParrotPose> pose) {
             return getInternal().createBirb(location, pose);
         }
 
@@ -90,7 +91,7 @@ public interface ISceneBuilderJS {
             getInternal().changeBirbPose(birb, pose);
         }
 
-        default void movePointOfInterest(Vector3d location) {
+        default void movePointOfInterest(Vec3 location) {
             getInternal().movePointOfInterest(location);
         }
 
@@ -98,11 +99,11 @@ public interface ISceneBuilderJS {
             getInternal().rotateParrot(link, xRotation, yRotation, zRotation, duration);
         }
 
-        default void moveParrot(ElementLink<ParrotElement> link, Vector3d offset, int duration) {
+        default void moveParrot(ElementLink<ParrotElement> link, Vec3 offset, int duration) {
             getInternal().moveParrot(link, offset, duration);
         }
 
-        default ElementLink<MinecartElement> createCart(Vector3d location, float angle, MinecartElement.MinecartConstructor type) {
+        default ElementLink<MinecartElement> createCart(Vec3 location, float angle, MinecartElement.MinecartConstructor type) {
             return getInternal().createCart(location, angle, type);
         }
 
@@ -110,7 +111,7 @@ public interface ISceneBuilderJS {
             getInternal().rotateCart(link, yRotation, duration);
         }
 
-        default void moveCart(ElementLink<MinecartElement> link, Vector3d offset, int duration) {
+        default void moveCart(ElementLink<MinecartElement> link, Vec3 offset, int duration) {
             getInternal().moveCart(link, offset, duration);
         }
 
@@ -169,15 +170,15 @@ public interface ISceneBuilderJS {
             getInternal().rotateSection(link, xRotation, yRotation, zRotation, duration);
         }
 
-        default void configureCenterOfRotation(ElementLink<WorldSectionElement> link, Vector3d anchor) {
+        default void configureCenterOfRotation(ElementLink<WorldSectionElement> link, Vec3 anchor) {
             getInternal().configureCenterOfRotation(link, anchor);
         }
 
-        default void configureStabilization(ElementLink<WorldSectionElement> link, Vector3d anchor) {
+        default void configureStabilization(ElementLink<WorldSectionElement> link, Vec3 anchor) {
             getInternal().configureStabilization(link, anchor);
         }
 
-        default void moveSection(ElementLink<WorldSectionElement> link, Vector3d offset, int duration) {
+        default void moveSection(ElementLink<WorldSectionElement> link, Vec3 offset, int duration) {
             getInternal().moveSection(link, offset, duration);
         }
 
@@ -237,11 +238,11 @@ public interface ISceneBuilderJS {
 //            getInternal().modifyEntity(link, entityCallBack);
 //        }
 
-        default ElementLink<EntityElement> createEntity(Function<World, Entity> factory) {
+        default ElementLink<EntityElement> createEntity(Function<Level, Entity> factory) {
             return getInternal().createEntity(factory);
         }
 
-        default ElementLink<EntityElement> createItemEntity(Vector3d location, Vector3d motion, ItemStack stack) {
+        default ElementLink<EntityElement> createItemEntity(Vec3 location, Vec3 motion, ItemStack stack) {
             return getInternal().createItemEntity(location, motion, stack);
         }
 
@@ -285,19 +286,19 @@ public interface ISceneBuilderJS {
             getInternal().propagatePipeChange(pos);
         }
 
-        default void setFilterData(Selection selection, Class<? extends TileEntity> teType, ItemStack filter) {
+        default void setFilterData(Selection selection, Class<? extends BlockEntity> teType, ItemStack filter) {
             getInternal().setFilterData(selection, teType, filter);
         }
 
-        default void modifyTileNBT(Selection selection, Class<? extends TileEntity> teType, Consumer<CompoundNBT> consumer) {
+        default void modifyTileNBT(Selection selection, Class<? extends BlockEntity> teType, Consumer<CompoundTag> consumer) {
             getInternal().modifyTileNBT(selection, teType, consumer);
         }
 
-        default <T extends TileEntity> void modifyTileEntity(BlockPos position, Class<T> teType, Consumer<T> consumer) {
+        default <T extends BlockEntity> void modifyBlockEntity(BlockPos position, Class<T> teType, Consumer<T> consumer) {
             getInternal().modifyTileEntity(position, teType, consumer);
         }
 
-        default void modifyTileNBT(Selection selection, Class<? extends TileEntity> teType, Consumer<CompoundNBT> consumer, boolean reDrawBlocks) {
+        default void modifyTileNBT(Selection selection, Class<? extends BlockEntity> teType, Consumer<CompoundTag> consumer, boolean reDrawBlocks) {
             getInternal().modifyTileNBT(selection, teType, consumer, reDrawBlocks);
         }
 

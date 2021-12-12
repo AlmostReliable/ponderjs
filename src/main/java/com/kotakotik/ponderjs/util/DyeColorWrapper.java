@@ -1,6 +1,6 @@
 package com.kotakotik.ponderjs.util;
 
-import net.minecraft.item.DyeColor;
+import net.minecraft.world.item.DyeColor;
 
 public class DyeColorWrapper {
     public final DyeColor mcColor;
@@ -22,7 +22,7 @@ public class DyeColorWrapper {
     }
 
     public int getColorValue() {
-        return mcColor.getColorValue();
+        return mcColor.getTextColor();
     }
 
     public static DyeColorWrapper get(String name) {

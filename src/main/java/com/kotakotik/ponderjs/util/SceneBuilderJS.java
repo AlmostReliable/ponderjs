@@ -1,24 +1,24 @@
  package com.kotakotik.ponderjs.util;
 
+import com.jozufozu.flywheel.util.Lazy;
 import com.simibubi.create.foundation.ponder.ElementLink;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.Selection;
-import com.simibubi.create.foundation.ponder.elements.EntityElement;
-import dev.latvian.kubejs.KubeJSRegistries;
-import dev.latvian.kubejs.bindings.BlockWrapper;
-import dev.latvian.kubejs.block.predicate.BlockIDPredicate;
-import dev.latvian.kubejs.entity.EntityJS;
-import dev.latvian.kubejs.util.UtilsJS;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.LazyValue;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import com.simibubi.create.foundation.ponder.element.EntityElement;
+import dev.latvian.mods.kubejs.KubeJSRegistries;
+import dev.latvian.mods.kubejs.bindings.BlockWrapper;
+import dev.latvian.mods.kubejs.block.predicate.BlockIDPredicate;
+import dev.latvian.mods.kubejs.entity.EntityJS;
+import dev.latvian.mods.kubejs.util.UtilsJS;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -47,7 +47,7 @@ public class SceneBuilderJS implements ISceneBuilderJS {
 //    }
 
 // aaaaaa i could have just used MapJS.of(nbt)
-//    public JsonObject nbtToJson(CompoundNBT nbt) {
+//    public JsonObject nbtToJson(CompoundTag nbt) {
 //        BuiltinKubeJSPlugin
 //        JsonObject json = new JsonObject();
 //        for(String key : nbt.getAllKeys()) {
@@ -77,7 +77,7 @@ public class SceneBuilderJS implements ISceneBuilderJS {
         return getInternal().overlay;
     }
 
-    public LazyValue<WorldInstructionsJS> worldInstructionsJS = new LazyValue<>(() ->
+    public Lazy<WorldInstructionsJS> worldInstructionsJS = new Lazy<>(() ->
             new WorldInstructionsJS(getInternal().world, this));
 
     @Override
@@ -95,7 +95,7 @@ public class SceneBuilderJS implements ISceneBuilderJS {
         return getInternal().effects;
     }
 
-    public LazyValue<SpecialInstructionsJS> specialInstructionsJS = new LazyValue<>(() ->
+    public Lazy<SpecialInstructionsJS> specialInstructionsJS = new Lazy<>(() ->
             new SpecialInstructionsJS(getInternal().special));
 
     @Override
@@ -127,39 +127,39 @@ public class SceneBuilderJS implements ISceneBuilderJS {
             this.sceneBuilder = sceneBuilder;
         }
 
-        public Consumer<CompoundNBT> mapJsConsumerToNBT(Object pos, UnaryOperator<CompoundNBT> sup) {
+        public Consumer<CompoundTag> mapJsConsumerToNBT(Object pos, UnaryOperator<CompoundTag> sup) {
             return nbt -> {
                 Objects.requireNonNull(nbt, "Could not find NBT in selection " +
                         pos + ", your selection might include non-tiles!");
-                CompoundNBT n = Objects.requireNonNull(sup.apply(Objects.requireNonNull(nbt)),
+                CompoundTag n = Objects.requireNonNull(sup.apply(Objects.requireNonNull(nbt)),
                         "Null returned for tile NBT");
                 nbt.merge(n);
             };
         }
 
-        public void updateTileNBT(Selection selection, UnaryOperator<CompoundNBT> sup) {
-            modifyTileNBT(selection, TileEntity.class, mapJsConsumerToNBT(selection, sup));
+        public void updateTileNBT(Selection selection, UnaryOperator<CompoundTag> sup) {
+            modifyTileNBT(selection, BlockEntity.class, mapJsConsumerToNBT(selection, sup));
         }
 
-        public void modifyTileNBT(Selection selection, CompoundNBT obj) {
+        public void modifyTileNBT(Selection selection, CompoundTag obj) {
             updateTileNBT(selection, $ -> obj);
         }
 
-        public void updateTileNBT(Selection selection, Class<? extends TileEntity> teType, UnaryOperator<CompoundNBT> sup, boolean reDrawBlocks) {
+        public void updateTileNBT(Selection selection, Class<? extends BlockEntity> teType, UnaryOperator<CompoundTag> sup, boolean reDrawBlocks) {
 //            TypeToken<?> t = TypeSetKubeJSRegistries.blockEntities().get(teType);
             modifyTileNBT(selection, teType, mapJsConsumerToNBT(selection, sup), reDrawBlocks);
         }
 
-        public void updateTileNBT(Selection selection, UnaryOperator<CompoundNBT> sup, boolean reDrawBlocks) {
-            updateTileNBT(selection, TileEntity.class, sup, reDrawBlocks);
+        public void updateTileNBT(Selection selection, UnaryOperator<CompoundTag> sup, boolean reDrawBlocks) {
+            updateTileNBT(selection, BlockEntity.class, sup, reDrawBlocks);
         }
 
-        public void modifyTileNBT(Selection selection, Class<? extends TileEntity> teType, CompoundNBT obj, boolean reDrawBlocks) {
+        public void modifyTileNBT(Selection selection, Class<? extends BlockEntity> teType, CompoundTag obj, boolean reDrawBlocks) {
             updateTileNBT(selection, teType, $ -> obj, reDrawBlocks);
         }
 
-        public void modifyTileNBT(Selection selection, CompoundNBT obj, boolean reDrawBlocks) {
-            modifyTileNBT(selection, TileEntity.class, obj, reDrawBlocks);
+        public void modifyTileNBT(Selection selection, CompoundTag obj, boolean reDrawBlocks) {
+            modifyTileNBT(selection, BlockEntity.class, obj, reDrawBlocks);
         }
 
         @Override
@@ -191,15 +191,15 @@ public class SceneBuilderJS implements ISceneBuilderJS {
                             UtilsJS.getWorld(e.level), e)));
         }
 
-        public ElementLink<EntityElement> createEntity(ResourceLocation id, Vector3d pos, UnaryOperator<EntityJS> mod) {
+        public ElementLink<EntityElement> createEntity(ResourceLocation id, Vec3 pos, UnaryOperator<EntityJS> mod) {
             return internal.createEntity(w -> mod.apply(createEntityJS(w, id, pos)).minecraftEntity);
         }
 
-        public ElementLink<EntityElement> createEntity(ResourceLocation id, Vector3d pos) {
+        public ElementLink<EntityElement> createEntity(ResourceLocation id, Vec3 pos) {
             return createEntity(id, pos, e -> e);
         }
 
-        public EntityJS createEntityJS(World world, ResourceLocation id, Vector3d pos) {
+        public EntityJS createEntityJS(Level world, ResourceLocation id, Vec3 pos) {
             Entity entity = getEntity(id).create(world);
             entity.setPos(pos.x, pos.y, pos.z);
             return new EntityJS(UtilsJS.getWorld(world), entity);

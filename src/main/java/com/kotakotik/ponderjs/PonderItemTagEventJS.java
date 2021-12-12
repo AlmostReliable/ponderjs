@@ -2,12 +2,12 @@ package com.kotakotik.ponderjs;
 
 import com.google.common.collect.Multimap;
 import com.simibubi.create.foundation.ponder.PonderRegistry;
-import com.simibubi.create.foundation.ponder.content.PonderTag;
-import com.simibubi.create.foundation.ponder.content.PonderTagRegistry;
-import dev.latvian.kubejs.event.EventJS;
-import dev.latvian.kubejs.util.ListJS;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import com.simibubi.create.foundation.ponder.PonderTag;
+import com.simibubi.create.foundation.ponder.PonderTagRegistry;
+import dev.latvian.mods.kubejs.event.EventJS;
+import dev.latvian.mods.kubejs.util.ListJS;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Field;
 

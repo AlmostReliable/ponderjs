@@ -1,13 +1,12 @@
 package com.kotakotik.ponderjs;
 
 
-import net.minecraft.util.LazyValue;
+import com.jozufozu.flywheel.util.Lazy;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.network.FMLNetworkConstants;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +23,8 @@ public class PonderJSMod {
     public static final Logger LOGGER = LogManager.getLogger(BuildConfig.MODID);
 
     public PonderJSMod() {
-        ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.DISPLAYTEST, () -> Pair.of(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
+        ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class,
+                () -> new IExtensionPoint.DisplayTest(() -> "ANY", (a, b) -> true));
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> PonderJS::clientModInit);
 //        DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
 //                () -> () -> {
@@ -34,8 +34,8 @@ public class PonderJSMod {
 //                });
     }
 
-    static LazyValue<?> staticFinalFieldVal(Class<?> clazz, String field) {
-        return new LazyValue<>(() -> {
+    static Lazy<?> staticFinalFieldVal(Class<?> clazz, String field) {
+        return new Lazy<>(() -> {
             Field f;
             try {
                 f = clazz.getDeclaredField(field);
@@ -53,8 +53,8 @@ public class PonderJSMod {
         });
     }
 
-    static LazyValue<Method> staticMethodVal(Class<?> clazz, String method, Class<?>... classes) {
-        return new LazyValue<>(() -> {
+    static Lazy<Method> staticMethodVal(Class<?> clazz, String method, Class<?>... classes) {
+        return new Lazy<>(() -> {
             Method f;
             try {
                 f = clazz.getDeclaredMethod(method, classes);
@@ -68,7 +68,7 @@ public class PonderJSMod {
     }
 
     static <R, T> Function<T, R> staticOneArgMethod(Class<?> clazz, String method, Class<T> arg) {
-        LazyValue<Method> m = staticMethodVal(clazz, method, arg);
+        Lazy<Method> m = staticMethodVal(clazz, method, arg);
         return (t) -> {
             try {
                 return (R) m.get().invoke(null, t);

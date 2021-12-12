@@ -1,9 +1,11 @@
 package com.kotakotik.ponderjs.config;
 
+import com.simibubi.create.foundation.config.AllConfigs;
 import com.simibubi.create.foundation.config.ConfigBase;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -57,7 +59,7 @@ public class ModConfigs {
                     .registerConfig(pair.getValue(), pair.getKey().specification);
     }
 
-    public static void onLoad(net.minecraftforge.fml.config.ModConfig.Loading event) {
+    public static void onLoad(ModConfigEvent.Loading event) {
         for (Map.Entry<AutoConfigBase, ModConfig.Type> pair : configs.entrySet())
             if (pair.getKey().specification == event.getConfig()
                     .getSpec())
@@ -65,7 +67,7 @@ public class ModConfigs {
                         .onLoad();
     }
 
-    public static void onReload(net.minecraftforge.fml.config.ModConfig.Reloading event) {
+    public static void onReload(ModConfigEvent.Reloading event) {
         for (Map.Entry<AutoConfigBase, ModConfig.Type> pair : configs.entrySet())
             if (pair.getKey().specification == event.getConfig()
                     .getSpec())

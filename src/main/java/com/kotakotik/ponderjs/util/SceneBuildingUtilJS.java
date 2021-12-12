@@ -1,13 +1,13 @@
 package com.kotakotik.ponderjs.util;
 
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
-import dev.latvian.kubejs.bindings.BlockWrapper;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.RegistryObject;
+import dev.latvian.mods.kubejs.bindings.BlockWrapper;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.Item;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class SceneBuildingUtilJS implements ISceneBuildingUtilJS {
     protected final SceneBuildingUtil internal;
