@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "ponderjs.refmap.json",
   "mixins": [
+    "PonderLocalizationAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

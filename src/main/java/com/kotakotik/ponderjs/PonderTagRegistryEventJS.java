@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PonderTagRegistryEventJS extends EventJS {
-    public PonderTagRegistryEventJS create(String name, ResourceLocation displayItem, String title, String description, Object defaultItems) {
+    public PonderTagRegistryEventJS create(String name, ResourceLocation displayItem, String title, String description) {
         try {
             ResourceLocation id = PonderJS.appendKubeToId(name);
             if (!PonderJS.tags.contains(id)) {
@@ -25,7 +25,6 @@ public class PonderTagRegistryEventJS extends EventJS {
                     .item(KubeJSRegistries.items().get(displayItem))
                     .defaultLang(title, description);
             PonderRegistry.TAGS.listTag(tag);
-            PonderJS.tagItemEvent.add(id.toString(), defaultItems);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -34,8 +33,7 @@ public class PonderTagRegistryEventJS extends EventJS {
 
     public PonderTagRegistryEventJS remove(boolean clearItems, String... id) {
             List<ResourceLocation> res = Arrays.stream(id)
-                    .map(PonderJS::appendCreateToId)
-                    .collect(Collectors.toList());
+                    .map(PonderJS::appendCreateToId).toList();
             if (!PonderRegistry.TAGS.getListedTags()
                     .removeIf(tag -> {
                         if (res.contains(tag.getId())) {
@@ -57,9 +55,5 @@ public class PonderTagRegistryEventJS extends EventJS {
 
     public PonderTagRegistryEventJS remove(String... id) {
         return remove(true, id);
-    }
-
-    public PonderTagRegistryEventJS create(String name, ResourceLocation displayItem, String title, String description) {
-        return create(name, displayItem, title, description, new ListJS());
     }
 }

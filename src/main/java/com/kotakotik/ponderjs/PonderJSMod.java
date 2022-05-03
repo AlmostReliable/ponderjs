@@ -33,49 +33,4 @@ public class PonderJSMod {
 //                    }
 //                });
     }
-
-    static Lazy<?> staticFinalFieldVal(Class<?> clazz, String field) {
-        return new Lazy<>(() -> {
-            Field f;
-            try {
-                f = clazz.getDeclaredField(field);
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-                return null;
-            }
-            f.setAccessible(true);
-            try {
-                return f.get(null);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            return null;
-        });
-    }
-
-    static Lazy<Method> staticMethodVal(Class<?> clazz, String method, Class<?>... classes) {
-        return new Lazy<>(() -> {
-            Method f;
-            try {
-                f = clazz.getDeclaredMethod(method, classes);
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-                return null;
-            }
-            f.setAccessible(true);
-            return f;
-        });
-    }
-
-    static <R, T> Function<T, R> staticOneArgMethod(Class<?> clazz, String method, Class<T> arg) {
-        Lazy<Method> m = staticMethodVal(clazz, method, arg);
-        return (t) -> {
-            try {
-                return (R) m.get().invoke(null, t);
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            return null;
-        };
-    }
 }

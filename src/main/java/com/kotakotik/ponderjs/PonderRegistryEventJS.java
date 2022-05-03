@@ -1,23 +1,18 @@
 package com.kotakotik.ponderjs;
 
-import com.kotakotik.ponderjs.config.ModConfigs;
 import dev.latvian.mods.kubejs.KubeJS;
 import dev.latvian.mods.kubejs.event.EventJS;
+import dev.latvian.mods.kubejs.item.ingredient.IngredientJS;
 import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.kubejs.util.ListJS;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import org.antlr.v4.runtime.misc.Triple;
 
-import java.awt.*;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class PonderRegistryEventJS extends EventJS {
-    public PonderBuilderJS create(String name, Object items) {
-        return new PonderBuilderJS(name, ListJS.orSelf(items));
-    }
+    public static boolean rerun = false;
 
     public static void rerunScripts(ScriptType scriptType, String tagRegistry, String tagItem, String ponder) {
         if (tagRegistry != null) {
@@ -56,8 +51,6 @@ public class PonderRegistryEventJS extends EventJS {
         }
     }
 
-    public static boolean rerun = false;
-
     public static void runAllRegistration() {
         if (rerun) {
             rerunScripts(ScriptType.CLIENT, null, null, "ponder.registry");
@@ -68,7 +61,11 @@ public class PonderRegistryEventJS extends EventJS {
         rerun = true;
     }
 
-    public void register(FMLClientSetupEvent event) {
+    public PonderBuilderJS create(String name, IngredientJS ingredient) {
+        return new PonderBuilderJS(name, ingredient.getVanillaItems());
+    }
+
+    public static void register(FMLClientSetupEvent event) {
 //                PonderRegistry.forComponents(itemProvider)
 //                        .addStoryBoard("test", b.function::accept);
 //                PonderRegistry.TAGS.forTag(PonderTag.KINETIC_RELAYS)

@@ -59,7 +59,7 @@ public class PonderJS {
         ponderEvent = new PonderRegistryEventJS();
         tagRegistryEvent = new PonderTagRegistryEventJS();
         tagItemEvent = new PonderItemTagEventJS();
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ponderEvent::register);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(PonderRegistryEventJS::register);
     }
 
     public static IEventBus modEventBus;
@@ -200,10 +200,6 @@ public class PonderJS {
 
     public static Optional<PonderTag> getTagByName(String tag) {
         return getTagByName(appendCreateToId(tag));
-    }
-
-    public static <T extends IForgeRegistryEntry<? super T> & ItemLike> ItemProviderEntry<T> createItemProvider(RegistryObject<T> item) {
-        return new ItemProviderEntry<>(Create.registrate(), item);
     }
 
     public static AllIcons getIconByName(String icon) {

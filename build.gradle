@@ -161,6 +161,7 @@ jar {
 
 mixin {
     add sourceSets.main, "${modid}.refmap.json"
+    config "${modid}.mixins.json"
 }
 
 task deobfJar(type: Jar) {

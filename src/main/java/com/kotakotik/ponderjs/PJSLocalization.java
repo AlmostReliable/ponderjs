@@ -1,6 +1,7 @@
 package com.kotakotik.ponderjs;
 
 import com.google.gson.JsonObject;
+import com.kotakotik.ponderjs.mixin.PonderLocalizationAccessor;
 import com.simibubi.create.foundation.ponder.PonderLocalization;
 import com.simibubi.create.foundation.utility.Couple;
 import net.minecraft.resources.ResourceLocation;
@@ -15,8 +16,8 @@ public class PJSLocalization {
         for (String namespace : namespaces) {
             PonderLocalization.record(namespace, tempJson);
         }
-        List<String> tagsAsIds = tags.stream().map(langKeyForTag).collect(Collectors.toList());
-        List<String> tagsAsDescriptionIds = tags.stream().map(langKeyForTagDescription).collect(Collectors.toList());
+        List<String> tagsAsIds = tags.stream().map(PonderLocalizationAccessor::langKeyForTag).toList();
+        List<String> tagsAsDescriptionIds = tags.stream().map(PonderLocalizationAccessor::langKeyForTagDescription).toList();
         tempJson.entrySet().forEach((e) -> {
             String key = e.getKey();
             String value = e.getValue().getAsString();
@@ -33,34 +34,6 @@ public class PJSLocalization {
         return json;
     }
 
-    // hell
-//    protected static Lazy<Map<ResourceLocation, String>> sharedField = (Lazy<Map<ResourceLocation,java.lang.String>>)
-//            PonderJS.staticFinalFieldVal(PonderLocalization.class, "SHARED");
-//    protected static Lazy<Map<ResourceLocation, Couple<String>>> tagField = (Lazy<Map<ResourceLocation, Couple<String>>>)
-//            PonderJS.staticFinalFieldVal(PonderLocalization.class, "TAG");
-//    protected static Lazy<Map<ResourceLocation, String>> chapterField = (Lazy<Map<ResourceLocation, String>>)
-//            PonderJS.staticFinalFieldVal(PonderLocalization.class, "CHAPTER");
-//    protected static Lazy<Map<ResourceLocation, Map<String, String>>> specificField = (Lazy<Map<ResourceLocation, Map<String, String>>>)
-//            PonderJS.staticFinalFieldVal(PonderLocalization.class, "SPECIFIC");
-//
-//    protected static Function<ResourceLocation, String> langKeyForShared =
-//            PonderJS.staticOneArgMethod(PonderLocalization.class, "langKeyForShared", ResourceLocation.class);
-    protected static Function<ResourceLocation, String> langKeyForTag =
-            PonderJSMod.staticOneArgMethod(PonderLocalization.class, "langKeyForTag", ResourceLocation.class);
-    protected static Function<ResourceLocation, String> langKeyForTagDescription =
-            PonderJSMod.staticOneArgMethod(PonderLocalization.class, "langKeyForTagDescription", ResourceLocation.class);
-//    protected static Function<ResourceLocation, String> langKeyForChapter =
-//            PonderJS.staticOneArgMethod(PonderLocalization.class, "langKeyForChapter", ResourceLocation.class);
-//    protected static Lazy<Method> langKeyForSpecificVal = PonderJS.staticMethodVal(PonderLocalization.class, "langKeyForSpecific", ResourceLocation.class, String.class);
-//    protected static BiFunction<ResourceLocation, String, String> langKeyForSpecific = (r, s) -> {
-//        try {
-//            return (String) langKeyForSpecificVal.get().invoke(null, r, s);
-//        } catch (IllegalAccessException | InvocationTargetException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    };
-
     public static String getSceneLangId(Couple<String> scene) {
         return scene.getFirst() + ".ponder." + scene.getSecond();
     }
@@ -70,42 +43,4 @@ public class PJSLocalization {
         return textKey.startsWith(l + ".text_") ||
                 textKey.equals(l + ".header");
     }
-
-//
-//    public static void record(JsonObject object, List<String> sharedKeys, List<ResourceLocation> tags, List<ResourceLocation> chapters) {
-//        PonderLangEventJS lang = new PonderLangEventJS();
-//        lang.post(ScriptType.CLIENT, "ponder.lang");
-//        sharedField.get().forEach((k, v) -> {
-//            String key = langKeyForShared.apply(k);
-//            if(lang.matches(key) || sharedKeys.contains(key)) {
-//                object.addProperty(key, v);
-//            }
-//        });
-//        tagField.get().forEach((k, v) -> {
-//            if(tags.contains(k)) {
-//                String key = langKeyForTag.apply(k);
-//                if(lang.matches(key)) {
-//                    object.addProperty(key, v.getFirst());
-//                }
-//                String key2 = langKeyForTagDescription.apply(k);
-//                if(lang.matches(key2)) {
-//                    object.addProperty(langKeyForTagDescription.apply(k), v.getSecond());
-//                }
-//            }
-//        });
-//        chapterField.get().forEach((k, v) -> {
-//            String key = langKeyForChapter.apply(k);
-//            if (lang.matches(key) || chapters.contains(k)) {
-//                object.addProperty(key, v);
-//            }
-//
-//        });
-//        specificField.get().entrySet().stream().map((k) -> Pair.of(k.getKey(), langKeyForSpecific.apply(k.getVa))).filter((entry) -> {
-//            return chapters.contains(entry.getKey()) || lang.matches(entry.getKe);
-//        }).sorted(Map.Entry.comparingByKey()).forEach((entry) -> {
-//            ((Map)entry.getValue()).entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach((subEntry) -> {
-//                object.addProperty(langKeyForSpecific((ResourceLocation)entry.getKey(), (String)subEntry.getKey()), (String)subEntry.getValue());
-//            });
-//        });
-//    }
 }

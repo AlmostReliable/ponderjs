@@ -5,28 +5,29 @@ import com.kotakotik.ponderjs.PonderJSMod;
 import com.simibubi.create.foundation.ponder.*;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
 /**
  * Also known as type param hell
  *
- * @param <T> The Item type
  * @param <S> Self
  * @param <C> The scene bi-consumer
  */
-public abstract class AbstractPonderBuilder<T,
-        S extends AbstractPonderBuilder<T, S, C>,
+public abstract class AbstractPonderBuilder<
+        S extends AbstractPonderBuilder<S, C>,
         C extends BiConsumer<?, ?>> {
     protected ResourceLocation name;
-    protected List<T> items;
+    protected Set<Item> items;
 
     protected abstract S getSelf();
 
-    public AbstractPonderBuilder(ResourceLocation name, List<T> items) {
+    public AbstractPonderBuilder(ResourceLocation name, Set<Item> items) {
         this.name = name;
         this.items = items;
     }
@@ -51,11 +52,9 @@ public abstract class AbstractPonderBuilder<T,
         return name.getPath() + "." + scene;
     }
 
-    protected String getName(String scene, T item) {
-        return getName(scene) + "." + itemToString(item);
+    protected String getName(String scene, Item item) {
+        return getName(scene) + "." + item.getDescriptionId();
     }
-
-    protected abstract ResourceLocation[] itemsToIdArray();
 
     /**
      * @param tags The list of tags to add
@@ -63,40 +62,38 @@ public abstract class AbstractPonderBuilder<T,
      */
     protected S tag(String... tags) {
             for(String tag : tags) {
-                PonderRegistry.TAGS.forItems(itemsToIdArray()).add(PonderJS.getTagByName(tag).get());
+                PonderTag ponderTag = PonderJS.getTagByName(tag).orElseThrow();
+                PonderTagRegistry.TagBuilder tagBuilder = PonderRegistry.TAGS.forTag(ponderTag);
+                items.forEach(tagBuilder::add);
             }
             return getSelf();
     }
 
     /**
-     * @return The item provider. There's a utility method for that: {@link PonderJS#createItemProvider(RegistryObject)}
+     * @return The item provider.
      */
-    protected abstract ItemProviderEntry<?> getItemProviderEntry(T item);
-//    protected abstract PonderStoryBoardEntry.PonderStoryBoard storyBoard(C scene);
+    protected abstract ItemProviderEntry<?> getItemProviderEntry(Item item);
+
     protected abstract void programStoryBoard(C scene, SceneBuilder builder, SceneBuildingUtil util);
 
-    protected S addStoryBoard(T item, ResourceLocation schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
+    protected S addStoryBoard(Item item, ResourceLocation schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
         new PonderRegistrationHelper(name.getNamespace())
                 .forComponents(getItemProviderEntry(item))
                 .addStoryBoard(schematic, scene);
-//            PonderRegistry.addStoryBoard(getItemProviderEntry(item), schematic, scene)
         return getSelf();
     }
 
     protected static List<String> added = new ArrayList<>();
 
-    protected S addNamedStoryBoard(String name, String displayName, T item, ResourceLocation schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
+    protected S addNamedStoryBoard(String name, String displayName, Item item, ResourceLocation schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
         String cacheName = getName(name, item);
         if(added.contains(cacheName)) return getSelf();
         added.add(cacheName);
         return addStoryBoard(item, schematic, (builder, util) -> {
                         builder.title(name, displayName);
                         scene.program(builder, util);
-//                        programStoryBoard(scene, builder, util);
-//                        storyBoard(scene).program(builder, util);
                     });
     }
 
-    protected abstract String itemToString(T item);
     protected abstract C createConsumer(BiConsumer<SceneBuilder, SceneBuildingUtil> consumer);
 }

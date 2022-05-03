@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+// TODO move into Scene too
 public class SceneBuildingUtilJS implements ISceneBuildingUtilJS {
     protected final SceneBuildingUtil internal;
 
@@ -19,14 +20,6 @@ public class SceneBuildingUtilJS implements ISceneBuildingUtilJS {
     @Override
     public SceneBuildingUtil getInternal() {
         return internal;
-    }
-
-    public RegistryObject<Block> block(ResourceLocation id) {
-        return RegistryObject.of(id, ForgeRegistries.BLOCKS);
-    }
-
-    public RegistryObject<Item> item(ResourceLocation id) {
-        return RegistryObject.of(id, ForgeRegistries.ITEMS);
     }
 
     // BlockWrapper.id(...).getBlockstate() throws an NPE because properties are null, so it's much easier to do it this way

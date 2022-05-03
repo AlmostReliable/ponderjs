@@ -3,6 +3,7 @@ package com.kotakotik.ponderjs;
 import com.kotakotik.ponderjs.api.AbstractPonderBuilder;
 import com.kotakotik.ponderjs.util.SceneBuilderJS;
 import com.kotakotik.ponderjs.util.SceneBuildingUtilJS;
+import com.simibubi.create.Create;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
 import com.simibubi.create.foundation.utility.Couple;
@@ -10,20 +11,19 @@ import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
 import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.kubejs.util.ListJS;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.HashMap;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 public class PonderBuilderJS extends
-        AbstractPonderBuilder<ResourceLocation, PonderBuilderJS, PonderBuilderJS.SceneConsumer> {
-    public PonderBuilderJS(String name, ListJS ids) {
-        super(PonderJS.appendKubeToId(name), ids.stream()
-                .map(Object::toString)
-                .map(ResourceLocation::new)
-                .collect(Collectors.toList()));
+        AbstractPonderBuilder<PonderBuilderJS, PonderBuilderJS.SceneConsumer> {
+    public PonderBuilderJS(String name, Set<Item> items) {
+        super(PonderJS.appendKubeToId(name), items);
         String namespace = this.name.getNamespace();
         if (!PonderJS.namespaces.contains(namespace)) {
             PonderJS.namespaces.add(namespace);
@@ -52,7 +52,7 @@ public class PonderBuilderJS extends
             if (!PonderJS.scenes.contains(sceneId)) {
                 PonderJS.scenes.add(sceneId);
             }
-            for (ResourceLocation id : items)
+            for (var id : items)
                 addNamedStoryBoard(pathOnlyName, displayName, id, PonderJS.appendKubeToId(schematic), (b, u) -> programStoryBoard(fullName, b, u));
         }
         return this;
@@ -64,13 +64,8 @@ public class PonderBuilderJS extends
     }
 
     @Override
-    protected ResourceLocation[] itemsToIdArray() {
-        return items.toArray(new ResourceLocation[0]);
-    }
-
-    @Override
-    protected ItemProviderEntry<?> getItemProviderEntry(ResourceLocation item) {
-        return PonderJS.createItemProvider(RegistryObject.of(item, ForgeRegistries.ITEMS));
+    protected ItemProviderEntry<?> getItemProviderEntry(Item item) {
+        return new ItemProviderEntry<>(Create.registrate(), RegistryObject.create(item.getRegistryName(), ForgeRegistries.ITEMS));
     }
 
     @Override
@@ -85,11 +80,6 @@ public class PonderBuilderJS extends
             t.printStackTrace();
             ScriptType.CLIENT.console.error("Error occurred in ponder " + name, t);
         }
-    }
-
-    @Override
-    protected String itemToString(ResourceLocation item) {
-        return item.toString().replace(":", ".");
     }
 
     @Override
