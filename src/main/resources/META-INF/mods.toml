@@ -43,7 +43,7 @@ modId = "forge" #mandatory
 # Does this dependency have to exist - if not, ordering below must be specified
 mandatory = true #mandatory
 # The version range of the dependency
-versionRange = "[36,)" #mandatory
+versionRange = "[40,)" #mandatory
 # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
 ordering = "NONE"
 # Side this dependency is applied on - BOTH, CLIENT or SERVER
@@ -59,13 +59,13 @@ side = "BOTH"
 [[dependencies.ponderjs]]
 modId = "create"
 mandatory = true
-versionRange = "[0.4c,)"
+versionRange = "[0.4.1,)"
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.ponderjs]]
 modId = "kubejs"
 mandatory = true
-versionRange = "[1605.3.15-build.100,)"
+versionRange = "[1802.5.1-build.300,)"
 ordering = "NONE"
 side = "BOTH"
 #[[dependencies.ponderjs]]

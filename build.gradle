@@ -122,12 +122,21 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    implementation fg.deobf("com.simibubi.create:Create:mc${minecraft_version}_v${create_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
+
+    implementation fg.deobf("com.simibubi.create:Create:${create_version}")
     implementation fg.deobf("com.jozufozu.flywheel:Flywheel-Forge:${flywheel_version}")
+
     implementation fg.deobf("dev.latvian.mods:kubejs-forge:${kubejs_version}")
-    implementation fg.deobf("curse.maven:rhino-416294:${rhino_file_id}")
-//    implementation "dev.latvian.mods:rhino:${rhino_version}"
     implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
+    implementation fg.deobf("dev.latvian.mods:rhino-forge:${rhino_version}")
+
+//    implementation fg.deobf("dev.latvian.mods:kubejs-forge:${kubejs_version}")
+    // implementation fg.deobf("curse.maven:rhino-416294:${rhino_file_id}")
+//    implementation "dev.latvian.mods:rhino:${rhino_version}"
+//    implementation fg.deobf("dev.latvian.mods:rhino-forge:${rhino_version}")
+//    implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
 //    compileOnly fg.deobf("com.blamejared.crafttweaker:CraftTweaker-${crafttweaker_version}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'

@@ -188,7 +188,7 @@ public class SceneBuilderJS implements ISceneBuilderJS {
         public void modifyEntity(ElementLink<EntityElement> entity, Consumer<EntityJS> mod) {
             internal.modifyEntity(entity, (e) ->
                     mod.accept(new EntityJS(
-                            UtilsJS.getWorld(e.level), e)));
+                            UtilsJS.getLevel(e.level), e)));
         }
 
         public ElementLink<EntityElement> createEntity(ResourceLocation id, Vec3 pos, UnaryOperator<EntityJS> mod) {
@@ -202,7 +202,7 @@ public class SceneBuilderJS implements ISceneBuilderJS {
         public EntityJS createEntityJS(Level world, ResourceLocation id, Vec3 pos) {
             Entity entity = getEntity(id).create(world);
             entity.setPos(pos.x, pos.y, pos.z);
-            return new EntityJS(UtilsJS.getWorld(world), entity);
+            return new EntityJS(UtilsJS.getLevel(world), entity);
         }
 
         public EntityType<?> getEntity(ResourceLocation id) {
