@@ -14,10 +14,7 @@ import org.antlr.v4.runtime.misc.Triple;
 public class PonderRegistryEventJS extends EventJS {
     public static boolean rerun = false;
 
-    public static void rerunScripts(ScriptType scriptType, String tagRegistry, String tagItem, String ponder) {
-        if (tagRegistry != null) {
-            PonderJS.tagRegistryEvent.post(scriptType, tagRegistry);
-        }
+    public static void rerunScripts(ScriptType scriptType, String tagItem, String ponder) {
         if (tagItem != null) {
             PonderJS.tagItemEvent.post(scriptType, tagItem);
         }
@@ -27,7 +24,7 @@ public class PonderRegistryEventJS extends EventJS {
     }
 
     public static void rerunScripts() {
-        rerunScripts(ScriptType.CLIENT, "ponder.tag.registry", "ponder.tag", "ponder.registry");
+        rerunScripts(ScriptType.CLIENT, "ponder.tag", "ponder.registry");
     }
 
     public static void regenerateLang() {
@@ -53,7 +50,7 @@ public class PonderRegistryEventJS extends EventJS {
 
     public static void runAllRegistration() {
         if (rerun) {
-            rerunScripts(ScriptType.CLIENT, null, null, "ponder.registry");
+            rerunScripts(ScriptType.CLIENT, null, "ponder.registry");
         } else {
             rerunScripts();
         }

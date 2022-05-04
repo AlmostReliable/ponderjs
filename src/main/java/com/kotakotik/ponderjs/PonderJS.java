@@ -12,8 +12,6 @@ import com.simibubi.create.foundation.ponder.element.InputWindowElement;
 import com.simibubi.create.foundation.ponder.element.ParrotElement;
 import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.foundation.utility.Pointing;
-import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
-import dev.architectury.hooks.PackRepositoryHooks;
 import dev.latvian.mods.kubejs.KubeJS;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
 import dev.latvian.mods.kubejs.script.ScriptType;
@@ -23,16 +21,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.repository.PackRepository;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import net.minecraftforge.registries.IForgeRegistryEntry;
-import net.minecraftforge.registries.RegistryObject;
 import org.antlr.v4.runtime.misc.Triple;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
@@ -40,29 +33,24 @@ import org.apache.logging.log4j.Logger;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class PonderJS {
     public static final HashMap<String, String> LANG = new HashMap<>();
+    @Deprecated(forRemoval = true)
     public static final List<String> namespaces = new ArrayList<>();
     public static final List<ResourceLocation> tags = new ArrayList<>();
     public static final List<Couple<String>> scenes = new ArrayList<>();
     public static final HashMap<String, AllIcons> cachedIcons = new HashMap<>();
     public static PonderRegistryEventJS ponderEvent;
-    public static PonderTagRegistryEventJS tagRegistryEvent;
     public static PonderItemTagEventJS tagItemEvent;
+    public static IEventBus modEventBus;
 
     static void clientPluginInit() {
         ponderEvent = new PonderRegistryEventJS();
-        tagRegistryEvent = new PonderTagRegistryEventJS();
         tagItemEvent = new PonderItemTagEventJS();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(PonderRegistryEventJS::register);
     }
-
-    public static IEventBus modEventBus;
 
     static void clientModInit() {
         modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -92,10 +80,13 @@ public class PonderJS {
             }
             return Selection.of(new BoundingBox(0, 0, 0, 0, 0, 0));
         });
+
         typeWrappers.register(AllIcons.class, o -> {
             if (o instanceof AllIcons) return (AllIcons) o;
             return getIconByName(o.toString());
         });
+
+        typeWrappers.register(PonderTag.class, o -> PonderJS.getTagByName(o.toString()).orElseThrow(() -> new NoSuchElementException("No tags found matching " + o)));
     }
 
     public static Triple<Boolean, Component, Integer> generateJsonLang(HashMap<String, String> from) {
@@ -150,9 +141,9 @@ public class PonderJS {
             Reader reader = new InputStreamReader(Minecraft.getInstance().getResourceManager().getResource(
                     new ResourceLocation("kubejs", "lang/" + ModConfigs.CLIENT.lang.get() + ".json")).getInputStream(), StandardCharsets.UTF_8);
             assetLang = g.getAdapter(JsonObject.class).read(new JsonReader(reader));
-        } catch(FileNotFoundException ignored) {
+        } catch (FileNotFoundException ignored) {
 
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return assetLang;

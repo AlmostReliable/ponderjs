@@ -9,8 +9,6 @@ import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
 import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
 import dev.latvian.mods.kubejs.script.ScriptType;
-import dev.latvian.mods.kubejs.util.ListJS;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -18,7 +16,6 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 public class PonderBuilderJS extends
         AbstractPonderBuilder<PonderBuilderJS, PonderBuilderJS.SceneConsumer> {
