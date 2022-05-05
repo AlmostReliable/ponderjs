@@ -24,11 +24,6 @@ public class PonderItemTagEventJS extends EventJS {
         });
 
         ResourceLocation idWithNamespace = PonderJS.appendKubeToId(id);
-
-        if (!PonderJS.tags.contains(idWithNamespace)) {
-            PonderJS.tags.add(idWithNamespace);
-        }
-
         PonderTag ponderTag = new PonderTag(idWithNamespace).item(displayItem.getItem()).defaultLang(title, description);
         PonderRegistry.TAGS.listTag(ponderTag);
         add(ponderTag, ingredient);

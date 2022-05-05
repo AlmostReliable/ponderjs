@@ -4,7 +4,7 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "ponderjs.refmap.json",
   "mixins": [
-    "PonderLocalizationAccessor",
+    "KubeJSClientMixin",
     "PonderTagRegistryAccessor"
   ],
   "injectors": {

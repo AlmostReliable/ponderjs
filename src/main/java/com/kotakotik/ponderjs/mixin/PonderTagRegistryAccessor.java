@@ -10,6 +10,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(PonderTagRegistry.class)
 public interface PonderTagRegistryAccessor {
 
-    @Accessor("tags")
+    @Accessor(value = "tags", remap = false)
     Multimap<ResourceLocation, PonderTag> getTags();
 }

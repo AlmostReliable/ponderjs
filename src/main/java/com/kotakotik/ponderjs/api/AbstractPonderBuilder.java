@@ -19,9 +19,7 @@ import java.util.function.BiConsumer;
  * @param <S> Self
  * @param <C> The scene bi-consumer
  */
-public abstract class AbstractPonderBuilder<
-        S extends AbstractPonderBuilder<S, C>,
-        C extends BiConsumer<?, ?>> {
+public abstract class AbstractPonderBuilder<S extends AbstractPonderBuilder<S>> {
     protected ResourceLocation name;
     protected Set<Item> items;
 
@@ -73,8 +71,6 @@ public abstract class AbstractPonderBuilder<
      */
     protected abstract ItemProviderEntry<?> getItemProviderEntry(Item item);
 
-    protected abstract void programStoryBoard(C scene, SceneBuilder builder, SceneBuildingUtil util);
-
     protected S addStoryBoard(Item item, ResourceLocation schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
         new PonderRegistrationHelper(name.getNamespace())
                 .forComponents(getItemProviderEntry(item))
@@ -93,6 +89,4 @@ public abstract class AbstractPonderBuilder<
                         scene.program(builder, util);
                     });
     }
-
-    protected abstract C createConsumer(BiConsumer<SceneBuilder, SceneBuildingUtil> consumer);
 }
