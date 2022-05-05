@@ -107,7 +107,7 @@ public class PonderJS {
         }
     }
 
-    public synchronized static Map<String, String> createLang() {
+    public static Map<String, String> createLang() {
         PonderRegistry.ALL.forEach((resourceLocation, stories) -> {
             for (int i = 0; i < stories.size(); i++) {
                 var story = stories.get(i);
@@ -173,7 +173,7 @@ public class PonderJS {
         }
         new PonderItemTagEventJS().post(ScriptType.CLIENT, TAG_EVENT);
         new PonderRegistryEventJS().post(ScriptType.CLIENT, REGISTRY_EVENT);
-
+        generateJsonLang("en_us");
         initialized = true;
     }
 

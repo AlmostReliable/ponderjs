@@ -2,13 +2,11 @@ package com.kotakotik.ponderjs;
 
 
 import com.kotakotik.ponderjs.config.ModConfigs;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,13 +22,13 @@ public class PonderJSMod {
                 () -> new IExtensionPoint.DisplayTest(() -> "ANY", (a, b) -> true));
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modEventBus.addListener(this::onCommonSetup);
+        modEventBus.addListener(this::onClientSetup);
         modEventBus.addListener(ModConfigs::onLoad);
         modEventBus.addListener(ModConfigs::onReload);
         ModConfigs.register();
     }
 
-    private void onCommonSetup(FMLCommonSetupEvent event) {
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> PonderJS::init);
+    private void onClientSetup(FMLClientSetupEvent event) {
+        event.enqueueWork(PonderJS::init);
     }
 }

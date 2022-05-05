@@ -5,7 +5,11 @@
   "refmap": "ponderjs.refmap.json",
   "mixins": [
     "KubeJSClientMixin",
-    "PonderTagRegistryAccessor"
+    "PonderTagRegistryAccessor",
+    "SceneBuilderMixin",
+    "SceneBuilderMixin$SpecialInstructionsMixin",
+    "SceneBuilderMixin$WorldInstructionsMixin",
+    "SceneBuildingUtilMixin"
   ],
   "injectors": {
     "defaultRequire": 1
