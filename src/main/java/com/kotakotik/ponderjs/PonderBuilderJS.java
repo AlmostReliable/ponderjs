@@ -84,11 +84,6 @@ public class PonderBuilderJS extends
         return (b, u) -> consumer.accept(b.getInternal(), u.getInternal());
     }
 
-    @Override // expose protected method
-    public PonderBuilderJS tag(String... tags) {
-        return super.tag(tags);
-    }
-
     @FunctionalInterface
     public interface SceneConsumer extends BiConsumer<SceneBuilderJS, SceneBuildingUtilJS> {
     }

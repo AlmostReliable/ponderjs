@@ -60,10 +60,9 @@ public abstract class AbstractPonderBuilder<
      * @param tags The list of tags to add
      * @return Self
      */
-    protected S tag(String... tags) {
-            for(String tag : tags) {
-                PonderTag ponderTag = PonderJS.getTagByName(tag).orElseThrow();
-                PonderTagRegistry.TagBuilder tagBuilder = PonderRegistry.TAGS.forTag(ponderTag);
+    public S tag(PonderTag... tags) {
+            for(PonderTag tag : tags) {
+                PonderTagRegistry.TagBuilder tagBuilder = PonderRegistry.TAGS.forTag(tag);
                 items.forEach(tagBuilder::add);
             }
             return getSelf();
