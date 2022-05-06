@@ -124,7 +124,9 @@ public abstract class SceneBuilderMixin {
                 Entity entity = entityType.create(level);
                 Objects.requireNonNull(entity, "Could not create entity of type " + entityType.getRegistryName());
                 entity.setPosRaw(position.x, position.y, position.z);
-                entity.lookAt(EntityAnchorArgument.Anchor.EYES, position.add(-10, 0, 0));
+                entity.setOldPosAndRot();
+                // -100 should be enough so that the entity looks forward and not down ...
+                entity.lookAt(EntityAnchorArgument.Anchor.EYES, position.add(-100, 0, 0));
                 EntityJS entityJS = UtilsJS.getLevel(level).getEntity(entity);
                 consumer.accept(entityJS);
                 return entity;
