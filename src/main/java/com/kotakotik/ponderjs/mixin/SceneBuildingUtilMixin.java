@@ -27,22 +27,22 @@ public class SceneBuildingUtilMixin {
     @Final
     private BoundingBox sceneBounds;
 
-    @RemapForJS("grid")
+    @RemapForJS("getGrid")
     public SceneBuildingUtil.PositionUtil ponderjs$getGrid() {
         return grid;
     }
 
-    @RemapForJS("select")
+    @RemapForJS("getSelect")
     public SceneBuildingUtil.SelectionUtil ponderjs$getSelect() {
         return select;
     }
 
-    @RemapForJS("vector")
+    @RemapForJS("getVector")
     public SceneBuildingUtil.VectorUtil ponderjs$getVector() {
         return vector;
     }
 
-    @RemapForJS("sceneBounds")
+    @RemapForJS("getSceneBounds")
     public BoundingBox ponderjs$getSceneBounds() {
         return sceneBounds;
     }

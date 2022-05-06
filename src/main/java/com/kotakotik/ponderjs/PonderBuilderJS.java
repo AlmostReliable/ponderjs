@@ -1,8 +1,6 @@
 package com.kotakotik.ponderjs;
 
 import com.kotakotik.ponderjs.api.AbstractPonderBuilder;
-import com.kotakotik.ponderjs.util.SceneBuilderJS;
-import com.kotakotik.ponderjs.util.SceneBuildingUtilJS;
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.ponder.PonderStoryBoardEntry;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
@@ -16,10 +14,12 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Set;
-import java.util.function.BiConsumer;
 
 public class PonderBuilderJS extends AbstractPonderBuilder<PonderBuilderJS> {
+    public static final String BASIC_STRUCTURE = "ponderjs:basic";
+
     public PonderBuilderJS(String name, Set<Item> items) {
         super(PonderJS.appendKubeToId(name), items);
         String namespace = this.name.getNamespace();
@@ -30,8 +30,13 @@ public class PonderBuilderJS extends AbstractPonderBuilder<PonderBuilderJS> {
 
     public static HashMap<String, PonderStoryBoardEntry.PonderStoryBoard> scenes = new HashMap<>();
 
-    public PonderBuilderJS scene(String name, String displayName, String schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
-        String fullName = getName(name);
+
+    public PonderBuilderJS scene(String name, String title, PonderStoryBoardEntry.PonderStoryBoard scene) {
+        return scene(name, title, BASIC_STRUCTURE, scene);
+    }
+
+    public PonderBuilderJS scene(String name, String title, String structureName, PonderStoryBoardEntry.PonderStoryBoard scene) {
+        String fullName = createSceneId(name);
         if (PonderJS.isInitialized() && !scenes.containsKey(fullName)) {
             ScriptType.CLIENT.console.error("Tried to register ponder scene " + fullName + " in a reload, you'll have to restart!");
             return this;
@@ -44,7 +49,7 @@ public class PonderBuilderJS extends AbstractPonderBuilder<PonderBuilderJS> {
                 PonderJS.scenes.add(sceneId);
             }
             for (var id : items)
-                addNamedStoryBoard(pathOnlyName, displayName, id, PonderJS.appendKubeToId(schematic), (b, u) -> invokeScene(fullName, b, u));
+                addNamedStoryBoard(pathOnlyName, title, id, PonderJS.appendKubeToId(structureName), (b, u) -> invokeScene(fullName, b, u));
         }
         return this;
     }

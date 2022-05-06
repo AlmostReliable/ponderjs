@@ -1,6 +1,5 @@
 package com.kotakotik.ponderjs.api;
 
-import com.kotakotik.ponderjs.PonderJS;
 import com.kotakotik.ponderjs.PonderJSMod;
 import com.simibubi.create.foundation.ponder.*;
 import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiConsumer;
 
 /**
  * Also known as type param hell
@@ -42,7 +40,7 @@ public abstract class AbstractPonderBuilder<S extends AbstractPonderBuilder<S>> 
         if (s != null) PonderJSMod.LOGGER.info(s);
     };
 
-    protected String getName(String scene) {
+    protected String createSceneId(String scene) {
         return name.toString().replace(":", ".") + "." + scene;
     }
 
@@ -50,8 +48,8 @@ public abstract class AbstractPonderBuilder<S extends AbstractPonderBuilder<S>> 
         return name.getPath() + "." + scene;
     }
 
-    protected String getName(String scene, Item item) {
-        return getName(scene) + "." + item.getDescriptionId();
+    protected String createSceneId(String scene, Item item) {
+        return createSceneId(scene) + "." + item.getDescriptionId();
     }
 
     /**
@@ -81,7 +79,7 @@ public abstract class AbstractPonderBuilder<S extends AbstractPonderBuilder<S>> 
     protected static List<String> added = new ArrayList<>();
 
     protected S addNamedStoryBoard(String name, String displayName, Item item, ResourceLocation schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
-        String cacheName = getName(name, item);
+        String cacheName = createSceneId(name, item);
         if(added.contains(cacheName)) return getSelf();
         added.add(cacheName);
         return addStoryBoard(item, schematic, (builder, util) -> {

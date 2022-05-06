@@ -4,11 +4,17 @@ import com.simibubi.create.foundation.ponder.ElementLink;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.Selection;
 import com.simibubi.create.foundation.ponder.element.EntityElement;
+import com.simibubi.create.foundation.ponder.element.InputWindowElement;
+import com.simibubi.create.foundation.ponder.element.TextWindowElement;
+import com.simibubi.create.foundation.ponder.instruction.PonderInstruction;
+import com.simibubi.create.foundation.ponder.instruction.ShowInputInstruction;
+import com.simibubi.create.foundation.utility.Pointing;
 import dev.latvian.mods.kubejs.block.predicate.BlockIDPredicate;
 import dev.latvian.mods.kubejs.entity.EntityJS;
 import dev.latvian.mods.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import dev.latvian.mods.rhino.util.RemapForJS;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
@@ -21,13 +27,14 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 @Mixin(SceneBuilder.class)
-public class SceneBuilderMixin {
+public abstract class SceneBuilderMixin {
 
     @Shadow
     @Final
@@ -49,29 +56,55 @@ public class SceneBuilderMixin {
     @Final
     public SceneBuilder.SpecialInstructions special;
 
-    @RemapForJS("world")
+    @Shadow
+    public abstract void addInstruction(PonderInstruction instruction);
+
+    @RemapForJS("getWorld")
     public SceneBuilder.WorldInstructions ponderjs$getWorld() {
         return world;
     }
 
-    @RemapForJS("debug")
+    @RemapForJS("getLevel")
+    public SceneBuilder.WorldInstructions ponderjs$getLevel() {
+        return world;
+    }
+
+    @RemapForJS("getDebug")
     public SceneBuilder.DebugInstructions ponderjs$getDebug() {
         return debug;
     }
 
-    @RemapForJS("overlay")
+    @RemapForJS("getOverlay")
     public SceneBuilder.OverlayInstructions ponderjs$getOverlay() {
         return overlay;
     }
 
-    @RemapForJS("effects")
+    @RemapForJS("getEffects")
     public SceneBuilder.EffectInstructions ponderjs$getEffects() {
         return effects;
     }
 
-    @RemapForJS("special")
+    @RemapForJS("getSpecial")
     public SceneBuilder.SpecialInstructions ponderjs$getSpecial() {
         return special;
+    }
+
+    @RemapForJS("showText")
+    public TextWindowElement.Builder ponderjs$showText(int duration, String text) {
+        return overlay.showText(duration).text(text);
+    }
+
+    @RemapForJS("showText")
+    public TextWindowElement.Builder ponderjs$showText(int duration, String text, Vec3 position) {
+        return overlay.showText(duration).text(text).pointAt(position);
+    }
+
+    @RemapForJS("showControls")
+    public InputWindowElement ponderjs$showControls(int duration, Vec3 pos, Pointing pointing) {
+        InputWindowElement element = new InputWindowElement(pos, pointing);
+        // we use own instruction to avoid `element.clone()`
+        addInstruction(new ShowInputInstruction(element, duration));
+        return element;
     }
 
     @Mixin(SceneBuilder.WorldInstructions.class)
@@ -90,7 +123,8 @@ public class SceneBuilderMixin {
             return createEntity(level -> {
                 Entity entity = entityType.create(level);
                 Objects.requireNonNull(entity, "Could not create entity of type " + entityType.getRegistryName());
-                entity.setPos(position);
+                entity.setPosRaw(position.x, position.y, position.z);
+                entity.lookAt(EntityAnchorArgument.Anchor.EYES, position.add(-10, 0, 0));
                 EntityJS entityJS = UtilsJS.getLevel(level).getEntity(entity);
                 consumer.accept(entityJS);
                 return entity;
