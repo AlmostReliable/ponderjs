@@ -20,6 +20,7 @@ public class KubeJSClientMixin {
         if (PonderJS.isInitialized()) {
             // TODO try making PonderItemTag event reloadable
             new PonderRegistryEventJS().post(ScriptType.CLIENT, PonderJS.REGISTRY_EVENT);
+            PonderJS.generateJsonLang("en_us");
 
             String msg = "Ponder tags event currently is not reloadable. Only scenes are reloaded.";
             if(KubeJS.PROXY.getClientPlayer() != null) {
