@@ -11,7 +11,6 @@ public class PonderErrorHelper {
     public static void yeet(Exception e) {
         ConsoleJS.CLIENT.error(e);
         e.printStackTrace();
-
         Player clientPlayer = KubeJS.PROXY.getClientPlayer();
         if(clientPlayer != null) {
             MutableComponent first = new TextComponent("[PonderJS ERROR] ").withStyle(ChatFormatting.DARK_RED);
