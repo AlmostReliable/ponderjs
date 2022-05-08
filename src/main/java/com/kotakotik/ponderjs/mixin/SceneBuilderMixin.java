@@ -1,5 +1,7 @@
 package com.kotakotik.ponderjs.mixin;
 
+import com.kotakotik.ponderjs.api.BlockStateFunction;
+import com.kotakotik.ponderjs.api.BlockStateSupplier;
 import com.simibubi.create.foundation.ponder.ElementLink;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.Selection;
@@ -27,7 +29,6 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -113,10 +114,22 @@ public abstract class SceneBuilderMixin {
         public abstract ElementLink<EntityElement> createEntity(Function<Level, Entity> factory);
 
         @Shadow
-        public abstract void modifyBlock(BlockPos pos, UnaryOperator<BlockState> stateFunc, boolean spawnParticles);
+        public abstract void modifyTileNBT(Selection selection, Class<? extends BlockEntity> teType, Consumer<CompoundTag> consumer, boolean reDrawBlocks);
 
         @Shadow
-        public abstract void modifyTileNBT(Selection selection, Class<? extends BlockEntity> teType, Consumer<CompoundTag> consumer, boolean reDrawBlocks);
+        public abstract void setBlocks(Selection selection, BlockState state, boolean spawnParticles);
+
+        @Shadow
+        public abstract void destroyBlock(BlockPos pos);
+
+        @Shadow
+        public abstract void setBlock(BlockPos pos, BlockState state, boolean spawnParticles);
+
+        @Shadow
+        public abstract void replaceBlocks(Selection selection, BlockState state, boolean spawnParticles);
+
+        @Shadow
+        public abstract void modifyBlocks(Selection selection, UnaryOperator<BlockState> stateFunc, boolean spawnParticles);
 
         @RemapForJS("createEntity")
         public ElementLink<EntityElement> ponderjs$createEntity(EntityType<?> entityType, Vec3 position, Consumer<EntityJS> consumer) {
@@ -138,18 +151,37 @@ public abstract class SceneBuilderMixin {
             });
         }
 
-        @RemapForJS("modifyBlock")
-        public void ponderjs$modifyBlock(BlockPos pos, Consumer<BlockIDPredicate> mod) {
-            ponderjs$modifyBlock(pos, false, mod);
+        @RemapForJS("modifyBlocks")
+        public void ponderjs$modifyBlocks(Selection pos, BlockStateFunction function) {
+            ponderjs$modifyBlocks(pos, true, function);
         }
 
-        @RemapForJS("modifyBlock")
-        public void ponderjs$modifyBlock(BlockPos pos, boolean addParticles, Consumer<BlockIDPredicate> mod) {
-            modifyBlock(pos, blockState -> {
+        @RemapForJS("modifyBlocks")
+        public void ponderjs$modifyBlocks(Selection selection, boolean spawnParticles, BlockStateFunction function) {
+            modifyBlocks(selection, blockState -> {
                 BlockIDPredicate predicate = new BlockIDPredicate(blockState.getBlock().getRegistryName());
-                mod.accept(predicate);
-                return predicate.getBlockState();
-            }, false);
+                return function.apply(predicate);
+            }, spawnParticles);
+        }
+
+        @RemapForJS("replaceBlocks")
+        public void ponderjs$replaceBlocks(Selection selection, BlockStateFunction function) {
+            ponderjs$replaceBlocks(selection, true, function);
+        }
+
+        @RemapForJS("replaceBlocks")
+        public void ponderjs$replaceBlocks(Selection selection, boolean spawnParticles, BlockStateFunction function) {
+            ponderjs$modifyBlocks(selection, spawnParticles, function);
+        }
+
+        @RemapForJS("setBlocks")
+        public void ponderjs$setBlocks(Selection selection, BlockStateSupplier function) {
+            ponderjs$setBlocks(selection, true, function);
+        }
+
+        @RemapForJS("setBlocks")
+        public void ponderjs$setBlocks(Selection selection, boolean spawnParticles, BlockStateSupplier function) {
+            setBlocks(selection, function.get(), spawnParticles);
         }
 
         @RemapForJS("modifyTileNBT")

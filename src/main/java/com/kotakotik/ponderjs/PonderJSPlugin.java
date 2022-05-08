@@ -36,8 +36,8 @@ public class PonderJSPlugin extends KubeJSPlugin {
     @Override
     public void generateLang(Map<String, String> lang) {
         super.generateLang(lang);
-        // TODO: java.util.ConcurrentModificationException ... look at it later
-//        Map<String, String> createdLang = PonderJS.createLang();
-//        lang.putAll(createdLang);
+        // Pls work now .......
+        Map<String, String> createdLang = PonderJS.createLang();
+        lang.putAll(createdLang);
     }
 }

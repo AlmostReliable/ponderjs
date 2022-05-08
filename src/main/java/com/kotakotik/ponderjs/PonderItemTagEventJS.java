@@ -27,6 +27,7 @@ public class PonderItemTagEventJS extends EventJS {
         PonderTag ponderTag = new PonderTag(idWithNamespace).item(displayItem.getItem()).defaultLang(title, description);
         PonderRegistry.TAGS.listTag(ponderTag);
         add(ponderTag, ingredient);
+        PonderJS.namespaces.add(idWithNamespace.getNamespace());
     }
 
     public void createTag(String id, ItemStackJS displayItem, String title, String description) {

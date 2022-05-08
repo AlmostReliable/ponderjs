@@ -3,42 +3,51 @@ package com.kotakotik.ponderjs;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.kotakotik.ponderjs.api.BlockStateFunction;
+import com.kotakotik.ponderjs.api.BlockStateSupplier;
 import com.kotakotik.ponderjs.config.ModConfigs;
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.ponder.*;
 import com.simibubi.create.foundation.ponder.element.InputWindowElement;
 import com.simibubi.create.foundation.ponder.element.ParrotElement;
-import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.foundation.utility.Pointing;
 import dev.latvian.mods.kubejs.KubeJS;
+import dev.latvian.mods.kubejs.KubeJSRegistries;
+import dev.latvian.mods.kubejs.block.predicate.BlockIDPredicate;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
 import dev.latvian.mods.kubejs.script.ScriptType;
-import dev.latvian.mods.kubejs.util.ConsoleJS;
 import dev.latvian.mods.kubejs.util.UtilsJS;
+import dev.latvian.mods.rhino.Context;
+import dev.latvian.mods.rhino.Function;
+import dev.latvian.mods.rhino.RhinoException;
 import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.antlr.v4.runtime.misc.Triple;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.*;
 
 public class PonderJS {
     public static final String TAG_EVENT = "ponder.tag";
     public static final String REGISTRY_EVENT = "ponder.registry";
-    public static final List<String> namespaces = new ArrayList<>();
-    public static final List<Couple<String>> scenes = new ArrayList<>();
+    public static final Set<String> namespaces = new HashSet<>();
+    //    public static final List<Couple<String>> scenes = new ArrayList<>();
     public static final HashMap<String, AllIcons> cachedIcons = new HashMap<>();
+    public static final PonderStoriesManager storiesManager = new PonderStoriesManager();
     private static boolean initialized;
 
     static void addBindings(BindingsEvent event) {
@@ -52,14 +61,30 @@ public class PonderJS {
 
     static void addTypeWrappers(ScriptType type, TypeWrappers typeWrappers) {
         typeWrappers.register(Selection.class, o -> {
-            if (o instanceof Selection) return (Selection) o;
-            if (o instanceof AABB) {
-                return Selection.of((BoundingBox) o);
+            if (o instanceof Selection s) return s;
+            if (o instanceof BoundingBox box) {
+                return Selection.of(box);
             }
-            if (o instanceof BlockPos) {
-                return Selection.of(new BoundingBox((BlockPos) o));
+
+            if (o instanceof BlockPos b) {
+                return Selection.of(new BoundingBox(b));
             }
-            return Selection.of(new BoundingBox(0, 0, 0, 0, 0, 0));
+
+            if(o instanceof List<?> l) {
+                Integer[] values = l.stream().map(entry -> UtilsJS.parseInt(entry, 0)).toArray(Integer[]::new);
+                if(values.length == 6) {
+                    return Selection.of(new BoundingBox(values[0], values[1], values[2], values[3], values[4], values[5]));
+                }
+                if(values.length == 3) {
+                    return Selection.of(new BoundingBox(values[0], values[1], values[2], values[0], values[1], values[2]));
+                }
+            }
+
+            if(Context.jsToJava(o, Vec3.class) instanceof Vec3 v) {
+                return Selection.of(new BoundingBox(new BlockPos(v.x, v.y, v.z)));
+            }
+
+            throw new IllegalArgumentException("Invalid selection: " + o);
         });
 
         typeWrappers.register(AllIcons.class, o -> {
@@ -68,6 +93,8 @@ public class PonderJS {
         });
 
         typeWrappers.register(PonderTag.class, o -> PonderJS.getTagByName(o.toString()).orElseThrow(() -> new NoSuchElementException("No tags found matching " + o)));
+        typeWrappers.register(BlockStateFunction.class, BlockStateFunction::of);
+        typeWrappers.register(BlockStateSupplier.class, BlockStateSupplier::of);
     }
 
     public static Triple<Boolean, Component, Integer> generateJsonLang(String langName) {
@@ -110,19 +137,7 @@ public class PonderJS {
     }
 
     public static Map<String, String> createLang() {
-        PonderRegistry.ALL.forEach((resourceLocation, stories) -> {
-            for (int i = 0; i < stories.size(); i++) {
-                var story = stories.get(i);
-                if(namespaces.contains(story.getNamespace())) {
-                    try {
-                        PonderRegistry.compileScene(i, story,null);
-                    } catch (Exception e) {
-                        ConsoleJS.CLIENT.error(e);
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
+        storiesManager.compileLang();
         Map<String, String> lang = new HashMap<>();
         JsonObject object = new JsonObject();
         PonderJS.namespaces.forEach(namespace -> PonderLocalization.record(namespace, object));
@@ -175,7 +190,6 @@ public class PonderJS {
         }
         new PonderItemTagEventJS().post(ScriptType.CLIENT, TAG_EVENT);
         new PonderRegistryEventJS().post(ScriptType.CLIENT, REGISTRY_EVENT);
-        generateJsonLang("en_us");
         initialized = true;
     }
 

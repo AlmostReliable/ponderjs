@@ -1,20 +1,11 @@
 package com.kotakotik.ponderjs;
 
 import com.kotakotik.ponderjs.api.AbstractPonderBuilder;
-import com.simibubi.create.Create;
 import com.simibubi.create.foundation.ponder.PonderStoryBoardEntry;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.repack.registrate.util.entry.ItemProviderEntry;
-import dev.latvian.mods.kubejs.script.ScriptType;
-import dev.latvian.mods.kubejs.util.ConsoleJS;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
-import java.util.HashMap;
-import java.util.Locale;
 import java.util.Set;
 
 public class PonderBuilderJS extends AbstractPonderBuilder<PonderBuilderJS> {
@@ -23,44 +14,22 @@ public class PonderBuilderJS extends AbstractPonderBuilder<PonderBuilderJS> {
     public PonderBuilderJS(String name, Set<Item> items) {
         super(PonderJS.appendKubeToId(name), items);
         String namespace = this.name.getNamespace();
-        if (!PonderJS.namespaces.contains(namespace)) {
-            PonderJS.namespaces.add(namespace);
-        }
+        PonderJS.namespaces.add(namespace);
     }
-
-    public static HashMap<String, PonderStoryBoardEntry.PonderStoryBoard> scenes = new HashMap<>();
-
 
     public PonderBuilderJS scene(String name, String title, PonderStoryBoardEntry.PonderStoryBoard scene) {
         return scene(name, title, BASIC_STRUCTURE, scene);
     }
 
     public PonderBuilderJS scene(String name, String title, String structureName, PonderStoryBoardEntry.PonderStoryBoard scene) {
-        String fullName = createSceneId(name);
-        if (PonderJS.isInitialized() && !scenes.containsKey(fullName)) {
-            ScriptType.CLIENT.console.error("Tried to register ponder scene " + fullName + " in a reload, you'll have to restart!");
-            return this;
-        }
-        scenes.put(fullName, scene);
-        if (!PonderJS.isInitialized()) {
-            String pathOnlyName = getPathOnlyName(name);
-            Couple<String> sceneId = Couple.create(this.name.getNamespace(), pathOnlyName);
-            if (!PonderJS.scenes.contains(sceneId)) {
-                PonderJS.scenes.add(sceneId);
-            }
-            for (var id : items)
-                addNamedStoryBoard(pathOnlyName, title, id, PonderJS.appendKubeToId(structureName), (b, u) -> invokeScene(fullName, b, u));
-        }
-        return this;
-    }
+        String translationKey = createTitleTranslationKey(name);
 
-    protected void invokeScene(String name, SceneBuilder builder, SceneBuildingUtil util) {
-            try {
-                scenes.get(name).program(builder, util);
-            } catch (Exception e) {
-                ConsoleJS.CLIENT.error("Failed to invoke scene " + name + ": " + e.getMessage());
-                e.printStackTrace();
-            }
+        PonderStoryBoardWrapper wrapper = new PonderStoryBoardWrapper(scene);
+        for (var item : items) {
+            addNamedStoryBoard(translationKey, title, item, PonderJS.appendKubeToId(structureName), wrapper);
+        }
+
+        return this;
     }
 
     @Override
@@ -68,8 +37,20 @@ public class PonderBuilderJS extends AbstractPonderBuilder<PonderBuilderJS> {
         return this;
     }
 
-    @Override
-    protected ItemProviderEntry<?> getItemProviderEntry(Item item) {
-        return new ItemProviderEntry<>(Create.registrate(), RegistryObject.create(item.getRegistryName(), ForgeRegistries.ITEMS));
+    public static class PonderStoryBoardWrapper implements PonderStoryBoardEntry.PonderStoryBoard {
+        private final PonderStoryBoardEntry.PonderStoryBoard storyBoard;
+
+        protected PonderStoryBoardWrapper(PonderStoryBoardEntry.PonderStoryBoard storyBoard) {
+            this.storyBoard = storyBoard;
+        }
+
+        @Override
+        public void program(SceneBuilder scene, SceneBuildingUtil util) {
+            try {
+                storyBoard.program(scene, util);
+            } catch (Exception e) {
+                PonderErrorHelper.yeet(e);
+            }
+        }
     }
 }
