@@ -78,9 +78,13 @@ public class PonderJS {
                 if(values.length == 3) {
                     return Selection.of(new BoundingBox(values[0], values[1], values[2], values[0], values[1], values[2]));
                 }
+                if(values.length == 2) {
+                    // TODO add type wrappers for blockpos and vec3
+                }
             }
 
             if(Context.jsToJava(o, Vec3.class) instanceof Vec3 v) {
+                // TODO use type wrapper for ve3
                 return Selection.of(new BoundingBox(new BlockPos(v.x, v.y, v.z)));
             }
 
