@@ -120,15 +120,6 @@ public abstract class SceneBuilderMixin {
         public abstract void setBlocks(Selection selection, BlockState state, boolean spawnParticles);
 
         @Shadow
-        public abstract void destroyBlock(BlockPos pos);
-
-        @Shadow
-        public abstract void setBlock(BlockPos pos, BlockState state, boolean spawnParticles);
-
-        @Shadow
-        public abstract void replaceBlocks(Selection selection, BlockState state, boolean spawnParticles);
-
-        @Shadow
         public abstract void modifyBlocks(Selection selection, UnaryOperator<BlockState> stateFunc, boolean spawnParticles);
 
         @RemapForJS("createEntity")
