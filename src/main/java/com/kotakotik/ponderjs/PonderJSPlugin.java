@@ -13,16 +13,6 @@ import static net.minecraftforge.fml.DistExecutor.unsafeRunWhenOn;
 public class PonderJSPlugin extends KubeJSPlugin {
 
     @Override
-    public void clientInit() {
-        super.clientInit();
-    }
-
-    @Override
-    public void afterInit() {
-        super.afterInit();
-    }
-
-    @Override
     public void addBindings(BindingsEvent event) {
         unsafeRunWhenOn(Dist.CLIENT, () -> () -> PonderJS.addBindings(event));
     }

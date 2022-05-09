@@ -13,22 +13,15 @@ import com.simibubi.create.foundation.ponder.element.InputWindowElement;
 import com.simibubi.create.foundation.ponder.element.ParrotElement;
 import com.simibubi.create.foundation.utility.Pointing;
 import dev.latvian.mods.kubejs.KubeJS;
-import dev.latvian.mods.kubejs.KubeJSRegistries;
-import dev.latvian.mods.kubejs.block.predicate.BlockIDPredicate;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
 import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.Context;
-import dev.latvian.mods.rhino.Function;
-import dev.latvian.mods.rhino.RhinoException;
 import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
@@ -44,10 +37,9 @@ import java.util.*;
 public class PonderJS {
     public static final String TAG_EVENT = "ponder.tag";
     public static final String REGISTRY_EVENT = "ponder.registry";
-    public static final Set<String> namespaces = new HashSet<>();
-    //    public static final List<Couple<String>> scenes = new ArrayList<>();
-    public static final HashMap<String, AllIcons> cachedIcons = new HashMap<>();
-    public static final PonderStoriesManager storiesManager = new PonderStoriesManager();
+    public static final Set<String> NAMESPACES = new HashSet<>();
+    public static final HashMap<String, AllIcons> CACHED_ICONS = new HashMap<>();
+    public static final PonderStoriesManager STORIES_MANAGER = new PonderStoriesManager();
     private static boolean initialized;
 
     static void addBindings(BindingsEvent event) {
@@ -141,10 +133,10 @@ public class PonderJS {
     }
 
     public static Map<String, String> createLang() {
-        storiesManager.compileLang();
+        STORIES_MANAGER.compileLang();
         Map<String, String> lang = new HashMap<>();
         JsonObject object = new JsonObject();
-        PonderJS.namespaces.forEach(namespace -> PonderLocalization.record(namespace, object));
+        PonderJS.NAMESPACES.forEach(namespace -> PonderLocalization.record(namespace, object));
         object.entrySet().forEach(entry -> lang.put(entry.getKey(), entry.getValue().getAsString()));
         return lang;
     }
@@ -175,13 +167,13 @@ public class PonderJS {
         if (!str.startsWith("I_")) {
             str = "I_" + str;
         }
-        if (cachedIcons.containsKey(str)) {
-            return cachedIcons.get(str);
+        if (CACHED_ICONS.containsKey(str)) {
+            return CACHED_ICONS.get(str);
         }
         Field f = ObfuscationReflectionHelper.findField(AllIcons.class, str);
         try {
-            cachedIcons.put(str, (AllIcons) f.get(null));
-            cachedIcons.get(str);
+            CACHED_ICONS.put(str, (AllIcons) f.get(null));
+            CACHED_ICONS.get(str);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }

@@ -1,7 +1,6 @@
 package com.kotakotik.ponderjs.api;
 
 import com.kotakotik.ponderjs.PonderJS;
-import com.kotakotik.ponderjs.PonderJSMod;
 import com.simibubi.create.foundation.ponder.PonderRegistry;
 import com.simibubi.create.foundation.ponder.PonderStoryBoardEntry;
 import com.simibubi.create.foundation.ponder.PonderTag;
@@ -10,7 +9,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -50,7 +48,7 @@ public abstract class AbstractPonderBuilder<S extends AbstractPonderBuilder<S>> 
     protected S addStoryBoard(Item item, ResourceLocation schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
         PonderStoryBoardEntry entry = new PonderStoryBoardEntry(scene, name.getNamespace(), schematic, item.getRegistryName());
         PonderRegistry.addStoryBoard(entry);
-        PonderJS.storiesManager.add(entry);
+        PonderJS.STORIES_MANAGER.add(entry);
         return getSelf();
     }
 

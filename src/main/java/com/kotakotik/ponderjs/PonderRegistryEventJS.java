@@ -7,7 +7,7 @@ import dev.latvian.mods.kubejs.item.ingredient.IngredientJS;
 public class PonderRegistryEventJS extends EventJS {
 
     public PonderRegistryEventJS() {
-        PonderJS.storiesManager.clear();
+        PonderJS.STORIES_MANAGER.clear();
     }
 
     public PonderBuilderJS create(String name, IngredientJS ingredient) {

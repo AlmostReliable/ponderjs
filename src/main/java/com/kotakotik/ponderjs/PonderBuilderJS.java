@@ -14,7 +14,7 @@ public class PonderBuilderJS extends AbstractPonderBuilder<PonderBuilderJS> {
     public PonderBuilderJS(String name, Set<Item> items) {
         super(PonderJS.appendKubeToId(name), items);
         String namespace = this.name.getNamespace();
-        PonderJS.namespaces.add(namespace);
+        PonderJS.NAMESPACES.add(namespace);
     }
 
     public PonderBuilderJS scene(String name, String title, PonderStoryBoardEntry.PonderStoryBoard scene) {

@@ -10,9 +10,7 @@ import dev.latvian.mods.kubejs.item.ItemStackJS;
 import dev.latvian.mods.kubejs.item.ingredient.IngredientJS;
 import dev.latvian.mods.kubejs.util.ConsoleJS;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
-import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -27,7 +25,7 @@ public class PonderItemTagEventJS extends EventJS {
         PonderTag ponderTag = new PonderTag(idWithNamespace).item(displayItem.getItem()).defaultLang(title, description);
         PonderRegistry.TAGS.listTag(ponderTag);
         add(ponderTag, ingredient);
-        PonderJS.namespaces.add(idWithNamespace.getNamespace());
+        PonderJS.NAMESPACES.add(idWithNamespace.getNamespace());
     }
 
     public void createTag(String id, ItemStackJS displayItem, String title, String description) {
