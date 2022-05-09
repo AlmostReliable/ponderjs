@@ -3,6 +3,7 @@ package com.kotakotik.ponderjs.mixin;
 import com.kotakotik.ponderjs.api.BlockStateFunction;
 import com.kotakotik.ponderjs.api.BlockStateSupplier;
 import com.simibubi.create.foundation.ponder.ElementLink;
+import com.simibubi.create.foundation.ponder.PonderScene;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.Selection;
 import com.simibubi.create.foundation.ponder.element.EntityElement;
@@ -18,6 +19,8 @@ import dev.latvian.mods.rhino.util.HideFromJS;
 import dev.latvian.mods.rhino.util.RemapForJS;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -61,6 +64,8 @@ public abstract class SceneBuilderMixin {
     @Shadow(remap = false)
     public abstract void addInstruction(PonderInstruction instruction);
 
+    @Shadow @Final private PonderScene scene;
+
     @RemapForJS("getWorld")
     public SceneBuilder.WorldInstructions ponderjs$getWorld() {
         return world;
@@ -89,6 +94,19 @@ public abstract class SceneBuilderMixin {
     @RemapForJS("getSpecial")
     public SceneBuilder.SpecialInstructions ponderjs$getSpecial() {
         return special;
+    }
+
+    @RemapForJS("showStructure")
+    public void ponderjs$showStructure() {
+        ponderjs$showStructure(scene.getBasePlateSize() * 2);
+    }
+
+    @RemapForJS("showStructure")
+    public void ponderjs$showStructure(int height) {
+        BlockPos start = new BlockPos(scene.getBasePlateOffsetX(), 0, scene.getBasePlateOffsetZ());
+        Vec3i size = new Vec3i(scene.getBasePlateSize() - 1, height, scene.getBasePlateSize() - 1);
+        Selection selection = scene.getSceneBuildingUtil().select.cuboid(start, size);
+        world.showSection(selection, Direction.UP);
     }
 
     @RemapForJS("showText")
