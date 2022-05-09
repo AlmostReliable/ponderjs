@@ -11,19 +11,19 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(SceneBuildingUtil.class)
 public class SceneBuildingUtilMixin {
-    @Shadow
+    @Shadow(remap = false)
     @Final
     public SceneBuildingUtil.PositionUtil grid;
 
-    @Shadow
+    @Shadow(remap = false)
     @Final
     public SceneBuildingUtil.SelectionUtil select;
 
-    @Shadow
+    @Shadow(remap = false)
     @Final
     public SceneBuildingUtil.VectorUtil vector;
 
-    @Shadow
+    @Shadow(remap = false)
     @Final
     private BoundingBox sceneBounds;
 

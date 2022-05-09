@@ -34,30 +34,31 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
+@SuppressWarnings("unused")
 @Mixin(SceneBuilder.class)
 public abstract class SceneBuilderMixin {
 
-    @Shadow
+    @Shadow(remap = false)
     @Final
     public SceneBuilder.WorldInstructions world;
 
-    @Shadow
+    @Shadow(remap = false)
     @Final
     public SceneBuilder.OverlayInstructions overlay;
 
-    @Shadow
+    @Shadow(remap = false)
     @Final
     public SceneBuilder.DebugInstructions debug;
 
-    @Shadow
+    @Shadow(remap = false)
     @Final
     public SceneBuilder.EffectInstructions effects;
 
-    @Shadow
+    @Shadow(remap = false)
     @Final
     public SceneBuilder.SpecialInstructions special;
 
-    @Shadow
+    @Shadow(remap = false)
     public abstract void addInstruction(PonderInstruction instruction);
 
     @RemapForJS("getWorld")
@@ -110,16 +111,16 @@ public abstract class SceneBuilderMixin {
 
     @Mixin(SceneBuilder.WorldInstructions.class)
     private abstract static class WorldInstructionsMixin {
-        @Shadow
+        @Shadow(remap = false)
         public abstract ElementLink<EntityElement> createEntity(Function<Level, Entity> factory);
 
-        @Shadow
+        @Shadow(remap = false)
         public abstract void modifyTileNBT(Selection selection, Class<? extends BlockEntity> teType, Consumer<CompoundTag> consumer, boolean reDrawBlocks);
 
-        @Shadow
+        @Shadow(remap = false)
         public abstract void setBlocks(Selection selection, BlockState state, boolean spawnParticles);
 
-        @Shadow
+        @Shadow(remap = false)
         public abstract void modifyBlocks(Selection selection, UnaryOperator<BlockState> stateFunc, boolean spawnParticles);
 
         @RemapForJS("createEntity")
@@ -189,7 +190,7 @@ public abstract class SceneBuilderMixin {
     @Mixin(SceneBuilder.SpecialInstructions.class)
     private static abstract class SpecialInstructionsMixin {
         @HideFromJS
-        @Shadow
+        @Shadow(remap = false)
         public abstract void movePointOfInterest(BlockPos location);
     }
 }

@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 @Mixin(targets = "com.simibubi.create.foundation.ponder.instruction.PonderInstruction$Simple")
 public class PonderInstructionMixin {
 
-    @Shadow
+    @Shadow(remap = false)
     private Consumer<PonderScene> callback;
 
     @Inject(method = "<init>", at = @At("RETURN"), remap = false)
