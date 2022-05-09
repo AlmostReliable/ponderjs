@@ -2,10 +2,7 @@ package com.kotakotik.ponderjs.mixin;
 
 import com.kotakotik.ponderjs.api.BlockStateFunction;
 import com.kotakotik.ponderjs.api.BlockStateSupplier;
-import com.simibubi.create.foundation.ponder.ElementLink;
-import com.simibubi.create.foundation.ponder.PonderScene;
-import com.simibubi.create.foundation.ponder.SceneBuilder;
-import com.simibubi.create.foundation.ponder.Selection;
+import com.simibubi.create.foundation.ponder.*;
 import com.simibubi.create.foundation.ponder.element.EntityElement;
 import com.simibubi.create.foundation.ponder.element.InputWindowElement;
 import com.simibubi.create.foundation.ponder.element.TextWindowElement;
@@ -22,6 +19,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -109,14 +107,24 @@ public abstract class SceneBuilderMixin {
         world.showSection(selection, Direction.UP);
     }
 
-    @RemapForJS("showText")
-    public TextWindowElement.Builder ponderjs$showText(int duration, String text) {
+    @RemapForJS("text")
+    public TextWindowElement.Builder ponderjs$text(int duration, String text) {
         return overlay.showText(duration).text(text);
     }
 
-    @RemapForJS("showText")
-    public TextWindowElement.Builder ponderjs$showText(int duration, String text, Vec3 position) {
+    @RemapForJS("text")
+    public TextWindowElement.Builder ponderjs$text(int duration, String text, Vec3 position) {
         return overlay.showText(duration).text(text).pointAt(position);
+    }
+
+    @RemapForJS("sharedText")
+    public TextWindowElement.Builder ponderjs$sharedText(int duration, ResourceLocation key) {
+        return overlay.showText(duration).sharedText(key);
+    }
+
+    @RemapForJS("sharedText")
+    public TextWindowElement.Builder ponderjs$sharedText(int duration, ResourceLocation key, Vec3 position) {
+        return overlay.showText(duration).sharedText(key).pointAt(position).colored(PonderPalette.BLUE);
     }
 
     @RemapForJS("showControls")
