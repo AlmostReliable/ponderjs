@@ -1,6 +1,7 @@
 package com.kotakotik.ponderjs;
 
 
+import com.almostreliable.ponderjs.BuildConfig;
 import com.kotakotik.ponderjs.config.ModConfigs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.EventPriority;

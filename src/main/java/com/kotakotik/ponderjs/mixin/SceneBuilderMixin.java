@@ -60,9 +60,11 @@ public abstract class SceneBuilderMixin {
     public SceneBuilder.SpecialInstructions special;
 
     @Shadow(remap = false)
-    public abstract void addInstruction(PonderInstruction instruction);
+    @Final
+    private PonderScene scene;
 
-    @Shadow @Final private PonderScene scene;
+    @Shadow(remap = false)
+    public abstract void addInstruction(PonderInstruction instruction);
 
     @RemapForJS("getWorld")
     public SceneBuilder.WorldInstructions ponderjs$getWorld() {

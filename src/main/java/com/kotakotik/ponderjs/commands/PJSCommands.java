@@ -1,6 +1,6 @@
 package com.kotakotik.ponderjs.commands;
 
-import com.kotakotik.ponderjs.BuildConfig;
+import com.almostreliable.ponderjs.BuildConfig;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
