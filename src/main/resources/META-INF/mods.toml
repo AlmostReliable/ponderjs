@@ -1,21 +1,20 @@
 modLoader = "javafml"
-loaderVersion = "[${forge_loader_version},)"
+loaderVersion = "[${forge_min_version},)"
 issueTrackerURL = "https://github.com/${github_user}/${github_repo}/issues"
 license = "${license}"
 
 [[mods]]
 modId = "${mod_id}"
-version = "${version}"
+version = "${mod_version}"
 displayName = "${mod_name}"
-authors = "${mod_author}"
-description = '''
-Allows creating ponder scenes and tags with Kubejs
-'''
+credits = "${mod_credits}"
+authors = "${mod_authors}"
+description = '''${mod_description}'''
 
 [[dependencies.ponderjs]]
 modId = "forge"
 mandatory = true
-versionRange = "[${forge_loader_version},)"
+versionRange = "[${forge_min_version},)"
 ordering = "NONE"
 side = "BOTH"
 

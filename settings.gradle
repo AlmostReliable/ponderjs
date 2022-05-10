@@ -1,1 +1,1 @@
-rootProject.name = 'ponderjs'
+rootProject.name = "${mod_name}"
