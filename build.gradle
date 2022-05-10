@@ -1,15 +1,14 @@
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        mavenCentral()
-        maven { url = 'https://repo.spongepowered.org/maven' }
+        maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://maven.parchmentmc.org' }
+        mavenCentral()
     }
     dependencies {
-        classpath(group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true) {exclude group: 'org.apache.logging.log4j'}
+        classpath(group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true) { exclude group: 'org.apache.logging.log4j' }
         classpath 'org.apache.logging.log4j:log4j-api:2.11.2'
         classpath 'org.apache.logging.log4j:log4j-core:2.11.2'
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7.+'
         classpath 'org.parchmentmc:librarian:1.+'
     }
 }
@@ -26,16 +25,14 @@ apply plugin: 'idea'
 apply plugin: 'eclipse'
 
 version = "${minecraft_version}-${mod_version}"
-if (System.getenv("ENV_VERSION") != null) {
-    version = "${minecraft_version}-${System.getenv("ENV_VERSION")}"
-}
+group = "${mod_base_package}.${mod_id}"
 archivesBaseName = mod_id
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: "${mappings_channel}", version: "${mappings_version}"
+    mappings channel: mappings_channel, version: mappings_version
 
     runs {
         client {
@@ -132,20 +129,18 @@ dependencies {
     implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
     implementation fg.deobf("dev.latvian.mods:rhino-forge:${rhino_version}")
 
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 }
-
-compileJava.options.encoding = 'UTF-8'
 
 jar {
     manifest {
         attributes([
                 "Specification-Title"     : mod_id,
-                "Specification-Vendor"    : mod_author,
-                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Specification-Vendor"    : mod_authors,
+                "Specification-Version"   : "1",
                 "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.version,
-                "Implementation-Vendor"   : mod_author,
+                "Implementation-Version"  : mod_version,
+                "Implementation-Vendor"   : mod_authors,
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                 "MixinConfigs"            : "${mod_id}.mixins.json"
         ])
@@ -158,19 +153,21 @@ mixin {
 }
 
 processResources {
-    def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta', 'fabric.mod.json']
+    def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
     def replaceProperties = [
-            version             : project.version,
-            license             : license,
-            mod_id              : mod_id,
-            mod_name            : mod_name,
-            minecraft_version   : minecraft_version,
-            mod_author          : mod_author,
-            forge_loader_version: forge_loader_version,
-            create_min_version  : create_min_version,
-            kubejs_min_version  : kubejs_min_version,
-            github_user         : github_user,
-            github_repo         : github_repo]
+            mod_id            : mod_id,
+            mod_name          : mod_name,
+            mod_version       : mod_version,
+            mod_authors       : mod_authors,
+            mod_description   : mod_description,
+            mod_credits       : mod_credits,
+            minecraft_version : minecraft_version,
+            forge_min_version : forge_min_version,
+            create_min_version: create_min_version,
+            kubejs_min_version: kubejs_min_version,
+            license           : license,
+            github_user       : github_user,
+            github_repo       : github_repo]
 
     inputs.properties replaceProperties
     replaceProperties.put 'project', project
@@ -197,13 +194,47 @@ artifacts {
 
 build.dependsOn deobfJar
 
-jar.finalizedBy('reobfJar')
-
 buildConfig {
     buildConfigField 'String', 'MOD_ID', "\"${mod_id}\""
-    buildConfigField 'String', 'VERSION', "\"${project.version}\""
+    buildConfigField 'String', 'MOD_VERSION', "\"${mod_version}\""
     buildConfigField 'String', 'MOD_NAME', "\"${mod_name}\""
 
-    version = project.version
+    version = mod_version
     packageName = project.group
 }
+
+curseforge {
+    if (System.getenv('CF_API_KEY') != null) {
+        // GitHub actions
+        apiKey = System.getenv('CF_API_KEY')
+    } else {
+        // error prevention
+        apiKey = "none"
+    }
+    def RELEASE_TYPE
+    if (System.getenv('RELEASE_TYPE') == null || System.getenv('RELEASE_TYPE') == '') {
+        RELEASE_TYPE = "release"
+    } else {
+        RELEASE_TYPE = System.getenv('RELEASE_TYPE')
+    }
+    project {
+        id = project_id
+        changelogType = 'markdown'
+        changelog = "The whole changelog can be found [here](https://github.com/${github_user}/${github_repo}/blob/${github_branch}/CHANGELOG.md)."
+        releaseType = RELEASE_TYPE
+        addGameVersion minecraft_version
+
+        mainArtifact(jar) {
+            if (RELEASE_TYPE == 'release') {
+                displayName = "${mod_name}-${minecraft_version}-${mod_version}"
+            } else {
+                displayName = "${mod_name}-${minecraft_version}-${mod_version}-${RELEASE_TYPE}"
+            }
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+jar.finalizedBy('reobfJar')
