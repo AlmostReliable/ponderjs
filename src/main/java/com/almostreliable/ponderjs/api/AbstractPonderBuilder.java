@@ -18,7 +18,6 @@ import java.util.Set;
  * @param <S> Self
  */
 public abstract class AbstractPonderBuilder<S extends AbstractPonderBuilder<S>> {
-    protected static List<String> added = new ArrayList<>();
     protected ResourceLocation name;
     protected Set<Item> items;
 

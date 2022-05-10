@@ -1,6 +1,7 @@
 package com.almostreliable.ponderjs;
 
 import com.almostreliable.ponderjs.api.AbstractPonderBuilder;
+import com.almostreliable.ponderjs.util.PonderErrorHelper;
 import com.simibubi.create.foundation.ponder.PonderStoryBoardEntry;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;

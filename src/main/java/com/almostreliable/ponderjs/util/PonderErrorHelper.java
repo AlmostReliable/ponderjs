@@ -1,5 +1,6 @@
-package com.almostreliable.ponderjs;
+package com.almostreliable.ponderjs.util;
 
+import com.almostreliable.ponderjs.PonderJSMod;
 import dev.latvian.mods.kubejs.KubeJS;
 import dev.latvian.mods.kubejs.util.ConsoleJS;
 import net.minecraft.ChatFormatting;

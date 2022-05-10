@@ -1,6 +1,5 @@
 package com.almostreliable.ponderjs.util;
 
-import com.almostreliable.ponderjs.PonderErrorHelper;
 import dev.latvian.mods.kubejs.block.predicate.BlockIDPredicate;
 import dev.latvian.mods.kubejs.item.ItemStackJS;
 import dev.latvian.mods.kubejs.util.ConsoleJS;

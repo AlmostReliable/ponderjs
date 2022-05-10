@@ -1,6 +1,5 @@
 package com.almostreliable.ponderjs.util;
 
-import com.almostreliable.ponderjs.PonderErrorHelper;
 import dev.latvian.mods.kubejs.block.predicate.BlockIDPredicate;
 import dev.latvian.mods.rhino.Context;
 import dev.latvian.mods.rhino.RhinoException;

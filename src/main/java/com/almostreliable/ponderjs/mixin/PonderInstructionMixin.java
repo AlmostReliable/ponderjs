@@ -1,6 +1,6 @@
 package com.almostreliable.ponderjs.mixin;
 
-import com.almostreliable.ponderjs.PonderErrorHelper;
+import com.almostreliable.ponderjs.util.PonderErrorHelper;
 import com.simibubi.create.foundation.ponder.PonderScene;
 import dev.latvian.mods.rhino.RhinoException;
 import net.minecraft.client.Minecraft;

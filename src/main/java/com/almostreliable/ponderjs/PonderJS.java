@@ -3,6 +3,7 @@ package com.almostreliable.ponderjs;
 import com.almostreliable.ponderjs.config.ModConfigs;
 import com.almostreliable.ponderjs.util.BlockStateFunction;
 import com.almostreliable.ponderjs.util.BlockStateSupplier;
+import com.almostreliable.ponderjs.util.PonderErrorHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
