@@ -1,4 +1,4 @@
-package com.kotakotik.ponderjs.api;
+package com.kotakotik.ponderjs.util;
 
 import com.kotakotik.ponderjs.PonderErrorHelper;
 import dev.latvian.mods.kubejs.block.predicate.BlockIDPredicate;
@@ -16,7 +16,10 @@ public interface BlockStateFunction extends Function<BlockIDPredicate, BlockStat
             var ctx = Context.getCurrentContext();
             return (blockIDPredicate) -> {
                 try {
-                    Object result = function.call(ctx, function.getParentScope(), function, new Object[]{blockIDPredicate});
+                    Object result = function.call(ctx,
+                            function.getParentScope(),
+                            function,
+                            new Object[]{ blockIDPredicate });
                     return BlockStateFunction.of(result).apply(blockIDPredicate);
                 } catch (RhinoException e) {
                     PonderErrorHelper.yeet(e);

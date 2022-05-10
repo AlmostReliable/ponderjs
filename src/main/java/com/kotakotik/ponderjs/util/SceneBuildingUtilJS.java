@@ -2,12 +2,8 @@ package com.kotakotik.ponderjs.util;
 
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
 import dev.latvian.mods.kubejs.bindings.BlockWrapper;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.item.Item;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraft.world.level.block.state.BlockState;
 
 // TODO move into Scene too
 public class SceneBuildingUtilJS implements ISceneBuildingUtilJS {

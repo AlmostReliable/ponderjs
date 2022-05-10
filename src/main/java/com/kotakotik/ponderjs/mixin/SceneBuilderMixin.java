@@ -1,7 +1,7 @@
 package com.kotakotik.ponderjs.mixin;
 
-import com.kotakotik.ponderjs.api.BlockStateFunction;
-import com.kotakotik.ponderjs.api.BlockStateSupplier;
+import com.kotakotik.ponderjs.util.BlockStateFunction;
+import com.kotakotik.ponderjs.util.BlockStateSupplier;
 import com.simibubi.create.foundation.ponder.*;
 import com.simibubi.create.foundation.ponder.element.EntityElement;
 import com.simibubi.create.foundation.ponder.element.InputWindowElement;

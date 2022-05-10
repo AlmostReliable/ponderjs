@@ -22,7 +22,9 @@ public class PonderItemTagEventJS extends EventJS {
         });
 
         ResourceLocation idWithNamespace = PonderJS.appendKubeToId(id);
-        PonderTag ponderTag = new PonderTag(idWithNamespace).item(displayItem.getItem()).defaultLang(title, description);
+        PonderTag ponderTag = new PonderTag(idWithNamespace)
+                .item(displayItem.getItem())
+                .defaultLang(title, description);
         PonderRegistry.TAGS.listTag(ponderTag);
         add(ponderTag, ingredient);
         PonderJS.NAMESPACES.add(idWithNamespace.getNamespace());
@@ -41,13 +43,13 @@ public class PonderItemTagEventJS extends EventJS {
     }
 
     public void add(PonderTag tag, IngredientJS ingredient) {
-        if(ingredient.isEmpty()) return;
+        if (ingredient.isEmpty()) return;
         PonderTagRegistry.TagBuilder tagBuilder = PonderRegistry.TAGS.forTag(tag);
         ingredient.getStacks().forEach(stack -> tagBuilder.add(stack.getItem()));
     }
 
     public void remove(PonderTag tag, IngredientJS ingredient) {
-        if(ingredient.isEmpty()) return;
+        if (ingredient.isEmpty()) return;
         Set<ResourceLocation> ids = ingredient.getStacks()
                 .stream()
                 .map(ItemStackJS::getId)

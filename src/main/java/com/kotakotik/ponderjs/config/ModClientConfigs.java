@@ -13,7 +13,7 @@ public class ModClientConfigs extends ModConfigs.AutoConfigBase {
     protected void registerAll(ForgeConfigSpec.Builder builder) {
         langPath =
                 builder.comment(" ", "The path to the lang file where lang entries are automatically generated" +
-                                " %lang% is replaced by the value of the lang argument in the generate command")
+                                     " %lang% is replaced by the value of the lang argument in the generate command")
                         .define("langPath", "kubejs/assets/ponderjs_generated/lang/%lang%.json");
 
         super.registerAll(builder);

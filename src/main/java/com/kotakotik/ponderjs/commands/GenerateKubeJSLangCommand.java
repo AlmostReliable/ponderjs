@@ -3,10 +3,8 @@ package com.kotakotik.ponderjs.commands;
 import com.kotakotik.ponderjs.PonderJS;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
-import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.commands.KillCommand;
 import org.antlr.v4.runtime.misc.Triple;
 
 public class GenerateKubeJSLangCommand implements Command<CommandSourceStack> {

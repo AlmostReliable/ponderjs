@@ -1,4 +1,4 @@
- package com.kotakotik.ponderjs.util;
+package com.kotakotik.ponderjs.util;
 
 import com.jozufozu.flywheel.util.Lazy;
 import com.simibubi.create.foundation.ponder.ElementLink;
@@ -10,14 +10,14 @@ import dev.latvian.mods.kubejs.bindings.BlockWrapper;
 import dev.latvian.mods.kubejs.block.predicate.BlockIDPredicate;
 import dev.latvian.mods.kubejs.entity.EntityJS;
 import dev.latvian.mods.kubejs.util.UtilsJS;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Objects;
@@ -26,11 +26,9 @@ import java.util.function.UnaryOperator;
 
 public class SceneBuilderJS implements ISceneBuilderJS {
     public final SceneBuilder internal;
-//    public final PonderPaletteWrapper palette = new PonderPaletteWrapper();
-
-    public SceneBuilderJS(SceneBuilder scene) {
-        this.internal = scene;
-    }
+    //    public final PonderPaletteWrapper palette = new PonderPaletteWrapper();
+    public Lazy<WorldInstructionsJS> worldInstructionsJS = new Lazy<>(() ->
+            new WorldInstructionsJS(getInternal().world, this));
 
 //    public EntityJS createEntityJS(World world, Entity entity) {
 //        return new EntityJS(new WorldJS(world) {
@@ -46,7 +44,7 @@ public class SceneBuilderJS implements ISceneBuilderJS {
 //        }, entity);
 //    }
 
-// aaaaaa i could have just used MapJS.of(nbt)
+    // aaaaaa i could have just used MapJS.of(nbt)
 //    public JsonObject nbtToJson(CompoundTag nbt) {
 //        BuiltinKubeJSPlugin
 //        JsonObject json = new JsonObject();
@@ -65,7 +63,12 @@ public class SceneBuilderJS implements ISceneBuilderJS {
 //        }
 //        return json;
 //    }
+    public Lazy<SpecialInstructionsJS> specialInstructionsJS = new Lazy<>(() ->
+            new SpecialInstructionsJS(getInternal().special));
 
+    public SceneBuilderJS(SceneBuilder scene) {
+        this.internal = scene;
+    }
 
     @Override
     public SceneBuilder getInternal() {
@@ -77,12 +80,9 @@ public class SceneBuilderJS implements ISceneBuilderJS {
         return getInternal().overlay;
     }
 
-    public Lazy<WorldInstructionsJS> worldInstructionsJS = new Lazy<>(() ->
-            new WorldInstructionsJS(getInternal().world, this));
-
     @Override
     public WorldInstructionsJS getWorld() {
-       return worldInstructionsJS.get();
+        return worldInstructionsJS.get();
     }
 
     @Override
@@ -94,9 +94,6 @@ public class SceneBuilderJS implements ISceneBuilderJS {
     public SceneBuilder.EffectInstructions getEffects() {
         return getInternal().effects;
     }
-
-    public Lazy<SpecialInstructionsJS> specialInstructionsJS = new Lazy<>(() ->
-            new SpecialInstructionsJS(getInternal().special));
 
     @Override
     public SpecialInstructionsJS getSpecial() {
@@ -130,7 +127,7 @@ public class SceneBuilderJS implements ISceneBuilderJS {
         public Consumer<CompoundTag> mapJsConsumerToNBT(Object pos, UnaryOperator<CompoundTag> sup) {
             return nbt -> {
                 Objects.requireNonNull(nbt, "Could not find NBT in selection " +
-                        pos + ", your selection might include non-tiles!");
+                                            pos + ", your selection might include non-tiles!");
                 CompoundTag n = Objects.requireNonNull(sup.apply(Objects.requireNonNull(nbt)),
                         "Null returned for tile NBT");
                 nbt.merge(n);

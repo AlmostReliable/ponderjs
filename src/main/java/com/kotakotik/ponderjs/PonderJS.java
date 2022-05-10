@@ -3,9 +3,9 @@ package com.kotakotik.ponderjs;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.kotakotik.ponderjs.api.BlockStateFunction;
-import com.kotakotik.ponderjs.api.BlockStateSupplier;
 import com.kotakotik.ponderjs.config.ModConfigs;
+import com.kotakotik.ponderjs.util.BlockStateFunction;
+import com.kotakotik.ponderjs.util.BlockStateSupplier;
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.ponder.*;
@@ -29,6 +29,7 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.antlr.v4.runtime.misc.Triple;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +37,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 public class PonderJS {
-    public static final String TAG_EVENT = "ponder.tag";
+    @Nullable public static final String TAG_EVENT = "ponder.tag";
     public static final String REGISTRY_EVENT = "ponder.registry";
     public static final Set<String> NAMESPACES = new HashSet<>();
     public static final HashMap<String, AllIcons> CACHED_ICONS = new HashMap<>();
@@ -63,20 +64,30 @@ public class PonderJS {
                 return Selection.of(new BoundingBox(b));
             }
 
-            if(o instanceof List<?> l) {
+            if (o instanceof List<?> l) {
                 Integer[] values = l.stream().map(entry -> UtilsJS.parseInt(entry, 0)).toArray(Integer[]::new);
-                if(values.length == 6) {
-                    return Selection.of(new BoundingBox(values[0], values[1], values[2], values[3], values[4], values[5]));
+                if (values.length == 6) {
+                    return Selection.of(new BoundingBox(values[0],
+                            values[1],
+                            values[2],
+                            values[3],
+                            values[4],
+                            values[5]));
                 }
-                if(values.length == 3) {
-                    return Selection.of(new BoundingBox(values[0], values[1], values[2], values[0], values[1], values[2]));
+                if (values.length == 3) {
+                    return Selection.of(new BoundingBox(values[0],
+                            values[1],
+                            values[2],
+                            values[0],
+                            values[1],
+                            values[2]));
                 }
-                if(values.length == 2) {
+                if (values.length == 2) {
                     // TODO add type wrappers for blockpos and vec3
                 }
             }
 
-            if(Context.jsToJava(o, Vec3.class) instanceof Vec3 v) {
+            if (Context.jsToJava(o, Vec3.class) instanceof Vec3 v) {
                 // TODO use type wrapper for ve3
                 return Selection.of(new BoundingBox(new BlockPos(v.x, v.y, v.z)));
             }
@@ -92,7 +103,7 @@ public class PonderJS {
 
         typeWrappers.register(PonderTag.class, o -> {
             PonderTag ponderTag = PonderJS.getTagByName(o.toString()).orElse(null);
-            if(ponderTag == null) {
+            if (ponderTag == null) {
                 IllegalArgumentException e = new IllegalArgumentException("Invalid PonderTag: " + o);
                 PonderErrorHelper.yeet(e);
                 throw e;
@@ -138,7 +149,10 @@ public class PonderJS {
         } catch (IOException e) {
             log.error("Couldn't write KubeJS langMap");
             e.printStackTrace();
-            return new Triple<>(false, new TextComponent("Unable to write KubeJS lang: " + e.getClass().getSimpleName() + "\nMore info in logs"), wrote.size());
+            return new Triple<>(false,
+                    new TextComponent(
+                            "Unable to write KubeJS lang: " + e.getClass().getSimpleName() + "\nMore info in logs"),
+                    wrote.size());
         }
     }
 

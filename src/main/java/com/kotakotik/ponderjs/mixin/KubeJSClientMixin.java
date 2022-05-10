@@ -23,8 +23,10 @@ public class KubeJSClientMixin {
 //            PonderJS.generateJsonLang("en_us");
 
             String msg = "Ponder tags event is currently not reloadable. Only scenes were reloaded.";
-            if(KubeJS.PROXY.getClientPlayer() != null) {
-                KubeJS.PROXY.getClientPlayer().sendMessage(new TextComponent(msg), KubeJS.PROXY.getClientPlayer().getUUID());
+            if (KubeJS.PROXY.getClientPlayer() != null) {
+                KubeJS.PROXY
+                        .getClientPlayer()
+                        .sendMessage(new TextComponent(msg), KubeJS.PROXY.getClientPlayer().getUUID());
             }
             ConsoleJS.CLIENT.info(msg);
         }

@@ -46,7 +46,10 @@ public abstract class AbstractPonderBuilder<S extends AbstractPonderBuilder<S>> 
     }
 
     protected S addStoryBoard(Item item, ResourceLocation schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
-        PonderStoryBoardEntry entry = new PonderStoryBoardEntry(scene, name.getNamespace(), schematic, item.getRegistryName());
+        PonderStoryBoardEntry entry = new PonderStoryBoardEntry(scene,
+                name.getNamespace(),
+                schematic,
+                item.getRegistryName());
         PonderRegistry.addStoryBoard(entry);
         PonderJS.STORIES_MANAGER.add(entry);
         return getSelf();

@@ -1,4 +1,4 @@
-package com.kotakotik.ponderjs.api;
+package com.kotakotik.ponderjs.util;
 
 import com.kotakotik.ponderjs.PonderErrorHelper;
 import dev.latvian.mods.kubejs.block.predicate.BlockIDPredicate;

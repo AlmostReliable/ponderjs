@@ -5,16 +5,15 @@ import com.simibubi.create.foundation.ponder.ElementLink;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.Selection;
 import com.simibubi.create.foundation.ponder.element.*;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Consumer;
@@ -70,6 +69,36 @@ public interface ISceneBuilderJS {
 
     default void addLazyKeyframe() {
         getInternal().addLazyKeyframe();
+    }
+
+    SceneBuilder.OverlayInstructions getOverlay();
+
+    default SceneBuilder.OverlayInstructions overlay() {
+        return getOverlay();
+    }
+
+    SceneBuilderJS.WorldInstructionsJS getWorld();
+
+    default SceneBuilderJS.WorldInstructionsJS world() {
+        return getWorld();
+    }
+
+    SceneBuilder.DebugInstructions getDebug();
+
+    default SceneBuilder.DebugInstructions debug() {
+        return getDebug();
+    }
+
+    SceneBuilder.EffectInstructions getEffects();
+
+    default SceneBuilder.EffectInstructions effects() {
+        return getEffects();
+    }
+
+    SceneBuilderJS.SpecialInstructionsJS getSpecial();
+
+    default SceneBuilderJS.SpecialInstructionsJS special() {
+        return getSpecial();
     }
 
     interface ISpecialInstructionsJS {
@@ -317,26 +346,5 @@ public interface ISceneBuilderJS {
         default void connectCrafterInvs(BlockPos position1, BlockPos position2) {
             getInternal().connectCrafterInvs(position1, position2);
         }
-    }
-
-    SceneBuilder.OverlayInstructions getOverlay();
-    default SceneBuilder.OverlayInstructions overlay() {
-        return getOverlay();
-    }
-    SceneBuilderJS.WorldInstructionsJS getWorld();
-    default SceneBuilderJS.WorldInstructionsJS world() {
-        return getWorld();
-    }
-    SceneBuilder.DebugInstructions getDebug();
-    default SceneBuilder.DebugInstructions debug() {
-        return getDebug();
-    }
-    SceneBuilder.EffectInstructions getEffects();
-    default SceneBuilder.EffectInstructions effects() {
-        return getEffects();
-    }
-    SceneBuilderJS.SpecialInstructionsJS getSpecial();
-    default SceneBuilderJS.SpecialInstructionsJS special() {
-        return getSpecial();
     }
 }

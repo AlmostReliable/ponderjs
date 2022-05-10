@@ -9,6 +9,14 @@ public class DyeColorWrapper {
         this.mcColor = color;
     }
 
+    public static DyeColorWrapper get(String name) {
+        return new DyeColorWrapper(DyeColor.byName(name, null));
+    }
+
+    public static DyeColorWrapper byId(int id) {
+        return new DyeColorWrapper(DyeColor.byId(id));
+    }
+
     public int getId() {
         return mcColor.getId();
     }
@@ -23,13 +31,5 @@ public class DyeColorWrapper {
 
     public int getColorValue() {
         return mcColor.getTextColor();
-    }
-
-    public static DyeColorWrapper get(String name) {
-        return new DyeColorWrapper(DyeColor.byName(name, null));
-    }
-
-    public static DyeColorWrapper byId(int id) {
-        return new DyeColorWrapper(DyeColor.byId(id));
     }
 }

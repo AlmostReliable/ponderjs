@@ -2,7 +2,7 @@ buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
         mavenCentral()
-        maven {url='https://repo.spongepowered.org/maven'}
+        maven { url = 'https://repo.spongepowered.org/maven' }
         maven { url = 'https://maven.parchmentmc.org' }
     }
     dependencies {
@@ -174,7 +174,6 @@ artifacts {
 build.dependsOn deobfJar
 
 jar.finalizedBy('reobfJar')
-
 
 
 buildConfig {
