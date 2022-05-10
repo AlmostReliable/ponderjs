@@ -3,6 +3,7 @@ package com.kotakotik.ponderjs.api;
 import com.kotakotik.ponderjs.PonderErrorHelper;
 import dev.latvian.mods.kubejs.block.predicate.BlockIDPredicate;
 import dev.latvian.mods.kubejs.item.ItemStackJS;
+import dev.latvian.mods.kubejs.util.ConsoleJS;
 import dev.latvian.mods.rhino.Context;
 import dev.latvian.mods.rhino.RhinoException;
 import net.minecraft.world.item.BlockItem;
@@ -42,6 +43,7 @@ public interface BlockStateSupplier extends Supplier<BlockState> {
             return bi.getBlock()::defaultBlockState;
         }
 
-        throw new IllegalArgumentException("Block or BlockState does not exist");
+        ConsoleJS.CLIENT.error("Invalid blockstate supplier: " + o);
+        return Blocks.AIR::defaultBlockState;
     }
 }

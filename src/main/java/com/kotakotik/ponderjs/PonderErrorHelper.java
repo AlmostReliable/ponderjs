@@ -8,11 +8,12 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Player;
 
 public class PonderErrorHelper {
+
     public static void yeet(Exception e) {
         ConsoleJS.CLIENT.error(e);
-        e.printStackTrace();
+        PonderJSMod.LOGGER.error(e.getMessage(), e);
         Player clientPlayer = KubeJS.PROXY.getClientPlayer();
-        if(clientPlayer != null) {
+        if (clientPlayer != null) {
             MutableComponent first = new TextComponent("[PonderJS ERROR] ").withStyle(ChatFormatting.DARK_RED);
             MutableComponent second = new TextComponent(e.getMessage()).withStyle(ChatFormatting.RED);
             clientPlayer.sendMessage(first.append(second), clientPlayer.getUUID());

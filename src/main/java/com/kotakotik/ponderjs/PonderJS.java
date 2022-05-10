@@ -15,6 +15,7 @@ import com.simibubi.create.foundation.utility.Pointing;
 import dev.latvian.mods.kubejs.KubeJS;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
 import dev.latvian.mods.kubejs.script.ScriptType;
+import dev.latvian.mods.kubejs.util.ConsoleJS;
 import dev.latvian.mods.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.Context;
 import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
@@ -80,7 +81,8 @@ public class PonderJS {
                 return Selection.of(new BoundingBox(new BlockPos(v.x, v.y, v.z)));
             }
 
-            throw new IllegalArgumentException("Invalid selection: " + o);
+            ConsoleJS.CLIENT.error("Invalid selection: " + o);
+            return Selection.of(new BoundingBox(0, 0, 0, 0, 0, 0));
         });
 
         typeWrappers.register(AllIcons.class, o -> {
@@ -88,7 +90,15 @@ public class PonderJS {
             return getIconByName(o.toString());
         });
 
-        typeWrappers.register(PonderTag.class, o -> PonderJS.getTagByName(o.toString()).orElseThrow(() -> new NoSuchElementException("No tags found matching " + o)));
+        typeWrappers.register(PonderTag.class, o -> {
+            PonderTag ponderTag = PonderJS.getTagByName(o.toString()).orElse(null);
+            if(ponderTag == null) {
+                IllegalArgumentException e = new IllegalArgumentException("Invalid PonderTag: " + o);
+                PonderErrorHelper.yeet(e);
+                throw e;
+            }
+            return ponderTag;
+        });
         typeWrappers.register(BlockStateFunction.class, BlockStateFunction::of);
         typeWrappers.register(BlockStateSupplier.class, BlockStateSupplier::of);
     }
