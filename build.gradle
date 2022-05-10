@@ -194,11 +194,6 @@ artifacts {
 
 build.dependsOn deobfJar
 
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
-}
-jar.finalizedBy('reobfJar')
-
 buildConfig {
     buildConfigField 'String', 'MOD_ID', "\"${mod_id}\""
     buildConfigField 'String', 'MOD_VERSION', "\"${mod_version}\""
@@ -207,3 +202,39 @@ buildConfig {
     version = mod_version
     packageName = project.group
 }
+
+curseforge {
+    if (System.getenv('CF_API_KEY') != null) {
+        // GitHub actions
+        apiKey = System.getenv('CF_API_KEY')
+    } else {
+        // error prevention
+        apiKey = "none"
+    }
+    def RELEASE_TYPE
+    if (System.getenv('RELEASE_TYPE') == null || System.getenv('RELEASE_TYPE') == '') {
+        RELEASE_TYPE = "release"
+    } else {
+        RELEASE_TYPE = System.getenv('RELEASE_TYPE')
+    }
+    project {
+        id = project_id
+        changelogType = 'markdown'
+        changelog = "The whole changelog can be found [here](https://github.com/${github_user}/${github_repo}/blob/${github_branch}/CHANGELOG.md)."
+        releaseType = RELEASE_TYPE
+        addGameVersion minecraft_version
+
+        mainArtifact(jar) {
+            if (RELEASE_TYPE == 'release') {
+                displayName = "${mod_name}-${minecraft_version}-${mod_version}"
+            } else {
+                displayName = "${mod_name}-${minecraft_version}-${mod_version}-${RELEASE_TYPE}"
+            }
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+jar.finalizedBy('reobfJar')
