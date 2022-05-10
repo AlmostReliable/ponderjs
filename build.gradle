@@ -23,12 +23,11 @@ apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 
-group = "com.almostreliable.${modid}"
 version = "${minecraft_version}-${mod_version}"
 if (System.getenv("ENV_VERSION") != null) {
     version = "${minecraft_version}-${System.getenv("ENV_VERSION")}"
 }
-archivesBaseName = modid
+archivesBaseName = mod_id
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
@@ -41,12 +40,12 @@ minecraft {
             workingDirectory project.file('run')
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            args "--debug", "--stacktrace", "--scan", "-mixin.config=${modid}.mixins.json".toString()
+            args "--debug", "--stacktrace", "--scan", "-mixin.config=${mod_id}.mixins.json".toString()
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                "${modid}" {
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -60,7 +59,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                "${modid}" {
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -73,10 +72,10 @@ minecraft {
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
 
-            args "--mod", modid, "--all", "--output", file('src/generated/resources/'), "--existing", file('src/main/resources/')
+            args "--mod", mod_id, "--all", "--output", file('src/generated/resources/'), "--existing", file('src/main/resources/')
 
             mods {
-                "${modid}" {
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -139,21 +138,44 @@ compileJava.options.encoding = 'UTF-8'
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : modid,
-                "Specification-Vendor"    : author,
+                "Specification-Title"     : mod_id,
+                "Specification-Vendor"    : mod_author,
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.version,
-                "Implementation-Vendor"   : author,
+                "Implementation-Vendor"   : mod_author,
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                "MixinConfigs"            : "${modid}.mixins.json"
+                "MixinConfigs"            : "${mod_id}.mixins.json"
         ])
     }
 }
 
 mixin {
-    add sourceSets.main, "${modid}.refmap.json"
-    config "${modid}.mixins.json"
+    add sourceSets.main, "${mod_id}.refmap.json"
+    config "${mod_id}.mixins.json"
+}
+
+processResources {
+    def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta', 'fabric.mod.json']
+    def replaceProperties = [
+            version             : project.version,
+            license             : license,
+            mod_id              : mod_id,
+            mod_name            : mod_name,
+            minecraft_version   : minecraft_version,
+            mod_author          : mod_author,
+            forge_loader_version: forge_loader_version,
+            create_min_version  : create_min_version,
+            kubejs_min_version  : kubejs_min_version,
+            github_user         : github_user,
+            github_repo         : github_repo]
+
+    inputs.properties replaceProperties
+    replaceProperties.put 'project', project
+
+    filesMatching(resourceTargets) {
+        expand replaceProperties
+    }
 }
 
 task deobfJar(type: Jar) {
@@ -175,11 +197,10 @@ build.dependsOn deobfJar
 
 jar.finalizedBy('reobfJar')
 
-
 buildConfig {
-    buildConfigField 'String', 'MODID', "\"${modid}\""
+    buildConfigField 'String', 'MOD_ID', "\"${mod_id}\""
     buildConfigField 'String', 'VERSION', "\"${project.version}\""
-    buildConfigField 'String', 'DISPLAY_NAME', "\"${display_name}\""
+    buildConfigField 'String', 'MOD_NAME', "\"${mod_name}\""
 
     version = project.version
     packageName = project.group

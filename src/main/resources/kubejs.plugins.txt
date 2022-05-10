@@ -1,1 +1,1 @@
-com.kotakotik.ponderjs.PonderJSPlugin
+com.almostreliable.ponderjs.PonderJSPlugin
