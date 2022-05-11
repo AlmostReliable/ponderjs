@@ -7,10 +7,14 @@
     "KubeJSClientMixin",
     "PonderInstructionMixin",
     "PonderTagRegistryAccessor",
+    "PonderWorldAccessor",
     "SceneBuilderMixin",
     "SceneBuilderMixin$SpecialInstructionsMixin",
     "SceneBuilderMixin$WorldInstructionsMixin",
     "SceneBuildingUtilMixin"
+  ],
+  "client": [
+    "ParticleAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

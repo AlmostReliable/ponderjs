@@ -2,6 +2,7 @@ package com.almostreliable.ponderjs.mixin;
 
 import com.almostreliable.ponderjs.util.BlockStateFunction;
 import com.almostreliable.ponderjs.util.BlockStateSupplier;
+import com.almostreliable.ponderjs.particles.ParticleInstructions;
 import com.simibubi.create.foundation.ponder.*;
 import com.simibubi.create.foundation.ponder.element.EntityElement;
 import com.simibubi.create.foundation.ponder.element.InputWindowElement;
@@ -29,6 +30,7 @@ import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -63,6 +65,9 @@ public abstract class SceneBuilderMixin {
     @Final
     private PonderScene scene;
 
+    @Unique
+    private ParticleInstructions particles;
+
     @Shadow(remap = false)
     public abstract void addInstruction(PonderInstruction instruction);
 
@@ -94,6 +99,14 @@ public abstract class SceneBuilderMixin {
     @RemapForJS("getSpecial")
     public SceneBuilder.SpecialInstructions ponderjs$getSpecial() {
         return special;
+    }
+
+    @RemapForJS(("getParticles"))
+    public ParticleInstructions ponderjs$getParticles() {
+        if (particles == null) {
+            particles = new ParticleInstructions((SceneBuilder) (Object) this);
+        }
+        return particles;
     }
 
     @RemapForJS("showStructure")
