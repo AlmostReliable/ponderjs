@@ -13,11 +13,11 @@ public class PonderRegistryEventJS extends EventJS {
         PonderJS.STORIES_MANAGER.clear();
     }
 
-    public PonderBuilderJS create(String name, IngredientJS ingredient) {
+    public PonderBuilderJS create(IngredientJS ingredient) {
         if (ingredient.isEmpty()) {
             throw new IllegalArgumentException("Provided items must not be empty!");
         }
-        return new PonderBuilderJS(name, ingredient.getVanillaItems());
+        return new PonderBuilderJS(ingredient.getVanillaItems());
     }
 
     public void printParticleNames() {

@@ -8,8 +8,6 @@ import com.simibubi.create.foundation.ponder.PonderTagRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -18,18 +16,16 @@ import java.util.Set;
  * @param <S> Self
  */
 public abstract class AbstractPonderBuilder<S extends AbstractPonderBuilder<S>> {
-    protected ResourceLocation name;
     protected Set<Item> items;
 
-    public AbstractPonderBuilder(ResourceLocation name, Set<Item> items) {
-        this.name = name;
+    public AbstractPonderBuilder(Set<Item> items) {
         this.items = items;
     }
 
     protected abstract S getSelf();
 
-    protected String createTitleTranslationKey(String scene) {
-        return name.getPath() + "." + scene;
+    protected ResourceLocation createTitleTranslationKey(String scene) {
+        return PonderJS.appendKubeToId(scene);
     }
 
     /**
@@ -44,9 +40,10 @@ public abstract class AbstractPonderBuilder<S extends AbstractPonderBuilder<S>> 
         return getSelf();
     }
 
-    protected S addStoryBoard(Item item, ResourceLocation schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
+    protected S addStoryBoard(ResourceLocation id, Item item, ResourceLocation schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
+        PonderJS.NAMESPACES.add(id.getNamespace());
         PonderStoryBoardEntry entry = new PonderStoryBoardEntry(scene,
-                name.getNamespace(),
+                id.getNamespace(),
                 schematic,
                 item.getRegistryName());
         PonderRegistry.addStoryBoard(entry);
@@ -54,9 +51,9 @@ public abstract class AbstractPonderBuilder<S extends AbstractPonderBuilder<S>> 
         return getSelf();
     }
 
-    protected S addNamedStoryBoard(String name, String displayName, Item item, ResourceLocation schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
-        return addStoryBoard(item, schematic, (builder, util) -> {
-            builder.title(name, displayName);
+    protected S addNamedStoryBoard(ResourceLocation id, String displayName, Item item, ResourceLocation schematic, PonderStoryBoardEntry.PonderStoryBoard scene) {
+        return addStoryBoard(id, item, schematic, (builder, util) -> {
+            builder.title(id.getPath(), displayName);
             scene.program(builder, util);
         });
     }

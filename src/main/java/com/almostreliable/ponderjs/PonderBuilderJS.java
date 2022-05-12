@@ -5,6 +5,7 @@ import com.almostreliable.ponderjs.util.PonderErrorHelper;
 import com.simibubi.create.foundation.ponder.PonderStoryBoardEntry;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
 import java.util.Set;
@@ -12,10 +13,8 @@ import java.util.Set;
 public class PonderBuilderJS extends AbstractPonderBuilder<PonderBuilderJS> {
     public static final String BASIC_STRUCTURE = "ponderjs:basic";
 
-    public PonderBuilderJS(String name, Set<Item> items) {
-        super(PonderJS.appendKubeToId(name), items);
-        String namespace = this.name.getNamespace();
-        PonderJS.NAMESPACES.add(namespace);
+    public PonderBuilderJS(Set<Item> items) {
+        super(items);
     }
 
     public PonderBuilderJS scene(String name, String title, PonderStoryBoardEntry.PonderStoryBoard scene) {
@@ -23,11 +22,11 @@ public class PonderBuilderJS extends AbstractPonderBuilder<PonderBuilderJS> {
     }
 
     public PonderBuilderJS scene(String name, String title, String structureName, PonderStoryBoardEntry.PonderStoryBoard scene) {
-        String translationKey = createTitleTranslationKey(name);
+        ResourceLocation id = createTitleTranslationKey(name);
 
         PonderStoryBoardWrapper wrapper = new PonderStoryBoardWrapper(scene);
         for (var item : items) {
-            addNamedStoryBoard(translationKey, title, item, PonderJS.appendKubeToId(structureName), wrapper);
+            addNamedStoryBoard(id, title, item, PonderJS.appendKubeToId(structureName), wrapper);
         }
 
         return this;
