@@ -1,6 +1,7 @@
 package com.almostreliable.ponderjs;
 
 import com.almostreliable.ponderjs.config.ModConfigs;
+import com.almostreliable.ponderjs.particles.ParticleTransformation;
 import com.almostreliable.ponderjs.util.BlockStateFunction;
 import com.almostreliable.ponderjs.util.BlockStateSupplier;
 import com.almostreliable.ponderjs.util.PonderErrorHelper;
@@ -113,6 +114,7 @@ public class PonderJS {
         });
         typeWrappers.register(BlockStateFunction.class, BlockStateFunction::of);
         typeWrappers.register(BlockStateSupplier.class, BlockStateSupplier::of);
+        typeWrappers.register(ParticleTransformation.Data.class, ParticleTransformation.Data::of);
     }
 
     public static Triple<Boolean, Component, Integer> generateJsonLang(String langName) {

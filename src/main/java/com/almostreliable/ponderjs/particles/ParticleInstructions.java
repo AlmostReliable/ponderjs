@@ -10,7 +10,6 @@ import com.simibubi.create.foundation.ponder.PonderScene;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.instruction.TickingInstruction;
 import dev.latvian.mods.kubejs.fluid.FluidStackJS;
-import dev.latvian.mods.rhino.RhinoException;
 import dev.latvian.mods.rhino.mod.util.color.Color;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.Direction;
@@ -127,14 +126,14 @@ public class ParticleInstructions {
         private void doTick(PonderScene scene) {
             int currentTick = totalTicks - remainingTicks;
             for (int i = 0; i < builder.density; i++) {
-                Vec3[] data = new Vec3[]{ origin, Vec3.ZERO };
+                var data = new ParticleTransformation.Data(origin, Vec3.ZERO);
                 for (ParticleTransformation transformation : transformations) {
                     float partialTicks = currentTick + ((float) i / builder.density);
-                    data = transformation.apply(partialTicks, data[0], data[1]);
+                    data = transformation.apply(partialTicks, data.position(), data.motion());
                 }
 
-                Vec3 pos = data[0];
-                Vec3 motion = data[1];
+                Vec3 pos = data.position();
+                Vec3 motion = data.motion();
                 Particle particle = ((PonderWorldAccessor) scene.getWorld()).ponderjs$makeParticle(cachedOptions,
                         pos.x,
                         pos.y,
@@ -149,6 +148,7 @@ public class ParticleInstructions {
                 }
             }
         }
+
         private void applyParticleData(Particle particle) {
             if (particle instanceof ParticleAccessor accessor) {
                 if (builder.color != null) {
