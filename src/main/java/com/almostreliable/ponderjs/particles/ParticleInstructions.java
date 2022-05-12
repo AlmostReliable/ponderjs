@@ -3,15 +3,19 @@ package com.almostreliable.ponderjs.particles;
 import com.almostreliable.ponderjs.mixin.ParticleAccessor;
 import com.almostreliable.ponderjs.mixin.PonderWorldAccessor;
 import com.almostreliable.ponderjs.util.BlockStateSupplier;
+import com.simibubi.create.AllParticleTypes;
+import com.simibubi.create.content.contraptions.fluids.particle.FluidParticleData;
 import com.simibubi.create.foundation.ponder.PonderScene;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.instruction.TickingInstruction;
+import dev.latvian.mods.kubejs.fluid.FluidStackJS;
 import dev.latvian.mods.rhino.mod.util.color.Color;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +53,33 @@ public class ParticleInstructions {
     public ParticleDataBuilder.Static block(int ticks, BlockStateSupplier blockState, Vec3 pos) {
         BlockParticleOption options = new BlockParticleOption(ParticleTypes.BLOCK, blockState.get());
         return create(ticks, pos, new ParticleDataBuilder.Static(options));
+    }
+
+    public ParticleDataBuilder<?, ?> fluid(int ticks, FluidStackJS fluid, Vec3 pos) {
+        var archFluidStack = fluid.getFluidStack();
+        FluidStack fs = new FluidStack(archFluidStack.getFluid(),
+                (int) archFluidStack.getAmount(),
+                archFluidStack.getTag());
+        FluidParticleData data = new FluidParticleData(AllParticleTypes.FLUID_PARTICLE.get(), fs);
+        return create(ticks, pos, new ParticleDataBuilder.Static(data));
+    }
+
+    public ParticleDataBuilder<?, ?> drip(int ticks, FluidStackJS fluid, Vec3 pos) {
+        var archFluidStack = fluid.getFluidStack();
+        FluidStack fs = new FluidStack(archFluidStack.getFluid(),
+                (int) archFluidStack.getAmount(),
+                archFluidStack.getTag());
+        FluidParticleData data = new FluidParticleData(AllParticleTypes.FLUID_DRIP.get(), fs);
+        return create(ticks, pos, new ParticleDataBuilder.Static(data));
+    }
+
+    public ParticleDataBuilder<?, ?> basin(int ticks, FluidStackJS fluid, Vec3 pos) {
+        var archFluidStack = fluid.getFluidStack();
+        FluidStack fs = new FluidStack(archFluidStack.getFluid(),
+                (int) archFluidStack.getAmount(),
+                archFluidStack.getTag());
+        FluidParticleData data = new FluidParticleData(AllParticleTypes.BASIN_FLUID.get(), fs);
+        return create(ticks, pos, new ParticleDataBuilder.Static(data));
     }
 
     private <O extends ParticleDataBuilder<O, ?>> O create(int ticks, Vec3 origin, O options) {
