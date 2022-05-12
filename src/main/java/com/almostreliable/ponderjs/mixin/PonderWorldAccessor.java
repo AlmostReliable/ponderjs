@@ -9,6 +9,6 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(PonderWorld.class)
 public interface PonderWorldAccessor {
 
-    @Invoker("makeParticle")
+    @Invoker(value = "makeParticle", remap = false)
     <T extends ParticleOptions>Particle ponderjs$makeParticle(T data, double x, double y, double z, double mx, double my, double mz);
 }
