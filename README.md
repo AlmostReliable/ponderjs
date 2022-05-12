@@ -40,7 +40,7 @@ This project is licensed under the [MIT license][license].
 <!-- Badges -->
 [version_badge]: https://img.shields.io/github/v/release/AlmostReliable/ponderjs-forge?style=flat-square
 [version_link]: https://github.com/AlmostReliable/ponderjs-forge/releases/latest
-[total_downloads_badge]: http://cf.way2muchnoise.eu/full_000000.svg?badge_style=flat
+[total_downloads_badge]: http://cf.way2muchnoise.eu/full_622888.svg?badge_style=flat
 [workflow_status_badge]: https://img.shields.io/github/workflow/status/AlmostReliable/ponderjs-forge/CI?style=flat-square
 [workflow_status_link]: https://github.com/AlmostReliable/ponderjs-forge/actions
 [license_badge]: https://img.shields.io/github/license/AlmostReliable/ponderjs-forge?style=flat-square
@@ -49,7 +49,7 @@ This project is licensed under the [MIT license][license].
 [minecraft]: https://www.minecraft.net/
 [kubejs]: https://www.curseforge.com/minecraft/mc-mods/kubejs
 [discord]: https://discord.com/invite/ThFnwZCyYY
-[curseforge]: https://www.curseforge.com/minecraft/mc-mods/ponderjs
+[curseforge]: https://www.curseforge.com/minecraft/mc-mods/ponder-for-kubejs
 [create]: https://www.curseforge.com/minecraft/mc-mods/create
 [forge]: http://files.minecraftforge.net/
 [ponderjs]: https://github.com/Create-Additions/Ponderjs
