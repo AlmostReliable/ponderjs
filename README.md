@@ -38,7 +38,7 @@ This project is licensed under the [MIT license][license].
 
 
 <!-- Badges -->
-[version_badge]: https://img.shields.io/github/v/release/AlmostReliable/ponderjs-forge?style=flat-square
+[version_badge]: https://img.shields.io/github/v/release/AlmostReliable/ponderjs-forge?include_prereleases&style=flat-square
 [version_link]: https://github.com/AlmostReliable/ponderjs-forge/releases/latest
 [total_downloads_badge]: http://cf.way2muchnoise.eu/full_622888.svg?badge_style=flat
 [workflow_status_badge]: https://img.shields.io/github/workflow/status/AlmostReliable/ponderjs-forge/CI?style=flat-square
