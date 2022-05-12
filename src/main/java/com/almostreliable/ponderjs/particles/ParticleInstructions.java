@@ -3,12 +3,14 @@ package com.almostreliable.ponderjs.particles;
 import com.almostreliable.ponderjs.mixin.ParticleAccessor;
 import com.almostreliable.ponderjs.mixin.PonderWorldAccessor;
 import com.almostreliable.ponderjs.util.BlockStateSupplier;
+import com.almostreliable.ponderjs.util.PonderErrorHelper;
 import com.simibubi.create.AllParticleTypes;
 import com.simibubi.create.content.contraptions.fluids.particle.FluidParticleData;
 import com.simibubi.create.foundation.ponder.PonderScene;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.instruction.TickingInstruction;
 import dev.latvian.mods.kubejs.fluid.FluidStackJS;
+import dev.latvian.mods.rhino.RhinoException;
 import dev.latvian.mods.rhino.mod.util.color.Color;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.Direction;
@@ -113,7 +115,16 @@ public class ParticleInstructions {
 
         @Override
         public void tick(PonderScene scene) {
-            super.tick(scene);
+            try {
+                super.tick(scene);
+                doTick(scene);
+            } catch (Exception e) {
+                PonderErrorHelper.yeet(e);
+                remainingTicks = 0;
+            }
+        }
+
+        private void doTick(PonderScene scene) {
             int currentTick = totalTicks - remainingTicks;
             for (int i = 0; i < builder.density; i++) {
                 Vec3[] data = new Vec3[]{ origin, Vec3.ZERO };
@@ -138,7 +149,6 @@ public class ParticleInstructions {
                 }
             }
         }
-
         private void applyParticleData(Particle particle) {
             if (particle instanceof ParticleAccessor accessor) {
                 if (builder.color != null) {
