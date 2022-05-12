@@ -85,6 +85,14 @@ public abstract class ParticleDataBuilder<O extends ParticleDataBuilder<O, PO>, 
         ));
     }
 
+    public O withinBlockSpace() {
+        return transformPosition((partialTicks, position) -> new Vec3(
+                Math.floor(position.x) + Create.RANDOM.nextFloat(),
+                Math.floor(position.y) + Create.RANDOM.nextFloat(),
+                Math.floor(position.z) + Create.RANDOM.nextFloat()
+        ));
+    }
+
     public O area(Vec3 area) {
         return transformPosition((partialTicks, position) -> new Vec3(
                 position.x + (Create.RANDOM.nextFloat() * (area.x - position.x)),
