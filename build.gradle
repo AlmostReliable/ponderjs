@@ -136,7 +136,7 @@ jar {
     manifest {
         attributes([
                 "Specification-Title"     : mod_id,
-                "Specification-Vendor"    : project.version,
+                "Specification-Vendor"    : mod_authors,
                 "Specification-Version"   : "1",
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.version,

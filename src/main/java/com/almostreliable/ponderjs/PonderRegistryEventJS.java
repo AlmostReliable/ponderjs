@@ -26,7 +26,7 @@ public class PonderRegistryEventJS extends EventJS {
         //noinspection ConstantConditions
         ForgeRegistries.PARTICLE_TYPES.getValues()
                 .stream()
-                .filter(p -> p instanceof SimpleParticleType)
+                .filter(SimpleParticleType.class::isInstance)
                 .map(ForgeRegistryEntry::getRegistryName)
                 .sorted()
                 .forEach(id -> sb.append(" - ").append(id).append("\n"));

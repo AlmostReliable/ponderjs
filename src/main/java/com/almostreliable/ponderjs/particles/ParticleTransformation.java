@@ -36,7 +36,7 @@ public interface ParticleTransformation {
             }
 
             IllegalArgumentException e = new IllegalArgumentException(
-                    "Invalid format for particle transformation data. Please use [position, motion] or [ [x, y, z], [mx, my, mz]]");
+                    "Invalid format for particle transformation data. Please use [position, motion] or [[x, y, z], [mx, my, mz]]");
             PonderErrorHelper.yeet(e);
             return new Data(Vec3.ZERO, Vec3.ZERO);
         }

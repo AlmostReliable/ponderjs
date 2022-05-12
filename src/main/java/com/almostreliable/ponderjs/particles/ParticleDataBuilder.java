@@ -133,7 +133,6 @@ public abstract class ParticleDataBuilder<O extends ParticleDataBuilder<O, PO>, 
         private final ParticleOptions type;
 
         public Static(ParticleOptions type) {
-            super();
             this.type = type;
         }
 

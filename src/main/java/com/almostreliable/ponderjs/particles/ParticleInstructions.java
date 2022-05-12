@@ -18,6 +18,7 @@ import net.minecraft.core.particles.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class ParticleInstructions {
         }
 
         throw new IllegalArgumentException(
-                "Particle type " + (type == null ? "INVALID" : Registry.PARTICLE_TYPE.getKey(type)) +
+                "Particle type " + (type == null ? "INVALID" : ForgeRegistries.PARTICLE_TYPES.getKey(type)) +
                 " is null or not simple.");
     }
 
@@ -153,10 +154,10 @@ public class ParticleInstructions {
             if (particle instanceof ParticleAccessor accessor) {
                 if (builder.color != null) {
                     long argb = builder.color.getArgbKJS();
-                    float a = (float) (argb >> 24 & 255) / 255.0F;
-                    float r = (float) (argb >> 16 & 255) / 255.0F;
-                    float g = (float) (argb >> 8 & 255) / 255.0F;
-                    float b = (float) (argb & 255) / 255.0F;
+                    float a = (argb >> 24 & 255) / 255.0F;
+                    float r = (argb >> 16 & 255) / 255.0F;
+                    float g = (argb >> 8 & 255) / 255.0F;
+                    float b = (argb & 255) / 255.0F;
 
                     particle.setColor(r, g, b);
                     accessor.ponderjs$setAlpha(a);

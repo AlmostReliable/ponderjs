@@ -1,8 +1,8 @@
 package com.almostreliable.ponderjs.mixin;
 
+import com.almostreliable.ponderjs.particles.ParticleInstructions;
 import com.almostreliable.ponderjs.util.BlockStateFunction;
 import com.almostreliable.ponderjs.util.BlockStateSupplier;
-import com.almostreliable.ponderjs.particles.ParticleInstructions;
 import com.simibubi.create.foundation.ponder.*;
 import com.simibubi.create.foundation.ponder.element.EntityElement;
 import com.simibubi.create.foundation.ponder.element.InputWindowElement;
@@ -101,7 +101,7 @@ public abstract class SceneBuilderMixin {
         return special;
     }
 
-    @RemapForJS(("getParticles"))
+    @RemapForJS("getParticles")
     public ParticleInstructions ponderjs$getParticles() {
         if (particles == null) {
             particles = new ParticleInstructions((SceneBuilder) (Object) this);
