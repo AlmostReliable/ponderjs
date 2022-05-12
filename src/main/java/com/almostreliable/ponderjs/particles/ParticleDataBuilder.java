@@ -2,7 +2,10 @@ package com.almostreliable.ponderjs.particles;
 
 import com.mojang.math.Vector3f;
 import com.simibubi.create.Create;
+import com.simibubi.create.content.contraptions.particle.RotationIndicatorParticleData;
 import dev.latvian.mods.rhino.mod.util.color.Color;
+import dev.latvian.mods.rhino.mod.wrapper.ColorWrapper;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustColorTransitionOptions;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.DustParticleOptionsBase;
@@ -159,6 +162,34 @@ public abstract class ParticleDataBuilder<O extends ParticleDataBuilder<O, PO>, 
 
             Vector3f toC = new com.simibubi.create.foundation.utility.Color(toColor.getRgbKJS()).asVectorF();
             return new DustColorTransitionOptions(fC, toC, s);
+        }
+    }
+
+    public static class RotationIndicatorParticleDataBuilder
+            extends ParticleDataBuilder<RotationIndicatorParticleDataBuilder, RotationIndicatorParticleData> {
+        private final float radius1;
+        private final float radius2;
+        private final Direction.Axis axis;
+        private float rotationSpeed;
+
+        public RotationIndicatorParticleDataBuilder(float radius1, float radius2, Direction.Axis axis) {
+            this.rotationSpeed = 1.0f;
+            this.radius1 = radius1;
+            this.radius2 = radius2;
+            this.axis = axis;
+        }
+
+        public RotationIndicatorParticleDataBuilder rotationSpeed(float rotationSpeed) {
+            this.rotationSpeed = rotationSpeed;
+            return getSelf();
+        }
+
+        @Override
+        RotationIndicatorParticleData createOptions() {
+            Color c = color == null ? ColorWrapper.BLACK : color;
+            char axisChar = axis.name().charAt(0);
+            int lTime = lifetime == null ? 40 : lifetime;
+            return new RotationIndicatorParticleData(c.getRgbKJS(), rotationSpeed, radius1, radius2, lTime, axisChar);
         }
     }
 }

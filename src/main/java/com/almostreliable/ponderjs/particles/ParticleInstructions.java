@@ -11,6 +11,7 @@ import com.simibubi.create.foundation.ponder.instruction.TickingInstruction;
 import dev.latvian.mods.kubejs.fluid.FluidStackJS;
 import dev.latvian.mods.rhino.mod.util.color.Color;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.*;
 import net.minecraft.world.item.ItemStack;
@@ -80,6 +81,10 @@ public class ParticleInstructions {
                 archFluidStack.getTag());
         FluidParticleData data = new FluidParticleData(AllParticleTypes.BASIN_FLUID.get(), fs);
         return create(ticks, pos, new ParticleDataBuilder.Static(data));
+    }
+
+    public ParticleDataBuilder<?, ?> rotationIndicator(int ticks, Vec3 pos, float radius1, float radius2, Direction.Axis axis) {
+        return create(ticks, pos, new ParticleDataBuilder.RotationIndicatorParticleDataBuilder(radius1, radius2, axis));
     }
 
     private <O extends ParticleDataBuilder<O, ?>> O create(int ticks, Vec3 origin, O options) {
