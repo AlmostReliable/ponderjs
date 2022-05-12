@@ -163,12 +163,12 @@ public class ParticleInstructions {
                     accessor.ponderjs$setGravity(builder.gravity);
                 }
 
-                if (builder.hasPhysics != null) {
-                    accessor.ponderjs$setHasPhysics(builder.hasPhysics);
+                if (builder.physics != null) {
+                    accessor.ponderjs$setHasPhysics(builder.physics);
                 }
 
-                if (builder.stoppedByCollision != null) {
-                    accessor.ponderjs$setStoppedByCollision(builder.stoppedByCollision);
+                if (builder.collision != null) {
+                    accessor.ponderjs$setStoppedByCollision(builder.collision);
                 }
 
                 if (builder.lifetime != null) {

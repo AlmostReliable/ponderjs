@@ -17,8 +17,8 @@ public abstract class ParticleDataBuilder<O extends ParticleDataBuilder<O, PO>, 
     final List<ParticleTransformation> transformations = new ArrayList<>();
     int density = 1;
     @Nullable Float gravity = null;
-    @Nullable Boolean hasPhysics = null;
-    @Nullable Boolean stoppedByCollision = null;
+    @Nullable Boolean physics = null;
+    @Nullable Boolean collision = null;
     @Nullable Color color = null;
     @Nullable Float roll = null;
     @Nullable Float friction = null;
@@ -35,13 +35,13 @@ public abstract class ParticleDataBuilder<O extends ParticleDataBuilder<O, PO>, 
         return getSelf();
     }
 
-    public O hasPhysics(boolean hasPhysics) {
-        this.hasPhysics = hasPhysics;
+    public O physics(boolean physics) {
+        this.physics = physics;
         return getSelf();
     }
 
-    public O stoppedByCollision(boolean stoppedByCollision) {
-        this.stoppedByCollision = stoppedByCollision;
+    public O collision(boolean collision) {
+        this.collision = collision;
         return getSelf();
     }
 
