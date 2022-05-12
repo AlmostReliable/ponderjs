@@ -5,6 +5,7 @@ import com.almostreliable.ponderjs.particles.ParticleTransformation;
 import com.almostreliable.ponderjs.util.BlockStateFunction;
 import com.almostreliable.ponderjs.util.BlockStateSupplier;
 import com.almostreliable.ponderjs.util.PonderErrorHelper;
+import com.almostreliable.ponderjs.util.Util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -56,62 +57,9 @@ public class PonderJS {
     }
 
     static void addTypeWrappers(ScriptType type, TypeWrappers typeWrappers) {
-        typeWrappers.register(Selection.class, o -> {
-            if (o instanceof Selection s) return s;
-            if (o instanceof BoundingBox box) {
-                return Selection.of(box);
-            }
-
-            if (o instanceof BlockPos b) {
-                return Selection.of(new BoundingBox(b));
-            }
-
-            if (o instanceof List<?> l) {
-                Integer[] values = l.stream().map(entry -> UtilsJS.parseInt(entry, 0)).toArray(Integer[]::new);
-                if (values.length == 6) {
-                    return Selection.of(new BoundingBox(values[0],
-                            values[1],
-                            values[2],
-                            values[3],
-                            values[4],
-                            values[5]));
-                }
-                if (values.length == 3) {
-                    return Selection.of(new BoundingBox(values[0],
-                            values[1],
-                            values[2],
-                            values[0],
-                            values[1],
-                            values[2]));
-                }
-                if (values.length == 2) {
-                    // TODO add type wrappers for blockpos and vec3
-                }
-            }
-
-            if (Context.jsToJava(o, Vec3.class) instanceof Vec3 v) {
-                // TODO use type wrapper for ve3
-                return Selection.of(new BoundingBox(new BlockPos(v.x, v.y, v.z)));
-            }
-
-            ConsoleJS.CLIENT.error("Invalid selection: " + o);
-            return Selection.of(new BoundingBox(0, 0, 0, 0, 0, 0));
-        });
-
-        typeWrappers.register(AllIcons.class, o -> {
-            if (o instanceof AllIcons) return (AllIcons) o;
-            return getIconByName(o.toString());
-        });
-
-        typeWrappers.register(PonderTag.class, o -> {
-            PonderTag ponderTag = PonderJS.getTagByName(o.toString()).orElse(null);
-            if (ponderTag == null) {
-                IllegalArgumentException e = new IllegalArgumentException("Invalid PonderTag: " + o);
-                PonderErrorHelper.yeet(e);
-                throw e;
-            }
-            return ponderTag;
-        });
+        typeWrappers.register(Selection.class, Util::selectionOf);
+        typeWrappers.register(AllIcons.class, Util::allIconsOf);
+        typeWrappers.register(PonderTag.class, Util::ponderTagOf);
         typeWrappers.register(BlockStateFunction.class, BlockStateFunction::of);
         typeWrappers.register(BlockStateSupplier.class, BlockStateSupplier::of);
         typeWrappers.register(ParticleTransformation.Data.class, ParticleTransformation.Data::of);
