@@ -3,7 +3,10 @@
 ## [Unreleased]
 - /
 
-## [1.1.1]
+## [1.1.2] - Beta Version
+- Add structures for the tutorials
+
+## [1.1.1-beta] - Beta version
 - 1.18.2!
 - Add ParticleInstructions
 - Add shorter versions for showing controls & tags
@@ -12,4 +15,5 @@
 
 <!-- Versions -->
 [unreleased]: https://github.com/AlmostReliable/ponderjs-forge/compare/v1.18-1.1.1...HEAD
-[1.1.1]: https://github.com/AlmostReliable/ponderjs-forge/releases/tag/v1.18-1.1.1
+[1.1.2-beta]: https://github.com/AlmostReliable/ponderjs-forge/releases/tag/v1.18-1.1.2-beta
+[1.1.1-beta]: https://github.com/AlmostReliable/ponderjs-forge/releases/tag/v1.18-1.1.1-beta
