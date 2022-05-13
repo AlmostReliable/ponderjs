@@ -3,7 +3,7 @@
 ## [Unreleased]
 - /
 
-## [1.1.2] - Beta Version
+## [1.1.2-beta] - Beta Version
 - Add structures for the tutorials
 
 ## [1.1.1-beta] - Beta version
