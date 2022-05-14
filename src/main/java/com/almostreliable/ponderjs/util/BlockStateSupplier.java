@@ -3,7 +3,9 @@ package com.almostreliable.ponderjs.util;
 import dev.latvian.mods.kubejs.block.predicate.BlockIDPredicate;
 import dev.latvian.mods.kubejs.item.ItemStackJS;
 import dev.latvian.mods.kubejs.util.ConsoleJS;
+import dev.latvian.mods.rhino.BaseFunction;
 import dev.latvian.mods.rhino.Context;
+import dev.latvian.mods.rhino.NativeJavaObject;
 import dev.latvian.mods.rhino.RhinoException;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
@@ -11,6 +13,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public interface BlockStateSupplier extends Supplier<BlockState> {
@@ -24,11 +27,12 @@ public interface BlockStateSupplier extends Supplier<BlockState> {
         if (o instanceof Block block) return block::defaultBlockState;
         if (o instanceof BlockIDPredicate predicate) return predicate::getBlockState;
 
-        if (o instanceof dev.latvian.mods.rhino.Function function) {
-            var ctx = Context.getCurrentContext();
+        if (o instanceof BaseFunction function) {
+            //noinspection rawtypes
+            Supplier s = (Supplier) NativeJavaObject.createInterfaceAdapter(Supplier.class, function);
             return () -> {
                 try {
-                    Object result = function.call(ctx, function.getParentScope(), function, new Object[]{});
+                    Object result = s.get();
                     return BlockStateSupplier.of(result).get();
                 } catch (RhinoException e) {
                     PonderErrorHelper.yeet(e);
