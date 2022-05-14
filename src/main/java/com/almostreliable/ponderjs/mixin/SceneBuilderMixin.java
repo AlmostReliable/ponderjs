@@ -3,6 +3,7 @@ package com.almostreliable.ponderjs.mixin;
 import com.almostreliable.ponderjs.particles.ParticleInstructions;
 import com.almostreliable.ponderjs.util.BlockStateFunction;
 import com.almostreliable.ponderjs.util.BlockStateSupplier;
+import com.almostreliable.ponderjs.util.Util;
 import com.simibubi.create.foundation.ponder.*;
 import com.simibubi.create.foundation.ponder.element.EntityElement;
 import com.simibubi.create.foundation.ponder.element.InputWindowElement;
@@ -192,7 +193,7 @@ public abstract class SceneBuilderMixin {
         @RemapForJS("modifyBlocks")
         public void ponderjs$modifyBlocks(Selection selection, boolean spawnParticles, BlockStateFunction function) {
             modifyBlocks(selection, blockState -> {
-                BlockIDPredicate predicate = new BlockIDPredicate(blockState.getBlock().getRegistryName());
+                BlockIDPredicate predicate = Util.createBlockID(blockState);
                 return function.apply(predicate);
             }, spawnParticles);
         }

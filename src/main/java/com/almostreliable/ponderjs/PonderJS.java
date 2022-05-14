@@ -1,43 +1,32 @@
 package com.almostreliable.ponderjs;
 
-import com.almostreliable.ponderjs.config.ModConfigs;
 import com.almostreliable.ponderjs.particles.ParticleTransformation;
 import com.almostreliable.ponderjs.util.BlockStateFunction;
 import com.almostreliable.ponderjs.util.BlockStateSupplier;
-import com.almostreliable.ponderjs.util.PonderErrorHelper;
 import com.almostreliable.ponderjs.util.Util;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.ponder.*;
+import com.simibubi.create.foundation.ponder.PonderPalette;
+import com.simibubi.create.foundation.ponder.PonderRegistry;
+import com.simibubi.create.foundation.ponder.PonderTag;
+import com.simibubi.create.foundation.ponder.Selection;
 import com.simibubi.create.foundation.ponder.element.InputWindowElement;
 import com.simibubi.create.foundation.ponder.element.ParrotElement;
 import com.simibubi.create.foundation.utility.Pointing;
 import dev.latvian.mods.kubejs.KubeJS;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
 import dev.latvian.mods.kubejs.script.ScriptType;
-import dev.latvian.mods.kubejs.util.ConsoleJS;
-import dev.latvian.mods.kubejs.util.UtilsJS;
-import dev.latvian.mods.rhino.Context;
 import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import org.antlr.v4.runtime.misc.Triple;
-import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 public class PonderJS {
     @Nullable public static final String TAG_EVENT = "ponder.tag";
@@ -63,57 +52,6 @@ public class PonderJS {
         typeWrappers.register(BlockStateFunction.class, BlockStateFunction::of);
         typeWrappers.register(BlockStateSupplier.class, BlockStateSupplier::of);
         typeWrappers.register(ParticleTransformation.Data.class, ParticleTransformation.Data::of);
-    }
-
-    public static Triple<Boolean, Component, Integer> generateJsonLang(String langName) {
-        Map<String, String> langMap = createLang();
-        Logger log = PonderJSMod.LOGGER;
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        File file = new File(ModConfigs.CLIENT.getLangPath().replace("%lang%", langName));
-        JsonObject json = new JsonObject();
-        if (file.exists()) {
-            log.info("Found KubeJS lang, reading!");
-            try {
-                json = gson.fromJson(FileUtils.readFileToString(file, "UTF-8"), JsonObject.class);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        JsonObject finalJson = json;
-        List<String> wrote = new ArrayList<>();
-        langMap.forEach((key, value) -> {
-            if (!(finalJson.has(key) && finalJson.get(key).getAsString().equals(value))) {
-                log.info("Writing KubeJS lang key " + key);
-                finalJson.addProperty(key, value);
-                wrote.add(key);
-            }
-        });
-        String j = gson.toJson(wrote);
-        try {
-            FileUtils.writeStringToFile(file, gson.toJson(finalJson), "UTF-8");
-            String c = "Wrote " + wrote.size() + " KubeJS lang keys";
-            log.info(c);
-            if (wrote.size() > 0) {
-                log.info(j);
-            }
-            return new Triple<>(true, new TextComponent(c), wrote.size());
-        } catch (IOException e) {
-            log.error("Couldn't write KubeJS langMap");
-            e.printStackTrace();
-            return new Triple<>(false,
-                    new TextComponent(
-                            "Unable to write KubeJS lang: " + e.getClass().getSimpleName() + "\nMore info in logs"),
-                    wrote.size());
-        }
-    }
-
-    public static Map<String, String> createLang() {
-        STORIES_MANAGER.compileLang();
-        Map<String, String> lang = new HashMap<>();
-        JsonObject object = new JsonObject();
-        PonderJS.NAMESPACES.forEach(namespace -> PonderLocalization.record(namespace, object));
-        object.entrySet().forEach(entry -> lang.put(entry.getKey(), entry.getValue().getAsString()));
-        return lang;
     }
 
     public static Optional<PonderTag> getTagByName(ResourceLocation res) {
@@ -159,9 +97,27 @@ public class PonderJS {
         if (initialized) {
             throw new IllegalStateException("Ponder has already been initialized!");
         }
+        PonderJSMod.LOGGER.info("Initializing PonderJS - Run events.");
         new PonderItemTagEventJS().post(ScriptType.CLIENT, TAG_EVENT);
         new PonderRegistryEventJS().post(ScriptType.CLIENT, REGISTRY_EVENT);
+        PonderLang lang = new PonderLang();
+        if (lang.generate("en_us")) {
+            try {
+                Minecraft.getInstance().reloadResourcePacks();
+            } catch (Exception e) {
+                PonderJSMod.LOGGER.error("Something went wrong while reloaded resources after PonderJS init");
+                PonderJSMod.LOGGER.error(Minecraft.getInstance().reloadResourcePacks());
+            }
+        }
+
         initialized = true;
+    }
+
+    public static void reload() {
+        // TODO try making PonderItemTag event reloadable
+        new PonderRegistryEventJS().post(ScriptType.CLIENT, REGISTRY_EVENT);
+        PonderLang lang = new PonderLang();
+        lang.generate("en_us");
     }
 
     public static boolean isInitialized() {

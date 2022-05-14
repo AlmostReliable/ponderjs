@@ -4,10 +4,12 @@ import com.almostreliable.ponderjs.PonderJS;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.ponder.PonderTag;
 import com.simibubi.create.foundation.ponder.Selection;
+import dev.latvian.mods.kubejs.block.predicate.BlockIDPredicate;
 import dev.latvian.mods.kubejs.util.ConsoleJS;
 import dev.latvian.mods.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.Context;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.Vec3;
 
@@ -74,5 +76,13 @@ public class Util {
             throw e;
         }
         return ponderTag;
+    }
+
+    public static BlockIDPredicate createBlockID(BlockState state) {
+        BlockIDPredicate predicate = new BlockIDPredicate(state.getBlock().getRegistryName());
+        for (var entry : state.getValues().entrySet()) {
+            predicate.with(entry.getKey().getName(), entry.getValue().toString());
+        }
+        return predicate;
     }
 }
