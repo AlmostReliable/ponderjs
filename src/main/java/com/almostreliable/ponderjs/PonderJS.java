@@ -2,7 +2,6 @@ package com.almostreliable.ponderjs;
 
 import com.almostreliable.ponderjs.particles.ParticleTransformation;
 import com.almostreliable.ponderjs.util.BlockStateFunction;
-import com.almostreliable.ponderjs.util.BlockStateSupplier;
 import com.almostreliable.ponderjs.util.Util;
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.gui.AllIcons;
@@ -19,6 +18,7 @@ import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,8 +49,8 @@ public class PonderJS {
         typeWrappers.register(Selection.class, Util::selectionOf);
         typeWrappers.register(AllIcons.class, Util::allIconsOf);
         typeWrappers.register(PonderTag.class, Util::ponderTagOf);
+        typeWrappers.register(BlockState.class, Util::blockStateOf);
         typeWrappers.register(BlockStateFunction.class, BlockStateFunction::of);
-        typeWrappers.register(BlockStateSupplier.class, BlockStateSupplier::of);
         typeWrappers.register(ParticleTransformation.Data.class, ParticleTransformation.Data::of);
     }
 

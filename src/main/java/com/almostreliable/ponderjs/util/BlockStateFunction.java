@@ -2,14 +2,12 @@ package com.almostreliable.ponderjs.util;
 
 import dev.latvian.mods.kubejs.block.predicate.BlockIDPredicate;
 import dev.latvian.mods.rhino.BaseFunction;
-import dev.latvian.mods.rhino.Context;
 import dev.latvian.mods.rhino.NativeJavaObject;
-import dev.latvian.mods.rhino.RhinoException;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public interface BlockStateFunction extends Function<BlockIDPredicate, BlockState> {
     static BlockStateFunction of(@Nullable Object o) {
@@ -23,7 +21,14 @@ public interface BlockStateFunction extends Function<BlockIDPredicate, BlockStat
             };
         }
 
-        BlockStateSupplier supplier = BlockStateSupplier.of(o);
-        return ($) -> supplier.get();
+        BlockState blockState = Util.blockStateOf(o);
+        return ($) -> blockState;
+    }
+
+    static UnaryOperator<BlockState> from(BlockStateFunction function) {
+        return blockState -> {
+            BlockIDPredicate predicate = Util.createBlockID(blockState);
+            return function.apply(predicate);
+        };
     }
 }

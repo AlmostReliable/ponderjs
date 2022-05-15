@@ -2,7 +2,6 @@ package com.almostreliable.ponderjs.particles;
 
 import com.almostreliable.ponderjs.mixin.ParticleAccessor;
 import com.almostreliable.ponderjs.mixin.PonderWorldAccessor;
-import com.almostreliable.ponderjs.util.BlockStateSupplier;
 import com.almostreliable.ponderjs.util.PonderErrorHelper;
 import com.simibubi.create.AllParticleTypes;
 import com.simibubi.create.content.contraptions.fluids.particle.FluidParticleData;
@@ -13,9 +12,9 @@ import dev.latvian.mods.kubejs.fluid.FluidStackJS;
 import dev.latvian.mods.rhino.mod.util.color.Color;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -53,8 +52,8 @@ public class ParticleInstructions {
         return create(ticks, pos, new ParticleDataBuilder.Static(options));
     }
 
-    public ParticleDataBuilder.Static block(int ticks, BlockStateSupplier blockState, Vec3 pos) {
-        BlockParticleOption options = new BlockParticleOption(ParticleTypes.BLOCK, blockState.get());
+    public ParticleDataBuilder.Static block(int ticks, BlockState blockState, Vec3 pos) {
+        BlockParticleOption options = new BlockParticleOption(ParticleTypes.BLOCK, blockState);
         return create(ticks, pos, new ParticleDataBuilder.Static(options));
     }
 
