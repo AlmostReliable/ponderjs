@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class PonderLang {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -39,7 +40,7 @@ public class PonderLang {
     private boolean write(File file, JsonObject currentLang) {
         try {
             String output = GSON.toJson(currentLang);
-            FileUtils.writeStringToFile(file, output, "UTF-8");
+            FileUtils.writeStringToFile(file, output, StandardCharsets.UTF_8);
             return true;
         } catch (IOException e) {
             PonderJSMod.LOGGER.error(e);
@@ -52,7 +53,7 @@ public class PonderLang {
     protected JsonObject read(File file) {
         if (file.exists()) {
             try {
-                String s = FileUtils.readFileToString(file, "UTF-8");
+                String s = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
                 return GSON.fromJson(s, JsonObject.class);
             } catch (IOException e) {
                 PonderJSMod.LOGGER.error(e);
