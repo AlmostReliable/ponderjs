@@ -2,15 +2,14 @@ package com.almostreliable.ponderjs.mixin;
 
 import com.almostreliable.ponderjs.particles.ParticleInstructions;
 import com.almostreliable.ponderjs.util.BlockStateFunction;
-import com.almostreliable.ponderjs.util.BlockStateSupplier;
 import com.simibubi.create.foundation.ponder.*;
+import com.simibubi.create.foundation.ponder.SceneBuilder.WorldInstructions;
 import com.simibubi.create.foundation.ponder.element.EntityElement;
 import com.simibubi.create.foundation.ponder.element.InputWindowElement;
 import com.simibubi.create.foundation.ponder.element.TextWindowElement;
 import com.simibubi.create.foundation.ponder.instruction.PonderInstruction;
 import com.simibubi.create.foundation.ponder.instruction.ShowInputInstruction;
 import com.simibubi.create.foundation.utility.Pointing;
-import dev.latvian.mods.kubejs.block.predicate.BlockIDPredicate;
 import dev.latvian.mods.kubejs.entity.EntityJS;
 import dev.latvian.mods.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.util.HideFromJS;
@@ -162,8 +161,21 @@ public abstract class SceneBuilderMixin {
         public abstract void setBlocks(Selection selection, BlockState state, boolean spawnParticles);
 
         @Shadow(remap = false)
+        @HideFromJS
         public abstract void modifyBlocks(Selection selection, UnaryOperator<BlockState> stateFunc, boolean spawnParticles);
 
+        @Shadow(remap = false)
+        @HideFromJS
+        public abstract void modifyBlock(BlockPos pos, UnaryOperator<BlockState> stateFunc, boolean spawnParticles);
+
+        /**
+         * Create a new entity with some default behavior. The entity will be rotated to face north.
+         *
+         * @param entityType The type of entity to create.
+         * @param position   The position to create the entity at.
+         * @param consumer   Callback to modify the entity.
+         * @return An entity link which can be used later on.
+         */
         @RemapForJS("createEntity")
         public ElementLink<EntityElement> ponderjs$createEntity(EntityType<?> entityType, Vec3 position, Consumer<EntityJS> consumer) {
             return createEntity(level -> {
@@ -184,37 +196,70 @@ public abstract class SceneBuilderMixin {
             });
         }
 
+        /**
+         * Short version for modify blocks with default spawn particles.
+         *
+         * @param pos      the position to modify
+         * @param function the function to apply
+         */
         @RemapForJS("modifyBlocks")
         public void ponderjs$modifyBlocks(Selection pos, BlockStateFunction function) {
             ponderjs$modifyBlocks(pos, true, function);
         }
 
+        /**
+         * Wrapper for {@link WorldInstructions#modifyBlock(BlockPos, UnaryOperator, boolean)}
+         * <p>
+         * NOTE: Will probably be removed in the future, exist earlier for backwards compatibility
+         */
         @RemapForJS("modifyBlocks")
         public void ponderjs$modifyBlocks(Selection selection, boolean spawnParticles, BlockStateFunction function) {
-            modifyBlocks(selection, blockState -> {
-                BlockIDPredicate predicate = new BlockIDPredicate(blockState.getBlock().getRegistryName());
-                return function.apply(predicate);
-            }, spawnParticles);
+            modifyBlocks(selection, BlockStateFunction.from(function), spawnParticles);
         }
 
-        @RemapForJS("replaceBlocks")
-        public void ponderjs$replaceBlocks(Selection selection, BlockStateFunction function) {
-            ponderjs$replaceBlocks(selection, true, function);
+        /**
+         * Wrapper for {@link WorldInstructions#modifyBlock(BlockPos, UnaryOperator, boolean)} with TypeWrapper for {@link UnaryOperator<BlockState>}
+         *
+         * @param selection      selection
+         * @param function       Wrapper function for BlockState
+         * @param spawnParticles spawn particles
+         */
+        @RemapForJS("modifyBlocks")
+        public void ponderjs$modifyBlocks(Selection selection, BlockStateFunction function, boolean spawnParticles) {
+            modifyBlocks(selection, BlockStateFunction.from(function), spawnParticles);
         }
 
-        @RemapForJS("replaceBlocks")
-        public void ponderjs$replaceBlocks(Selection selection, boolean spawnParticles, BlockStateFunction function) {
-            ponderjs$modifyBlocks(selection, spawnParticles, function);
+        /**
+         * Wrapper for {@link WorldInstructions#modifyBlock(BlockPos, UnaryOperator, boolean)} with TypeWrapper for {@link UnaryOperator<BlockState>}
+         *
+         * @param pos            position
+         * @param function       Wrapper function for BlockState
+         * @param spawnParticles spawn particles
+         */
+        @RemapForJS("modifyBlock")
+        public void ponderjs$modifyBlock(BlockPos pos, BlockStateFunction function, boolean spawnParticles) {
+            modifyBlock(pos, BlockStateFunction.from(function), spawnParticles);
         }
 
+        /**
+         * Set blocks with default particle spawning
+         *
+         * @param selection  selection
+         * @param blockState block state
+         */
         @RemapForJS("setBlocks")
-        public void ponderjs$setBlocks(Selection selection, BlockStateSupplier function) {
-            ponderjs$setBlocks(selection, true, function);
+        public void ponderjs$setBlocks(Selection selection, BlockState blockState) {
+            ponderjs$setBlocks(selection, true, blockState);
         }
 
+        /**
+         * Wrapper for {@link WorldInstructions#setBlocks(Selection, BlockState, boolean)}
+         * <p>
+         * NOTE: Will probably be removed in the future, exist earlier for backwards compatibility
+         */
         @RemapForJS("setBlocks")
-        public void ponderjs$setBlocks(Selection selection, boolean spawnParticles, BlockStateSupplier function) {
-            setBlocks(selection, function.get(), spawnParticles);
+        public void ponderjs$setBlocks(Selection selection, boolean spawnParticles, BlockState blockState) {
+            setBlocks(selection, blockState, spawnParticles);
         }
 
         @RemapForJS("modifyTileNBT")
