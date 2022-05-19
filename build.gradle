@@ -1,84 +1,73 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
-        maven { url = 'https://maven.parchmentmc.org' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath(group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true) { exclude group: 'org.apache.logging.log4j' }
-        classpath 'org.apache.logging.log4j:log4j-api:2.11.2'
-        classpath 'org.apache.logging.log4j:log4j-core:2.11.2'
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7.+'
-        classpath 'org.parchmentmc:librarian:1.+'
-    }
-}
-
 plugins {
+    id 'fabric-loom' version '0.11-SNAPSHOT'
     id "com.github.gmazzo.buildconfig" version "3.0.3"
     id "com.matthewprenger.cursegradle" version "1.4.0"
 }
 
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
-apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 
 version = "${minecraft_version}-${mod_version}"
 group = "${mod_base_package}.${mod_id}"
-archivesBaseName = mod_id
+archivesBaseName = "${mod_id}-fabric"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
-minecraft {
-    mappings channel: mappings_channel, version: "${mappings_version}-${minecraft_version}"
+//minecraft {
+//    mappings channel: mappings_channel, version: mappings_version
+//
+//    runs {
+//        client {
+//            workingDirectory project.file('run')
+//            property 'mixin.env.remapRefMap', 'true'
+//            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+//            args "--debug", "--stacktrace", "--scan", "-mixin.config=${mod_id}.mixins.json".toString()
+//            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+//            property 'forge.logging.console.level', 'debug'
+//
+//            mods {
+//                "${mod_id}" {
+//                    source sourceSets.main
+//                }
+//            }
+//        }
+//
+//        server {
+//            workingDirectory project.file('server')
+//            property 'mixin.env.remapRefMap', 'true'
+//            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+//            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+//            property 'forge.logging.console.level', 'debug'
+//
+//            mods {
+//                "${mod_id}" {
+//                    source sourceSets.main
+//                }
+//            }
+//        }
+//
+//        data {
+//            workingDirectory project.file('run')
+//            property 'mixin.env.remapRefMap', 'true'
+//            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+//            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+//            property 'forge.logging.console.level', 'debug'
+//
+//            args "--mod", mod_id, "--all", "--output", file('src/generated/resources/'), "--existing", file('src/main/resources/')
+//
+//            mods {
+//                "${mod_id}" {
+//                    source sourceSets.main
+//                }
+//            }
+//        }
+//    }
+//}
 
-    runs {
-        client {
-            workingDirectory project.file('run')
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            args "--debug", "--stacktrace", "--scan", "-mixin.config=${mod_id}.mixins.json".toString()
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        server {
-            workingDirectory project.file('server')
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        data {
-            workingDirectory project.file('run')
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-
-            args "--mod", mod_id, "--all", "--output", file('src/generated/resources/'), "--existing", file('src/main/resources/')
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
-            }
-        }
+loom {
+    mixin {
+        defaultRefmapName = "${mod_id}.refmap.json"
     }
 }
 
@@ -117,19 +106,27 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    minecraft "com.mojang:minecraft:${minecraft_version}"
 
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
+    mappings loom.layered() {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${minecraft_version}:${mappings_version}@zip")
+    }
 
-    implementation fg.deobf("com.simibubi.create:Create:${create_version}")
-    implementation fg.deobf("com.jozufozu.flywheel:Flywheel-Forge:${flywheel_version}")
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
 
-    implementation fg.deobf("dev.latvian.mods:kubejs-forge:${kubejs_version}")
-    implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
-    implementation fg.deobf("dev.latvian.mods:rhino-forge:${rhino_version}")
+//    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
+//    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
 
-    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
+    modImplementation("com.simibubi.create:Create:${create_version}")
+//    modImplementation("com.jozufozu.flywheel:Flywheel-Forge:${flywheel_version}")
+
+    modImplementation("dev.latvian.mods:kubejs-fabric:${kubejs_version}")
+    modImplementation("dev.architectury:architectury-fabric:${architectury_version}")
+    modImplementation("dev.latvian.mods:rhino-fabric:${rhino_version}")
+
+//    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 }
 
 jar {
@@ -147,13 +144,8 @@ jar {
     }
 }
 
-mixin {
-    add sourceSets.main, "${mod_id}.refmap.json"
-    config "${mod_id}.mixins.json"
-}
-
 processResources {
-    def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta']
+    def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta', 'fabric.mod.json']
     def replaceProperties = [
             mod_id            : mod_id,
             mod_name          : mod_name,
@@ -176,23 +168,6 @@ processResources {
         expand replaceProperties
     }
 }
-
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    classifier 'deobf'
-}
-
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
-}
-
-artifacts {
-    archives deobfJar
-}
-
-build.dependsOn deobfJar
 
 buildConfig {
     buildConfigField 'String', 'MOD_ID', "\"${mod_id}\""
@@ -234,6 +209,6 @@ curseforge {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
+    it.options.encoding = 'UTF-8'
+    it.options.release = 17
 }
-jar.finalizedBy('reobfJar')
