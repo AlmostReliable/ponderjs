@@ -3,6 +3,7 @@ package com.almostreliable.ponderjs.api;
 import com.almostreliable.ponderjs.mixin.SceneBuilderAccessor;
 import com.almostreliable.ponderjs.particles.ParticleInstructions;
 import com.almostreliable.ponderjs.util.BlockStateFunction;
+import com.almostreliable.ponderjs.util.PonderPlatform;
 import com.simibubi.create.foundation.ponder.*;
 import com.simibubi.create.foundation.ponder.element.EntityElement;
 import com.simibubi.create.foundation.ponder.element.InputWindowElement;
@@ -114,7 +115,8 @@ public class ExtendedSceneBuilder extends SceneBuilder {
         public ElementLink<EntityElement> createEntity(EntityType<?> entityType, Vec3 position, Consumer<EntityJS> consumer) {
             return createEntity(level -> {
                 Entity entity = entityType.create(level);
-                Objects.requireNonNull(entity, "Could not create entity of type " + entityType.getRegistryName());
+                Objects.requireNonNull(entity, "Could not create entity of type " +
+                                               PonderPlatform.getEntityTypeName(entityType));
                 entity.setPosRaw(position.x, position.y, position.z);
                 entity.setOldPosAndRot();
                 entity.lookAt(EntityAnchorArgument.Anchor.FEET, position.add(0, 0, -1));

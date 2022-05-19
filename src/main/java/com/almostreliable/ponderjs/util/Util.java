@@ -88,7 +88,7 @@ public class Util {
     }
 
     public static BlockIDPredicate createBlockID(BlockState state) {
-        BlockIDPredicate predicate = new BlockIDPredicate(state.getBlock().getRegistryName());
+        BlockIDPredicate predicate = new BlockIDPredicate(PonderPlatform.getBlockName(state.getBlock()));
         for (var entry : state.getValues().entrySet()) {
             predicate.with(entry.getKey().getName(), entry.getValue().toString());
         }

@@ -1,10 +1,12 @@
 package com.almostreliable.ponderjs.api;
 
 import com.almostreliable.ponderjs.PonderJS;
+import com.almostreliable.ponderjs.util.PonderPlatform;
 import com.simibubi.create.foundation.ponder.PonderRegistry;
 import com.simibubi.create.foundation.ponder.PonderStoryBoardEntry;
 import com.simibubi.create.foundation.ponder.PonderTag;
 import com.simibubi.create.foundation.ponder.PonderTagRegistry;
+import dev.latvian.mods.kubejs.KubeJSRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
@@ -45,7 +47,7 @@ public abstract class AbstractPonderBuilder<S extends AbstractPonderBuilder<S>> 
         PonderStoryBoardEntry entry = new PonderStoryBoardEntry(scene,
                 id.getNamespace(),
                 schematic,
-                item.getRegistryName());
+                PonderPlatform.getItemName(item));
         PonderRegistry.addStoryBoard(entry);
         PonderJS.STORIES_MANAGER.add(entry);
         return getSelf();
