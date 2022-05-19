@@ -3,6 +3,7 @@ package com.almostreliable.ponderjs.particles;
 import com.almostreliable.ponderjs.mixin.ParticleAccessor;
 import com.almostreliable.ponderjs.mixin.PonderWorldAccessor;
 import com.almostreliable.ponderjs.util.PonderErrorHelper;
+import com.almostreliable.ponderjs.util.PonderPlatform;
 import com.simibubi.create.AllParticleTypes;
 import com.simibubi.create.content.contraptions.fluids.particle.FluidParticleData;
 import com.simibubi.create.foundation.ponder.PonderScene;
@@ -16,8 +17,6 @@ import net.minecraft.core.particles.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,7 @@ public class ParticleInstructions {
         }
 
         throw new IllegalArgumentException(
-                "Particle type " + (type == null ? "INVALID" : ForgeRegistries.PARTICLE_TYPES.getKey(type)) +
+                "Particle type " + (type == null ? "INVALID" : PonderPlatform.getParticleTypeName(type)) +
                 " is null or not simple.");
     }
 
@@ -58,29 +57,17 @@ public class ParticleInstructions {
     }
 
     public ParticleDataBuilder<?, ?> fluid(int ticks, FluidStackJS fluid, Vec3 pos) {
-        var archFluidStack = fluid.getFluidStack();
-        FluidStack fs = new FluidStack(archFluidStack.getFluid(),
-                (int) archFluidStack.getAmount(),
-                archFluidStack.getTag());
-        FluidParticleData data = new FluidParticleData(AllParticleTypes.FLUID_PARTICLE.get(), fs);
+        FluidParticleData data = PonderPlatform.createFluidParticleData(fluid, AllParticleTypes.FLUID_PARTICLE.get());
         return create(ticks, pos, new ParticleDataBuilder.Static(data));
     }
 
     public ParticleDataBuilder<?, ?> drip(int ticks, FluidStackJS fluid, Vec3 pos) {
-        var archFluidStack = fluid.getFluidStack();
-        FluidStack fs = new FluidStack(archFluidStack.getFluid(),
-                (int) archFluidStack.getAmount(),
-                archFluidStack.getTag());
-        FluidParticleData data = new FluidParticleData(AllParticleTypes.FLUID_DRIP.get(), fs);
+        FluidParticleData data = PonderPlatform.createFluidParticleData(fluid, AllParticleTypes.FLUID_DRIP.get());
         return create(ticks, pos, new ParticleDataBuilder.Static(data));
     }
 
     public ParticleDataBuilder<?, ?> basin(int ticks, FluidStackJS fluid, Vec3 pos) {
-        var archFluidStack = fluid.getFluidStack();
-        FluidStack fs = new FluidStack(archFluidStack.getFluid(),
-                (int) archFluidStack.getAmount(),
-                archFluidStack.getTag());
-        FluidParticleData data = new FluidParticleData(AllParticleTypes.BASIN_FLUID.get(), fs);
+        FluidParticleData data = PonderPlatform.createFluidParticleData(fluid, AllParticleTypes.BASIN_FLUID.get());
         return create(ticks, pos, new ParticleDataBuilder.Static(data));
     }
 

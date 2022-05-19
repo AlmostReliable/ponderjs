@@ -1,11 +1,10 @@
 package com.almostreliable.ponderjs;
 
+import com.almostreliable.ponderjs.util.PonderPlatform;
 import dev.latvian.mods.kubejs.event.EventJS;
 import dev.latvian.mods.kubejs.item.ingredient.IngredientJS;
 import dev.latvian.mods.kubejs.util.ConsoleJS;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public class PonderRegistryEventJS extends EventJS {
 
@@ -23,11 +22,9 @@ public class PonderRegistryEventJS extends EventJS {
     public void printParticleNames() {
         StringBuilder sb = new StringBuilder();
         sb.append("\n").append("### Particles ###").append("\n");
-        //noinspection ConstantConditions
-        ForgeRegistries.PARTICLE_TYPES.getValues()
-                .stream()
+        PonderPlatform.getParticleTypes()
                 .filter(SimpleParticleType.class::isInstance)
-                .map(ForgeRegistryEntry::getRegistryName)
+                .map(PonderPlatform::getParticleTypeName)
                 .sorted()
                 .forEach(id -> sb.append(" - ").append(id).append("\n"));
         ConsoleJS.CLIENT.info(sb.toString());

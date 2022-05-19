@@ -19,7 +19,8 @@ import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
@@ -29,6 +30,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public class PonderJS {
+    public static final Logger LOGGER = LogManager.getLogger(BuildConfig.MOD_ID);
     @Nullable public static final String TAG_EVENT = "ponder.tag";
     public static final String REGISTRY_EVENT = "ponder.registry";
     public static final Set<String> NAMESPACES = new HashSet<>();
@@ -83,11 +85,11 @@ public class PonderJS {
         if (CACHED_ICONS.containsKey(str)) {
             return CACHED_ICONS.get(str);
         }
-        Field f = ObfuscationReflectionHelper.findField(AllIcons.class, str);
         try {
+            Field f = AllIcons.class.getDeclaredField(str);
             CACHED_ICONS.put(str, (AllIcons) f.get(null));
             CACHED_ICONS.get(str);
-        } catch (IllegalAccessException e) {
+        } catch (IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();
         }
         return null;
@@ -97,7 +99,7 @@ public class PonderJS {
         if (initialized) {
             throw new IllegalStateException("Ponder has already been initialized!");
         }
-        PonderJSMod.LOGGER.info("Initializing PonderJS - Run events.");
+        LOGGER.info("Initializing PonderJS - Run events.");
         new PonderItemTagEventJS().post(ScriptType.CLIENT, TAG_EVENT);
         new PonderRegistryEventJS().post(ScriptType.CLIENT, REGISTRY_EVENT);
         PonderLang lang = new PonderLang();
@@ -105,8 +107,8 @@ public class PonderJS {
             try {
                 Minecraft.getInstance().reloadResourcePacks();
             } catch (Exception e) {
-                PonderJSMod.LOGGER.error("Something went wrong while reloading resources after PonderJS init");
-                PonderJSMod.LOGGER.error(Minecraft.getInstance().reloadResourcePacks());
+                LOGGER.error("Something went wrong while reloading resources after PonderJS init");
+                LOGGER.error(Minecraft.getInstance().reloadResourcePacks());
             }
         }
 

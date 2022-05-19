@@ -1,6 +1,5 @@
 package com.almostreliable.ponderjs;
 
-import com.almostreliable.ponderjs.config.ModConfigs;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -13,6 +12,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class PonderLang {
+    public static final String PATH = "kubejs/assets/ponderjs_generated/lang/%lang%.json";
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     /**
@@ -20,7 +20,7 @@ public class PonderLang {
      * @return true if a new lang file was created
      */
     public boolean generate(String langName) {
-        File file = new File(ModConfigs.CLIENT.getLangPath().replace("%lang%", langName));
+        File file = new File(PATH.replace("%lang%", langName));
 
         JsonObject existingLang = read(file);
         JsonObject currentLang = createFromLocalization();
@@ -29,7 +29,7 @@ public class PonderLang {
             return false;
         }
 
-        PonderJSMod.LOGGER.info(
+        PonderJS.LOGGER.info(
                 "PonderJS - New lang file differ from existing lang file, generating new lang file.\n Old Lang size: {} \n\n New lang size: {}",
                 existingLang == null ? 0 : existingLang.size(),
                 currentLang.size());
@@ -43,7 +43,7 @@ public class PonderLang {
             FileUtils.writeStringToFile(file, output, StandardCharsets.UTF_8);
             return true;
         } catch (IOException e) {
-            PonderJSMod.LOGGER.error(e);
+            PonderJS.LOGGER.error(e);
         }
 
         return false;
@@ -56,7 +56,7 @@ public class PonderLang {
                 String s = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
                 return GSON.fromJson(s, JsonObject.class);
             } catch (IOException e) {
-                PonderJSMod.LOGGER.error(e);
+                PonderJS.LOGGER.error(e);
             }
         }
         return null;
