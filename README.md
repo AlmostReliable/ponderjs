@@ -13,7 +13,7 @@ A [Minecraft] mod to create ponder scenes and tags with [KubeJS].
 </div>
 
 ## **📑 Overview**
-This is a mod for [Minecraft]-[Forge].<br>
+This is a [Minecraft] mod for [Forge] and [Fabric].<br>
 It adds the ability to create custom [Create] ponder scenes with [KubeJS].
 
 These can be used to visualize guides for players more easily.
@@ -21,8 +21,9 @@ These can be used to visualize guides for players more easily.
 
 ## **🔧 Installation**
 1. Download the latest **mod jar** from the [releases] or from [CurseForge].
-2. Install Minecraft [Forge].
+2. Install Minecraft [Forge] or [Fabric].
 3. Drop the **jar file** into your mods folder.
+4. Make sure you also have [KubeJS] and [Create] installed
 
 
 ## **💚 Credits**
@@ -52,6 +53,7 @@ This project is licensed under the [MIT license][license].
 [curseforge]: https://www.curseforge.com/minecraft/mc-mods/ponder-for-kubejs
 [create]: https://www.curseforge.com/minecraft/mc-mods/create
 [forge]: http://files.minecraftforge.net/
+[fabric]: https://fabricmc.net/
 [ponderjs]: https://github.com/Create-Additions/Ponderjs
 [kotakotik22]: https://github.com/kotakotik22
 [releases]: https://github.com/AlmostReliable/ponderjs-forge/releases
