@@ -5,7 +5,6 @@
   "refmap": "ponderjs.refmap.json",
   "mixins": [
     "KubeJSClientMixin",
-    "NativeJavaObjectInvoker",
     "PonderInstructionMixin",
     "PonderTagRegistryAccessor",
     "PonderWorldAccessor",

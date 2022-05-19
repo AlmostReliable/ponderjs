@@ -39,8 +39,9 @@ public class Util {
 
             if (l.size() == 2) {
                 // TODO Change to direct typewrapper if kube adds them
-                Vec3 from = (Vec3) Context.jsToJava(l.get(0), Vec3.class);
-                Vec3 to = (Vec3) Context.jsToJava(l.get(1), Vec3.class);
+                UtilsJS.vec3Of(l.get(0));
+                Vec3 from =UtilsJS.vec3Of(l.get(0));
+                Vec3 to = UtilsJS.vec3Of(l.get(1));
                 return Selection.of(new BoundingBox((int) from.x,
                         (int) from.y,
                         (int) from.z,
