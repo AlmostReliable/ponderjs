@@ -9,10 +9,7 @@
     "PonderInstructionMixin",
     "PonderTagRegistryAccessor",
     "PonderWorldAccessor",
-    "SceneBuilderMixin",
-    "SceneBuilderMixin$SpecialInstructionsMixin",
-    "SceneBuilderMixin$WorldInstructionsMixin",
-    "SceneBuildingUtilMixin"
+    "SceneBuilderAccessor"
   ],
   "client": [
     "ParticleAccessor"
