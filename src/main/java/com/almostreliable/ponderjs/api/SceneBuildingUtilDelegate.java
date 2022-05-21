@@ -15,7 +15,7 @@ public class SceneBuildingUtilDelegate {
         return util.grid;
     }
 
-    public SceneBuildingUtil.SelectionUtil pgetSelect() {
+    public SceneBuildingUtil.SelectionUtil getSelect() {
         return util.select;
     }
 

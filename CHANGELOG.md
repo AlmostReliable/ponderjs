@@ -2,7 +2,10 @@
 
 ## [Unreleased]
 - /
-- 
+
+## [1.1.5-beta] - Beta Version
+- Fix type in SceneBuildingUtil for `getSelect`
+
 ## [1.1.4-beta] - Beta Version
 - Internal refactoring
 - Bump version for Rhino and KubeJS
@@ -23,6 +26,7 @@
 
 <!-- Versions -->
 [unreleased]: https://github.com/AlmostReliable/ponderjs-forge/compare/v1.18-1.1.1...HEAD
+[1.1.4-beta]: https://github.com/AlmostReliable/ponderjs-forge/releases/tag/v1.18-1.1.5-beta
 [1.1.4-beta]: https://github.com/AlmostReliable/ponderjs-forge/releases/tag/v1.18-1.1.4-beta
 [1.1.3-beta]: https://github.com/AlmostReliable/ponderjs-forge/releases/tag/v1.18-1.1.3-beta
 [1.1.2-beta]: https://github.com/AlmostReliable/ponderjs-forge/releases/tag/v1.18-1.1.2-beta

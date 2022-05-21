@@ -151,7 +151,7 @@ public class ExtendedSceneBuilder extends SceneBuilder {
         }
 
         /**
-         * Wrapper for {@link WorldInstructions#modifyBlock(BlockPos, UnaryOperator, boolean)} with TypeWrapper for {@link UnaryOperator< BlockState >}
+         * Wrapper for {@link WorldInstructions#modifyBlock(BlockPos, UnaryOperator, boolean)} with TypeWrapper for {@link UnaryOperator<BlockState>}
          *
          * @param selection      selection
          * @param function       Wrapper function for BlockState
