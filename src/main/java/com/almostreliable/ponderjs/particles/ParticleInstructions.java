@@ -139,7 +139,7 @@ public class ParticleInstructions {
         private void applyParticleData(Particle particle) {
             if (particle instanceof ParticleAccessor accessor) {
                 if (builder.color != null) {
-                    long argb = builder.color.getArgbKJS();
+                    long argb = builder.color.getArgbJS();
                     float a = (argb >> 24 & 255) / 255.0F;
                     float r = (argb >> 16 & 255) / 255.0F;
                     float g = (argb >> 8 & 255) / 255.0F;
