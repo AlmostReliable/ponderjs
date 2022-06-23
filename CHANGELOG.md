@@ -2,7 +2,10 @@
 
 ## [Unreleased]
 - /
-- 
+
+## [1.1.7]
+- Add `removeEntity` for world instructions
+
 ## [1.1.6-beta]
 - Fix https://github.com/AlmostReliable/ponderjs-forge/issues/4
 
@@ -29,6 +32,7 @@
 
 <!-- Versions -->
 [unreleased]: https://github.com/AlmostReliable/ponderjs-forge/compare/v1.18-1.1.1...HEAD
+[1.1.7-beta]: https://github.com/AlmostReliable/ponderjs-forge/releases/tag/v1.18-1.1.7
 [1.1.6-beta]: https://github.com/AlmostReliable/ponderjs-forge/releases/tag/v1.18-1.1.6-beta
 [1.1.5-beta]: https://github.com/AlmostReliable/ponderjs-forge/releases/tag/v1.18-1.1.5-beta
 [1.1.4-beta]: https://github.com/AlmostReliable/ponderjs-forge/releases/tag/v1.18-1.1.4-beta

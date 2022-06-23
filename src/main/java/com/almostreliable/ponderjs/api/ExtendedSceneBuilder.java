@@ -210,6 +210,15 @@ public class ExtendedSceneBuilder extends SceneBuilder {
         public void modifyBlock(BlockPos pos, UnaryOperator<BlockState> stateFunc, boolean spawnParticles) {
             super.modifyBlock(pos, stateFunc, spawnParticles);
         }
+
+        public void removeEntity(ElementLink<EntityElement> link) {
+            addInstruction(scene -> {
+                EntityElement resolve = scene.resolve(link);
+                if (resolve != null) {
+                    resolve.ifPresent(Entity::discard);
+                }
+            });
+        }
     }
 
     public class ExtendedSpecialInstructions extends SpecialInstructions {
