@@ -16,7 +16,6 @@ import dev.latvian.mods.rhino.util.HideFromJS;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -75,9 +74,19 @@ public class ExtendedSceneBuilder extends SceneBuilder {
 
     public void showStructure(int height) {
         BlockPos start = new BlockPos(ponderScene.getBasePlateOffsetX(), 0, ponderScene.getBasePlateOffsetZ());
-        Vec3i size = new Vec3i(ponderScene.getBasePlateSize() - 1, height, ponderScene.getBasePlateSize() - 1);
+        BlockPos size = new BlockPos(ponderScene.getBasePlateSize() - 1, height, ponderScene.getBasePlateSize() - 1);
         Selection selection = ponderScene.getSceneBuildingUtil().select.cuboid(start, size);
+        encapsulateBounds(size);
         world.showSection(selection, Direction.UP);
+    }
+
+    public void encapsulateBounds(BlockPos size) {
+        addInstruction(ps -> {
+            PonderWorld w = ps.getWorld();
+            if (w != null) {
+                w.getBounds().encapsulate(size);
+            }
+        });
     }
 
     public TextWindowElement.Builder text(int duration, String text) {
