@@ -108,7 +108,6 @@ public class PonderJS {
                 Minecraft.getInstance().reloadResourcePacks();
             } catch (Exception e) {
                 LOGGER.error("Something went wrong while reloading resources after PonderJS init");
-                LOGGER.error(Minecraft.getInstance().reloadResourcePacks());
             }
         }
 
