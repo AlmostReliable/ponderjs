@@ -95,10 +95,10 @@ public class ExtendedSceneBuilder extends SceneBuilder {
     }
 
     public void playSound(SoundEvent soundEvent, SoundSource soundsource, float volume, float pitch) {
-        Level clientlevel = Minecraft.getInstance().level;
-        Player clientplayer = Minecraft.getInstance().player;
+        Level level = Minecraft.getInstance().level;
+        Player player = Minecraft.getInstance().player;
 
-        if (clientplayer != null && clientlevel != null) {
+        if (player != null && level != null) {
             addInstruction(ps -> {
                 clientlevel.playLocalSound(
                         clientplayer.getX(),
