@@ -94,7 +94,7 @@ public class ExtendedSceneBuilder extends SceneBuilder {
         });
     }
 
-    public void playLocalSound(SoundEvent soundEvent, SoundSource soundsource, float volume, float pitch) {
+    public void playSound(SoundEvent soundEvent, SoundSource soundsource, float volume, float pitch) {
         Level clientlevel = KubeJS.PROXY.getClientLevel().getMinecraftLevel();
         Player clientplayer = KubeJS.PROXY.getClientPlayer();
 
@@ -114,12 +114,12 @@ public class ExtendedSceneBuilder extends SceneBuilder {
         }
     }
 
-    public void playLocalSound(SoundEvent soundEvent, SoundSource soundsource, float volume) {
-        playLocalSound(soundEvent, soundsource, volume, 1);
+    public void playSound(SoundEvent soundEvent, SoundSource soundsource, float volume) {
+        playSound(soundEvent, soundsource, volume, 1);
     }
 
-    public void playLocalSound(SoundEvent soundEvent, SoundSource soundsource) {
-        playLocalSound(soundEvent, soundsource, 1, 1);
+    public void playSound(SoundEvent soundEvent, SoundSource soundsource) {
+        playSound(soundEvent, soundsource, 1, 1);
     }
 
     public TextWindowElement.Builder text(int duration, String text) {
