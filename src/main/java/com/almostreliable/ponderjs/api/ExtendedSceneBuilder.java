@@ -100,10 +100,10 @@ public class ExtendedSceneBuilder extends SceneBuilder {
 
         if (player != null && level != null) {
             addInstruction(ps -> {
-                clientlevel.playLocalSound(
-                        clientplayer.getX(),
-                        clientplayer.getY(),
-                        clientplayer.getZ(),
+                level.playLocalSound(
+                        player.getX(),
+                        player.getY(),
+                        player.getZ(),
                         soundEvent,
                         soundsource,
                         volume,
