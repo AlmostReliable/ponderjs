@@ -10,10 +10,10 @@ import com.simibubi.create.foundation.ponder.element.InputWindowElement;
 import com.simibubi.create.foundation.ponder.element.TextWindowElement;
 import com.simibubi.create.foundation.ponder.instruction.ShowInputInstruction;
 import com.simibubi.create.foundation.utility.Pointing;
-import dev.latvian.mods.kubejs.KubeJS;
 import dev.latvian.mods.kubejs.entity.EntityJS;
 import dev.latvian.mods.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.util.HideFromJS;
+import net.minecraft.client.Minecraft;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -95,8 +95,8 @@ public class ExtendedSceneBuilder extends SceneBuilder {
     }
 
     public void playSound(SoundEvent soundEvent, SoundSource soundsource, float volume, float pitch) {
-        Level clientlevel = KubeJS.PROXY.getClientLevel().getMinecraftLevel();
-        Player clientplayer = KubeJS.PROXY.getClientPlayer();
+        Level clientlevel = Minecraft.getInstance().level;
+        Player clientplayer = Minecraft.getInstance().player;
 
         if (clientplayer != null && clientlevel != null) {
             addInstruction(ps -> {
