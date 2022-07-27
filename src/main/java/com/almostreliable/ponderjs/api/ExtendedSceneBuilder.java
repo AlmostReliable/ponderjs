@@ -11,18 +11,22 @@ import com.simibubi.create.foundation.ponder.element.TextWindowElement;
 import com.simibubi.create.foundation.ponder.instruction.ShowInputInstruction;
 import com.simibubi.create.foundation.utility.Pointing;
 import dev.latvian.mods.kubejs.entity.EntityJS;
+import dev.latvian.mods.kubejs.level.ClientLevelJS;
 import dev.latvian.mods.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.util.HideFromJS;
+import net.minecraft.client.Minecraft;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.sounds.SoundEvent;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -86,6 +90,34 @@ public class ExtendedSceneBuilder extends SceneBuilder {
             if (w != null) {
                 w.getBounds().encapsulate(size);
             }
+        });
+    }
+    public void playLocalSound(double x, double y, double z, SoundEvent soundEvent, SoundSource soundsource, float volume, float pitch, boolean distanceDelay){
+        addInstruction(ps -> {
+            ClientLevelJS clientlevel = ClientLevelJS.getInstance();
+            clientlevel.getMinecraftLevel().playLocalSound(
+                    x,
+                    y,
+                    z,
+                    soundEvent,
+                    soundsource,
+                    volume,
+                    pitch,
+                    distanceDelay);
+        });
+    }
+    public void playLocalSound(SoundEvent soundEvent, float volume){
+        addInstruction(ps -> {
+            ClientLevelJS clientlevel = ClientLevelJS.getInstance();
+            clientlevel.getMinecraftLevel().playLocalSound(
+                    Minecraft.getInstance().player.position().x,
+                    Minecraft.getInstance().player.position().y,
+                    Minecraft.getInstance().player.position().z,
+                    soundEvent,
+                    SoundSource.BLOCKS,
+                    volume,
+                    1f,
+                    true);
         });
     }
 
