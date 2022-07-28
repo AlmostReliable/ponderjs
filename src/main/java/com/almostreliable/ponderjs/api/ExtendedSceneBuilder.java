@@ -4,6 +4,7 @@ import com.almostreliable.ponderjs.mixin.SceneBuilderAccessor;
 import com.almostreliable.ponderjs.particles.ParticleInstructions;
 import com.almostreliable.ponderjs.util.BlockStateFunction;
 import com.almostreliable.ponderjs.util.PonderPlatform;
+import com.google.common.base.Preconditions;
 import com.simibubi.create.foundation.ponder.*;
 import com.simibubi.create.foundation.ponder.element.EntityElement;
 import com.simibubi.create.foundation.ponder.element.InputWindowElement;
@@ -13,11 +14,15 @@ import com.simibubi.create.foundation.utility.Pointing;
 import dev.latvian.mods.kubejs.entity.EntityJS;
 import dev.latvian.mods.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.util.HideFromJS;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -87,6 +92,29 @@ public class ExtendedSceneBuilder extends SceneBuilder {
                 w.getBounds().encapsulate(size);
             }
         });
+    }
+
+    public void playSound(SoundEvent soundEvent, SoundSource soundSource, float volume, float pitch) {
+        Preconditions.checkArgument(soundEvent != null, "Given sound does not exist");
+
+        if (Minecraft.getInstance().player != null) {
+            addInstruction(ps -> {
+                SimpleSoundInstance sound = new SimpleSoundInstance(soundEvent,
+                        soundSource,
+                        volume,
+                        pitch,
+                        Minecraft.getInstance().player.blockPosition());
+                Minecraft.getInstance().getSoundManager().play(sound);
+            });
+        }
+    }
+
+    public void playSound(SoundEvent soundEvent, float volume) {
+        playSound(soundEvent, SoundSource.MASTER, volume, 1);
+    }
+
+    public void playSound(SoundEvent soundEvent) {
+        playSound(soundEvent, SoundSource.MASTER, 1, 1);
     }
 
     public TextWindowElement.Builder text(int duration, String text) {
