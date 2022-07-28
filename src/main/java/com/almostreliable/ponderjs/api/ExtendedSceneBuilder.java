@@ -4,6 +4,7 @@ import com.almostreliable.ponderjs.mixin.SceneBuilderAccessor;
 import com.almostreliable.ponderjs.particles.ParticleInstructions;
 import com.almostreliable.ponderjs.util.BlockStateFunction;
 import com.almostreliable.ponderjs.util.PonderPlatform;
+import com.google.common.base.Preconditions;
 import com.simibubi.create.foundation.ponder.*;
 import com.simibubi.create.foundation.ponder.element.EntityElement;
 import com.simibubi.create.foundation.ponder.element.InputWindowElement;
@@ -14,6 +15,7 @@ import dev.latvian.mods.kubejs.entity.EntityJS;
 import dev.latvian.mods.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,8 +25,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -94,32 +94,27 @@ public class ExtendedSceneBuilder extends SceneBuilder {
         });
     }
 
-    public void playSound(SoundEvent soundEvent, SoundSource soundsource, float volume, float pitch) {
-        Level level = Minecraft.getInstance().level;
-        Player player = Minecraft.getInstance().player;
+    public void playSound(SoundEvent soundEvent, SoundSource soundSource, float volume, float pitch) {
+        Preconditions.checkArgument(soundEvent != null, "Given sound does not exist");
 
-        if (player != null && level != null) {
+        if (Minecraft.getInstance().player != null) {
             addInstruction(ps -> {
-                level.playLocalSound(
-                        player.getX(),
-                        player.getY(),
-                        player.getZ(),
-                        soundEvent,
-                        soundsource,
+                SimpleSoundInstance sound = new SimpleSoundInstance(soundEvent,
+                        soundSource,
                         volume,
                         pitch,
-                        true
-                );
+                        Minecraft.getInstance().player.blockPosition());
+                Minecraft.getInstance().getSoundManager().play(sound);
             });
         }
     }
 
-    public void playSound(SoundEvent soundEvent, SoundSource soundsource, float volume) {
-        playSound(soundEvent, soundsource, volume, 1);
+    public void playSound(SoundEvent soundEvent, float volume) {
+        playSound(soundEvent, SoundSource.MASTER, volume, 1);
     }
 
-    public void playSound(SoundEvent soundEvent, SoundSource soundsource) {
-        playSound(soundEvent, soundsource, 1, 1);
+    public void playSound(SoundEvent soundEvent) {
+        playSound(soundEvent, SoundSource.MASTER, 1, 1);
     }
 
     public TextWindowElement.Builder text(int duration, String text) {
