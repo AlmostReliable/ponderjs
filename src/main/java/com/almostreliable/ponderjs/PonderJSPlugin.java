@@ -8,14 +8,19 @@ import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
 public class PonderJSPlugin extends KubeJSPlugin {
 
     @Override
-    public void addBindings(BindingsEvent event) {
+    public void registerBindings(BindingsEvent event) {
         if (event.type != ScriptType.CLIENT) return;
         PonderJS.addBindings(event);
     }
 
     @Override
-    public void addTypeWrappers(ScriptType type, TypeWrappers typeWrappers) {
+    public void registerTypeWrappers(ScriptType type, TypeWrappers typeWrappers) {
         if (type != ScriptType.CLIENT) return;
         PonderJS.addTypeWrappers(type, typeWrappers);
+    }
+
+    @Override
+    public void registerEvents() {
+        PonderEvents.GROUP.register();
     }
 }

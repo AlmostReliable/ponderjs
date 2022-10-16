@@ -2,9 +2,13 @@ package com.almostreliable.ponderjs;
 
 import com.almostreliable.ponderjs.util.PonderPlatform;
 import dev.latvian.mods.kubejs.event.EventJS;
-import dev.latvian.mods.kubejs.item.ingredient.IngredientJS;
 import dev.latvian.mods.kubejs.util.ConsoleJS;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class PonderRegistryEventJS extends EventJS {
 
@@ -12,11 +16,14 @@ public class PonderRegistryEventJS extends EventJS {
         PonderJS.STORIES_MANAGER.clear();
     }
 
-    public PonderBuilderJS create(IngredientJS ingredient) {
+    public PonderBuilderJS create(Ingredient ingredient) {
         if (ingredient.isEmpty()) {
             throw new IllegalArgumentException("Provided items must not be empty!");
         }
-        return new PonderBuilderJS(ingredient.getVanillaItems());
+        return new PonderBuilderJS(Arrays
+                .stream(ingredient.getItems())
+                .map(ItemStack::getItem)
+                .collect(Collectors.toSet()));
     }
 
     public void printParticleNames() {

@@ -1,4 +1,4 @@
-onEvent("ponder.registry", (event) => {
+Ponder.registry((event) => {
     event
         .create("minecraft:dirt")
         .scene("removing_an_entity", "Yeet", (scene, util) => {

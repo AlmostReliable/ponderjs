@@ -15,7 +15,7 @@ function fadeInSection(scene, selection, movingOffset, direction, idleTicks) {
     scene.idle(idleTicks);
 }
 
-onEvent("ponder.registry", (event) => {
+Ponder.registry((event) => {
     event.create("minecraft:hopper").scene("section_fading", "Let's fade", (scene, util) => {
 
         /**
@@ -42,7 +42,7 @@ onEvent("ponder.registry", (event) => {
     });
 });
 
-onEvent("ponder.registry", (event) => {
+Ponder.registry((event) => {
     event
         .create("minecraft:cake")
         .scene("animate_section", "The cake is a lie.", "ponderjs:the_cake_is_a_lie", (scene, util) => {

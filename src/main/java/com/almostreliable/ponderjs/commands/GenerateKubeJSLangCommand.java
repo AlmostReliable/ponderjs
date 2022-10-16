@@ -4,7 +4,7 @@ import com.almostreliable.ponderjs.PonderLang;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 
 public class GenerateKubeJSLangCommand implements Command<CommandSourceStack> {
     @Override
@@ -14,9 +14,9 @@ public class GenerateKubeJSLangCommand implements Command<CommandSourceStack> {
 
         CommandSourceStack source = context.getSource();
         if (ponderLang.generate(lang)) {
-            source.sendSuccess(new TextComponent("Changes detected - New lang file created."), false);
+            source.sendSuccess(Component.literal("Changes detected - New lang file created."), false);
         } else {
-            source.sendSuccess(new TextComponent("Lang file the same. Nothing created."), false);
+            source.sendSuccess(Component.literal("Lang file the same. Nothing created."), false);
         }
 
         return SINGLE_SUCCESS;

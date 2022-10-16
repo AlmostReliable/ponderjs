@@ -1,4 +1,4 @@
-onEvent("ponder.registry", (event) => {
+Ponder.registry((event) => {
     event
         .create("minecraft:paper")
         .scene("block_entity_nbt", "Set NBT for blocks", "ponderjs:block_entity_tutorial", (scene, util) => {

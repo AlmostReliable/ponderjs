@@ -11,11 +11,11 @@ import com.simibubi.create.foundation.ponder.element.InputWindowElement;
 import com.simibubi.create.foundation.ponder.element.TextWindowElement;
 import com.simibubi.create.foundation.ponder.instruction.ShowInputInstruction;
 import com.simibubi.create.foundation.utility.Pointing;
-import dev.latvian.mods.kubejs.entity.EntityJS;
 import dev.latvian.mods.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,6 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Objects;
+import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
@@ -103,6 +104,7 @@ public class ExtendedSceneBuilder extends SceneBuilder {
                         soundSource,
                         volume,
                         pitch,
+                        SoundInstance.createUnseededRandom(),
                         Minecraft.getInstance().player.blockPosition());
                 Minecraft.getInstance().getSoundManager().play(sound);
             });
@@ -149,7 +151,7 @@ public class ExtendedSceneBuilder extends SceneBuilder {
          * @param consumer   Callback to modify the entity.
          * @return An entity link which can be used later on.
          */
-        public ElementLink<EntityElement> createEntity(EntityType<?> entityType, Vec3 position, Consumer<EntityJS> consumer) {
+        public ElementLink<EntityElement> createEntity(EntityType<?> entityType, Vec3 position, Consumer<Entity> consumer) {
             return createEntity(level -> {
                 Entity entity = entityType.create(level);
                 Objects.requireNonNull(entity, "Could not create entity of type " +
@@ -157,8 +159,7 @@ public class ExtendedSceneBuilder extends SceneBuilder {
                 entity.setPosRaw(position.x, position.y, position.z);
                 entity.setOldPosAndRot();
                 entity.lookAt(EntityAnchorArgument.Anchor.FEET, position.add(0, 0, -1));
-                EntityJS entityJS = UtilsJS.getLevel(level).getEntity(entity);
-                consumer.accept(entityJS);
+                consumer.accept(entity);
                 return entity;
             });
         }

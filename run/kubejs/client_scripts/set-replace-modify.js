@@ -1,4 +1,4 @@
-onEvent("ponder.registry", (event) => {
+Ponder.registry((event) => {
     event.create("minecraft:stone").scene("set_replace_modify_tutorial", "Set, Replace, Modify.", (scene, util) => {
         scene.showStructure();
 

@@ -100,8 +100,8 @@ public class PonderJS {
             throw new IllegalStateException("Ponder has already been initialized!");
         }
         LOGGER.info("Initializing PonderJS - Run events.");
-        new PonderItemTagEventJS().post(ScriptType.CLIENT, TAG_EVENT);
-        new PonderRegistryEventJS().post(ScriptType.CLIENT, REGISTRY_EVENT);
+        PonderEvents.TAGS.post(new PonderItemTagEventJS());
+        PonderEvents.REGISTRY.post(new PonderRegistryEventJS());
         PonderLang lang = new PonderLang();
         if (lang.generate("en_us")) {
             try {
@@ -117,7 +117,7 @@ public class PonderJS {
 
     public static void reload() {
         // TODO try making PonderItemTag event reloadable
-        new PonderRegistryEventJS().post(ScriptType.CLIENT, REGISTRY_EVENT);
+        PonderEvents.REGISTRY.post(new PonderRegistryEventJS());
         PonderLang lang = new PonderLang();
         lang.generate("en_us");
     }

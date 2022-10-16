@@ -1,4 +1,4 @@
-onEvent("ponder.tag", (event) => {
+Ponder.tags((event) => {
     event.createTag("particle_test", "minecraft:blaze_powder", "All the particles", "Use PonderJS with particles!", [
         "minecraft:blaze_powder",
     ]);
@@ -7,7 +7,7 @@ onEvent("ponder.tag", (event) => {
 const TICK_LENGTH = 20;
 const IDLE_TICK_LENGTH = TICK_LENGTH * 3;
 
-onEvent("ponder.registry", (event) => {
+Ponder.registry((event) => {
     /**
      * Prints all particle names in the client.txt which can be used for `scene.particles.simple()`.
      */

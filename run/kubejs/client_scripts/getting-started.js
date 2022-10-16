@@ -1,4 +1,4 @@
-onEvent("ponder.tag", (event) => {
+Ponder.tags((event) => {
     /**
      * "kubejs:getting_started" -> The tag name
      * "minecraft:paper"        -> The icon
@@ -14,7 +14,7 @@ onEvent("ponder.tag", (event) => {
     ]);
 });
 
-onEvent("ponder.registry", (event) => {
+Ponder.registry((event) => {
     event.create("minecraft:paper").scene("our_first_scene", "First example scene", (scene, util) => {
         /**
          * Show the full strucutre.
@@ -94,7 +94,7 @@ onEvent("ponder.registry", (event) => {
     });
 });
 
-// onEvent("ponder.registry", (event) => {
+// Ponder.registry((event) => {
 //     /**
 //      * Additional structure
 //      */

@@ -33,14 +33,14 @@ public class PonderPlatform {
     }
 
     public static ResourceLocation getBlockName(Block block) {
-        return block.getRegistryName();
+        return ForgeRegistries.BLOCKS.getKey(block);
     }
 
     public static ResourceLocation getEntityTypeName(EntityType<?> entityType) {
-        return entityType.getRegistryName();
+        return ForgeRegistries.ENTITY_TYPES.getKey(entityType);
     }
 
     public static ResourceLocation getItemName(Item item) {
-        return item.getRegistryName();
+        return ForgeRegistries.ITEMS.getKey(item);
     }
 }

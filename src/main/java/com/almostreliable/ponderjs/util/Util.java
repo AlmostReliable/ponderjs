@@ -59,13 +59,8 @@ public class Util {
             }
         }
 
-        if (Context.jsToJava(o, Vec3.class) instanceof Vec3 v) {
-            // TODO use type wrapper for ve3
-            return Selection.of(new BoundingBox(new BlockPos(v.x, v.y, v.z)));
-        }
-
-        ConsoleJS.CLIENT.error("Invalid selection: " + o);
-        return Selection.of(new BoundingBox(0, 0, 0, 0, 0, 0));
+        Vec3 v = UtilsJS.vec3Of(o);
+        return Selection.of(new BoundingBox(new BlockPos(v.x, v.y, v.z)));
     }
 
     public static AllIcons allIconsOf(@Nullable Object o) {

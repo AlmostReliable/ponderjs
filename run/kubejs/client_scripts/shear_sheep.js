@@ -1,4 +1,4 @@
-onEvent("ponder.tag", (event) => {
+Ponder.tags((event) => {
     event.createTag("lytho:ponder_test", "minecraft:shears", "Some testing", "Some test description!", [
         "minecraft:blaze_powder",
         "minecraft:shears",
@@ -8,7 +8,7 @@ onEvent("ponder.tag", (event) => {
     event.remove("kinetic_appliances", ["create:deployer", "create:encased_fan"]);
 });
 
-onEvent("ponder.registry", (event) => {
+Ponder.registry((event) => {
     event
         .create("minecraft:shears")
         .tag("lytho:ponder_test")
