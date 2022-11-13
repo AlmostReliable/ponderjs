@@ -1,7 +1,10 @@
 package com.almostreliable.ponderjs.util;
 
 import dev.latvian.mods.kubejs.block.predicate.BlockIDPredicate;
+import dev.latvian.mods.kubejs.script.ScriptManager;
+import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.rhino.BaseFunction;
+import dev.latvian.mods.rhino.Context;
 import dev.latvian.mods.rhino.NativeJavaObject;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -13,7 +16,9 @@ public interface BlockStateFunction extends Function<BlockIDPredicate, BlockStat
     static BlockStateFunction of(@Nullable Object o) {
         if (o instanceof BaseFunction function) {
             //noinspection rawtypes
-            Function f = (Function) NativeJavaObject.createInterfaceAdapter(Function.class, function);
+            Function f = (Function) NativeJavaObject.createInterfaceAdapter(ScriptType.CLIENT.manager.get().context,
+                    Function.class,
+                    function);
             return blockIDPredicate -> {
                 //noinspection unchecked
                 Object result = f.apply(blockIDPredicate);

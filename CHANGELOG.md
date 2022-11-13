@@ -3,9 +3,12 @@
 ## [Unreleased]
 - /
 
+## [1.1.9]
+- Crash on startup with new Rhino version ([#9](https://github.com/AlmostReliable/ponderjs-forge/issues/9))
+
 ## [1.1.8]
 - Add `encapsulateBounds` for scene instructions
-- 
+
 ## [1.1.7]
 - Add `removeEntity` for world instructions
 
@@ -35,6 +38,7 @@
 
 <!-- Versions -->
 [unreleased]: https://github.com/AlmostReliable/ponderjs-forge/compare/v1.18-1.1.1...HEAD
+[1.1.9]: https://github.com/AlmostReliable/ponderjs-forge/releases/tag/v1.18-1.1.9
 [1.1.8]: https://github.com/AlmostReliable/ponderjs-forge/releases/tag/v1.18-1.1.8
 [1.1.7]: https://github.com/AlmostReliable/ponderjs-forge/releases/tag/v1.18-1.1.7
 [1.1.6-beta]: https://github.com/AlmostReliable/ponderjs-forge/releases/tag/v1.18-1.1.6-beta
