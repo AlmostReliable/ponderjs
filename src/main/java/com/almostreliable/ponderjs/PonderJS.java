@@ -48,12 +48,12 @@ public class PonderJS {
     }
 
     static void addTypeWrappers(ScriptType type, TypeWrappers typeWrappers) {
-        typeWrappers.register(Selection.class, Util::selectionOf);
-        typeWrappers.register(AllIcons.class, Util::allIconsOf);
-        typeWrappers.register(PonderTag.class, Util::ponderTagOf);
-        typeWrappers.register(BlockState.class, Util::blockStateOf);
+        typeWrappers.registerSimple(Selection.class, Util::selectionOf);
+        typeWrappers.registerSimple(AllIcons.class, Util::allIconsOf);
+        typeWrappers.registerSimple(PonderTag.class, Util::ponderTagOf);
+        typeWrappers.registerSimple(BlockState.class, Util::blockStateOf);
         typeWrappers.register(BlockStateFunction.class, BlockStateFunction::of);
-        typeWrappers.register(ParticleTransformation.Data.class, ParticleTransformation.Data::of);
+        typeWrappers.registerSimple(ParticleTransformation.Data.class, ParticleTransformation.Data::of);
     }
 
     public static Optional<PonderTag> getTagByName(ResourceLocation res) {

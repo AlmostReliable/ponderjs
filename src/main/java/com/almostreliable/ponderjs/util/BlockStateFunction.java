@@ -13,16 +13,16 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 public interface BlockStateFunction extends Function<BlockIDPredicate, BlockState> {
-    static BlockStateFunction of(@Nullable Object o) {
+    static BlockStateFunction of(Context ctx, @Nullable Object o) {
         if (o instanceof BaseFunction function) {
             //noinspection rawtypes
-            Function f = (Function) NativeJavaObject.createInterfaceAdapter(ScriptType.CLIENT.manager.get().context,
+            Function f = (Function) NativeJavaObject.createInterfaceAdapter(ctx,
                     Function.class,
                     function);
             return blockIDPredicate -> {
                 //noinspection unchecked
                 Object result = f.apply(blockIDPredicate);
-                return BlockStateFunction.of(result).apply(blockIDPredicate);
+                return BlockStateFunction.of(ctx, result).apply(blockIDPredicate);
             };
         }
 
