@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": [
+    "${mod_authors}"
+  ],
+  "contact": {
+    "homepage": "https://almostreliable.com/",
+    "sources": "https://github.com/${github_user}/${github_repo}/issues"
+  },
+  "license": "${license}",
+  "icon": "assets/modid/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "com.almostreliable.ponderjs.PonderJSMod"
+    ]
+  },
+  "mixins": [
+    "ponderjs.mixins.json"
+  ],
+  "depends": {
+    "fabric": "*",
+    "minecraft": ">=${minecraft_version}",
+    "java": ">=17",
+    "kubejs": ">=${kubejs_min_version}",
+    "create": "*"
+  }
+}

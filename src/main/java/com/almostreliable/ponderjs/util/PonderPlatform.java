@@ -2,13 +2,12 @@ package com.almostreliable.ponderjs.util;
 
 import com.simibubi.create.content.contraptions.fluids.particle.FluidParticleData;
 import dev.latvian.mods.kubejs.fluid.FluidStackJS;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.stream.Stream;
 
@@ -17,30 +16,31 @@ import java.util.stream.Stream;
  */
 public class PonderPlatform {
     public static FluidParticleData createFluidParticleData(FluidStackJS fluid, ParticleType<?> type) {
-        var archFluidStack = fluid.getFluidStack();
-        FluidStack fs = new FluidStack(archFluidStack.getFluid(),
-                (int) archFluidStack.getAmount(),
-                archFluidStack.getTag());
-        return new FluidParticleData(type, fs);
+//        var archFluidStack = fluid.getFluidStack();
+//        FluidStack fs = new FluidStack(archFluidStack.getFluid(),
+//                (int) archFluidStack.getAmount(),
+//                archFluidStack.getTag());
+//        return new FluidParticleData(type, fs);
+        throw new UnsupportedOperationException("PonderJS fluid particles are currently not supported for fabric");
     }
 
     public static Stream<ParticleType<?>> getParticleTypes() {
-        return ForgeRegistries.PARTICLE_TYPES.getValues().stream();
+        return Registry.PARTICLE_TYPE.stream();
     }
 
     public static ResourceLocation getParticleTypeName(ParticleType<?> particleType) {
-        return ForgeRegistries.PARTICLE_TYPES.getKey(particleType);
+        return Registry.PARTICLE_TYPE.getKey(particleType);
     }
 
     public static ResourceLocation getBlockName(Block block) {
-        return ForgeRegistries.BLOCKS.getKey(block);
+        return Registry.BLOCK.getKey(block);
     }
 
     public static ResourceLocation getEntityTypeName(EntityType<?> entityType) {
-        return ForgeRegistries.ENTITY_TYPES.getKey(entityType);
+        return Registry.ENTITY_TYPE.getKey(entityType);
     }
 
     public static ResourceLocation getItemName(Item item) {
-        return ForgeRegistries.ITEMS.getKey(item);
+        return Registry.ITEM.getKey(item);
     }
 }
