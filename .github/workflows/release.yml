@@ -1,0 +1,108 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v1.18-fabric-*.*.*'
+
+env:
+  JAVA_DIST: 'zulu'
+  JAVA_VERSION: 17
+  MOD_ID: 'ponderjs'
+  MOD_NAME: 'PonderJS'
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v3
+
+      - name: Check Secrets
+        run: |
+          if [ -z "${{ secrets.MODRINTH_TOKEN }}" ]; then
+            echo "MODRINTH_TOKEN is not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.CURSEFORGE_TOKEN }}" ]; then
+            echo "CURSEFORGE_TOKEN is not set"
+            exit 1
+          fi
+
+      - name: Validate Modrinth Token
+        run: |
+          if [ -n "$(curl -s -H "Authorization: ${{ secrets.MODRINTH_TOKEN }}" https://api.modrinth.com/v2/user | grep "unauthorized")" ]; then
+            echo "Modrinth Token is invalid!"
+            exit 1
+          fi
+
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DIST }}
+          cache: gradle
+
+      - name: Cleanup Gradle Cache
+        run: |
+          rm -f ~/.gradle/caches/modules-2/modules-2.lock
+          rm -f ~/.gradle/caches/modules-2/gc.properties
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Assemble the jar
+        run: ./gradlew assemble
+
+      - name: Collect version information
+        run: |
+          shopt -s failglob # print a warning if a glob does not match anything
+          set_var() {
+            echo $1="$2"
+            echo $1="$2" >> $GITHUB_ENV
+            declare -g $1="$2"
+          }
+          set_var JAR_FILE $(eval echo build/libs/${{ env.MOD_ID }}-*-*.jar)
+          set_var MINECRAFT_VERSION $(echo ${JAR_FILE%.*} | cut -d- -f2)
+          set_var MOD_VERSION $(echo ${JAR_FILE%.*} | cut -d- -f3)
+          set_var RELEASE_TYPE "$(echo ${GITHUB_REF##*/} | cut -d- -f4)"
+          set_var RELEASE_TYPE "$([[ -z $RELEASE_TYPE ]] && echo release || echo $RELEASE_TYPE)"
+
+      - name: Install changelog parser
+        uses: taiki-e/install-action@parse-changelog
+
+      - name: Parse changelog
+        run: parse-changelog CHANGELOG.md ${{ env.MOD_VERSION }} > changes.md
+
+      - name: Release
+        uses: Kir-Antipov/mc-publish@v3.2
+        with:
+          curseforge-id: 622888
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          modrinth-id: 5A34Stj8
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+          files: ${{ env.JAR_FILE }}
+          name: ${{ env.MOD_NAME }}-Fabric-${{ env.MINECRAFT_VERSION }}-${{ env.MOD_VERSION }}
+          github-name: v${{ env.MINECRAFT_VERSION }}-${{ env.MOD_VERSION }}-Fabric
+
+          loaders: fabric
+          game-versions: ${{ env.MINECRAFT_VERSION }}
+          version: ${{ env.MINECRAFT_VERSION }}-${{ env.MOD_VERSION }}+fabric
+          version-type: ${{ env.RELEASE_TYPE }}
+          version-resolver: exact
+          java: ${{ env.JAVA_VERSION }}
+
+          changelog-file: changes.md
+          dependencies: |
+            create-fabric | depends | *
+            kubejs | depends | *
+
+          retry-attempts: 2
+          retry-delay: 10000
