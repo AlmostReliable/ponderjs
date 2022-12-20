@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.1.11]
+- Fix potential startup crash
+
 ## [1.1.10]
 - Fix crash with new kubejs version
 
@@ -37,6 +40,7 @@
 - Default structure will be used if no structure provided
 
 <!-- Versions -->
+[1.1.11]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.18-1.1.11
 [1.1.10]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.18-1.1.10
 [1.1.9]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.18-1.1.9
 [1.1.8]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.18-1.1.8
