@@ -42,8 +42,8 @@ This project is licensed under the [MIT license][license].
 [version_badge]: https://img.shields.io/github/v/release/AlmostReliable/ponderjs?include_prereleases&style=flat-square
 [version_link]: https://github.com/AlmostReliable/ponderjs/releases/latest
 [total_downloads_cf_badge]: http://cf.way2muchnoise.eu/full_622888.svg?badge_style=flat
-[total_downloads_mr_badge]: https://img.shields.io/badge/dynamic/json?style=flat-square&color=5da545&label=modrinth&query=downloads&url=https://api.modrinth.com/api/v1/mod/5A34Stj8
-[workflow_status_badge]: https://img.shields.io/github/workflow/status/AlmostReliable/ponderjs/Build?style=flat-square
+[total_downloads_mr_badge]: https://img.shields.io/modrinth/dt/5A34Stj8?color=5da545&label=Modrinth&style=flat-square
+[workflow_status_badge]: https://img.shields.io/github/actions/workflow/status/AlmostReliable/ponderjs/build.yml?branch=1.18-forge&style=flat-square
 [workflow_status_link]: https://github.com/AlmostReliable/ponderjs/actions
 [license_badge]: https://img.shields.io/github/license/AlmostReliable/ponderjs?style=flat-square
 
