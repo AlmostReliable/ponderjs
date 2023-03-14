@@ -161,13 +161,13 @@ public abstract class ParticleDataBuilder<O extends ParticleDataBuilder<O, PO>, 
         @Override
         DustParticleOptionsBase createOptions() {
             float s = scale == null ? 1.0f : scale;
-            Vector3f fC = new com.simibubi.create.foundation.utility.Color(fromColor.getRgbKJS()).asVectorF();
+            Vector3f fC = new com.simibubi.create.foundation.utility.Color(fromColor.getRgbJS()).asVectorF();
 
             if (toColor == null) {
                 return new DustParticleOptions(fC, s);
             }
 
-            Vector3f toC = new com.simibubi.create.foundation.utility.Color(toColor.getRgbKJS()).asVectorF();
+            Vector3f toC = new com.simibubi.create.foundation.utility.Color(toColor.getRgbJS()).asVectorF();
             return new DustColorTransitionOptions(fC, toC, s);
         }
     }
@@ -196,7 +196,7 @@ public abstract class ParticleDataBuilder<O extends ParticleDataBuilder<O, PO>, 
             Color c = color == null ? ColorWrapper.BLACK : color;
             char axisChar = axis.name().charAt(0);
             int lTime = lifetime == null ? 40 : lifetime;
-            return new RotationIndicatorParticleData(c.getRgbKJS(), rotationSpeed, radius1, radius2, lTime, axisChar);
+            return new RotationIndicatorParticleData(c.getRgbJS(), rotationSpeed, radius1, radius2, lTime, axisChar);
         }
     }
 }
