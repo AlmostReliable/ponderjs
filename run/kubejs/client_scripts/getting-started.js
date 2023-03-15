@@ -24,6 +24,12 @@ onEvent("ponder.registry", (event) => {
         scene.showStructure();
 
         /**
+         * Encapsulate the structure bounds to given positions. This is useful if the custom structure has no proper bounds.
+         * scene.showStructure() automatically encapsulates the bounds.
+         */
+        // scene.encapsulateBounds(blockPos)
+
+        /**
          * Use idle(ticks) or idleSeconds(seconds) to wait for a certain amount of time.
          */
         scene.idle(10);

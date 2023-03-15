@@ -43,6 +43,8 @@ onEvent("ponder.registry", (event) => {
             scene.world.modifyEntity(entity, (e) => {
                 e.setSheared(true);
             });
+            scene.playSound("entity.sheep.shear", 1);
+
             /**
              * The first argument is the position, the second one the motion vector. I tried to simulate "shearing" :D
              */
