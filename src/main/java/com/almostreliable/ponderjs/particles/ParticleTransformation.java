@@ -1,7 +1,7 @@
 package com.almostreliable.ponderjs.particles;
 
 import com.almostreliable.ponderjs.util.PonderErrorHelper;
-import dev.latvian.mods.rhino.Context;
+import dev.latvian.mods.kubejs.util.UtilsJS;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
@@ -27,12 +27,9 @@ public interface ParticleTransformation {
     record Data(Vec3 position, Vec3 motion) {
         public static Data of(@Nullable Object o) {
             if (o instanceof List<?> list && list.size() >= 2) {
-                Object first = Context.jsToJava(list.get(0), Vec3.class);
-                Object second = Context.jsToJava(list.get(1), Vec3.class);
-
-                if (first instanceof Vec3 pos && second instanceof Vec3 motion) {
-                    return new Data(pos, motion);
-                }
+                Vec3 pos = UtilsJS.vec3Of(list.get(0));
+                Vec3 motion = UtilsJS.vec3Of(list.get(1));
+                return new Data(pos, motion);
             }
 
             IllegalArgumentException e = new IllegalArgumentException(
