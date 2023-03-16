@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.1.9]
+- Bump version for Rhino and KubeJS
+
 ## [1.1.8]
 - Add `encapsulateBounds` for scene instructions
 
@@ -31,6 +34,7 @@
 - Default structure will be used if no structure provided
 
 <!-- Versions -->
+[1.1.9]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.18-forge-1.1.9
 [1.1.8]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.18-1.1.8
 [1.1.7]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.18-1.1.7
 [1.1.6-beta]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.18-1.1.6-beta
