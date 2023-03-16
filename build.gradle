@@ -8,7 +8,7 @@ apply plugin: 'eclipse'
 
 version = "${minecraft_version}-${mod_version}"
 group = "${mod_base_package}.${mod_id}"
-archivesBaseName = "${mod_id}-fabric"
+archivesBaseName = "${mod_id}"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
