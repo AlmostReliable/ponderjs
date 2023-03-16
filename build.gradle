@@ -176,23 +176,6 @@ processResources {
     }
 }
 
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    classifier 'deobf'
-}
-
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
-}
-
-artifacts {
-    archives deobfJar
-}
-
-build.dependsOn deobfJar
-
 buildConfig {
     buildConfigField 'String', 'MOD_ID', "\"${mod_id}\""
     buildConfigField 'String', 'MOD_VERSION', "\"${mod_version}\""
@@ -204,4 +187,3 @@ buildConfig {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
-jar.finalizedBy('reobfJar')
