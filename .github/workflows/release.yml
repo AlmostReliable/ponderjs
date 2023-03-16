@@ -67,10 +67,10 @@ jobs:
             echo $1="$2" >> $GITHUB_ENV
             declare -g $1="$2"
           }
-          set_var JAR_FILE $(eval echo build/libs/${{ env.MOD_ID }}-*-*.jar)
-          set_var MINECRAFT_VERSION $(echo ${JAR_FILE%.*} | cut -d- -f2)
-          set_var MOD_VERSION $(echo ${JAR_FILE%.*} | cut -d- -f3)
-          set_var RELEASE_TYPE "$(echo ${GITHUB_REF##*/} | cut -d- -f4)"
+          set_var JAR_FILE $(eval echo build/libs/${{ env.MOD_ID }}-fabric-*-*.jar)
+          set_var MINECRAFT_VERSION $(echo ${JAR_FILE%.*} | cut -d- -f3)
+          set_var MOD_VERSION $(echo ${JAR_FILE%.*} | cut -d- -f4)
+          set_var RELEASE_TYPE "$(echo ${GITHUB_REF##*/} | cut -d- -f5)"
           set_var RELEASE_TYPE "$([[ -z $RELEASE_TYPE ]] && echo release || echo $RELEASE_TYPE)"
 
       - name: Install changelog parser
