@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.12]
+- Update to Create 0.5.1
+- `modifyTileNBT` is now deprecated and will be removed in the future. Please use `modifyBlockEntityNBT` instead.
+
 ## [1.1.11]
 - Fix potential startup crash
 

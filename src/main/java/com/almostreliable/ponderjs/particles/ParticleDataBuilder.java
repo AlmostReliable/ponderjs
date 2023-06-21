@@ -2,7 +2,7 @@ package com.almostreliable.ponderjs.particles;
 
 import com.mojang.math.Vector3f;
 import com.simibubi.create.Create;
-import com.simibubi.create.content.contraptions.particle.RotationIndicatorParticleData;
+import com.simibubi.create.content.kinetics.base.RotationIndicatorParticleData;
 import dev.latvian.mods.rhino.mod.util.color.Color;
 import dev.latvian.mods.rhino.mod.wrapper.ColorWrapper;
 import net.minecraft.core.Direction;
