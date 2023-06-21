@@ -5,7 +5,7 @@ import com.almostreliable.ponderjs.mixin.PonderWorldAccessor;
 import com.almostreliable.ponderjs.util.PonderErrorHelper;
 import com.almostreliable.ponderjs.util.PonderPlatform;
 import com.simibubi.create.AllParticleTypes;
-import com.simibubi.create.content.contraptions.fluids.particle.FluidParticleData;
+import com.simibubi.create.content.fluids.particle.FluidParticleData;
 import com.simibubi.create.foundation.ponder.PonderScene;
 import com.simibubi.create.foundation.ponder.SceneBuilder;
 import com.simibubi.create.foundation.ponder.instruction.TickingInstruction;

@@ -1,6 +1,6 @@
 package com.almostreliable.ponderjs.util;
 
-import com.simibubi.create.content.contraptions.fluids.particle.FluidParticleData;
+import com.simibubi.create.content.fluids.particle.FluidParticleData;
 import dev.latvian.mods.kubejs.fluid.FluidStackJS;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
