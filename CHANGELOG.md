@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.2.0]
+- Update to KubeJS 6.1
+
 ## [1.1.12]
 - Update to Create 0.5.1
 - `modifyTileNBT` is now deprecated and will be removed in the future. Please use `modifyBlockEntityNBT` instead.
@@ -44,6 +47,7 @@
 - Default structure will be used if no structure provided
 
 <!-- Versions -->
+[1.2.0]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.18-1.2.0
 [1.1.11]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.18-1.1.11
 [1.1.10]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.18-1.1.10
 [1.1.9]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.18-1.1.9
