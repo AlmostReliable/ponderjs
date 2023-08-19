@@ -7,7 +7,7 @@ onEvent("ponder.registry", (event) => {
             scene.setSceneOffsetY(-1)
             scene.idle(20);
 
-            scene.world.modifyTileNBT([2, 3, 3], (nbt) => {
+            scene.world.modifyBlockEntityNBT([2, 3, 3], (nbt) => {
                 nbt.Patterns = [
                     {
                         Color: 0,
@@ -16,7 +16,7 @@ onEvent("ponder.registry", (event) => {
                 ]
             });
 
-            scene.world.modifyTileNBT([3, 3, 2], (nbt) => {
+            scene.world.modifyBlockEntityNBT([3, 3, 2], (nbt) => {
                 nbt.Patterns = [
                     {
                         Color: 0,

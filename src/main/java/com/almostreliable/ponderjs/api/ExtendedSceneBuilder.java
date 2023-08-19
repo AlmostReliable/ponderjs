@@ -13,6 +13,7 @@ import com.simibubi.create.foundation.ponder.instruction.ShowInputInstruction;
 import com.simibubi.create.foundation.utility.Pointing;
 import dev.latvian.mods.kubejs.entity.EntityJS;
 import dev.latvian.mods.kubejs.util.UtilsJS;
+import dev.latvian.mods.kubejs.util.ConsoleJS;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -228,12 +229,27 @@ public class ExtendedSceneBuilder extends SceneBuilder {
             setBlocks(selection, blockState, spawnParticles);
         }
 
+
+        @Deprecated(forRemoval = true)
         public void modifyTileNBT(Selection selection, Consumer<CompoundTag> consumer) {
-            modifyTileNBT(selection, BlockEntity.class, consumer, false);
+            ConsoleJS.CLIENT.warn(
+                    "[PonderJS] modifyTileNBT(selection, (nbt) => {}) is deprecated, use modifyBlockEntityNBT(selection, (nbt) => {}) instead");
+            modifyBlockEntityNBT(selection, false, consumer);
         }
 
+        @Deprecated(forRemoval = true)
         public void modifyTileNBT(Selection selection, Consumer<CompoundTag> consumer, boolean reDrawBlocks) {
-            modifyTileNBT(selection, BlockEntity.class, consumer, reDrawBlocks);
+            ConsoleJS.CLIENT.warn(
+                    "[PonderJS] modifyTileNBT(selection, (nbt) => {}, reDrawBlocks) is deprecated, use modifyBlockEntityNBT(selection, reDrawBlocks, (nbt) => {}) instead");
+            modifyBlockEntityNBT(selection, BlockEntity.class, consumer, reDrawBlocks);
+        }
+
+        public void modifyBlockEntityNBT(Selection selection, Consumer<CompoundTag> consumer) {
+            modifyBlockEntityNBT(selection, false, consumer);
+        }
+
+        public void modifyBlockEntityNBT(Selection selection, boolean reDrawBlocks, Consumer<CompoundTag> consumer) {
+            modifyBlockEntityNBT(selection, BlockEntity.class, consumer, reDrawBlocks);
         }
 
         @Override
