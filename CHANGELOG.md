@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.10]
+- Update to Create 0.5.1
+- `modifyTileNBT` is now deprecated and will be removed in the future. Please use `modifyBlockEntityNBT` instead.
+
 ## [1.1.9]
 - Bump version for Rhino and KubeJS
 
