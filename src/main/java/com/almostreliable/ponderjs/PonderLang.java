@@ -65,7 +65,7 @@ public class PonderLang {
     public JsonObject createFromLocalization() {
         PonderJS.STORIES_MANAGER.compileLang();
         JsonObject object = new JsonObject();
-        PonderJS.NAMESPACES.forEach(namespace -> PonderLocalization.record(namespace, object));
+        PonderJS.NAMESPACES.forEach(namespace -> PonderLocalization.provideLang(namespace, object::addProperty));
         return object;
     }
 }

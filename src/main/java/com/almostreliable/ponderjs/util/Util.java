@@ -5,16 +5,17 @@ import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.ponder.PonderTag;
 import com.simibubi.create.foundation.ponder.Selection;
 import dev.latvian.mods.kubejs.block.predicate.BlockIDPredicate;
-import dev.latvian.mods.kubejs.registry.KubeJSRegistries;
 import dev.latvian.mods.kubejs.util.ConsoleJS;
 import dev.latvian.mods.kubejs.util.UtilsJS;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -59,7 +60,7 @@ public class Util {
         }
 
         Vec3 v = UtilsJS.vec3Of(o);
-        return Selection.of(new BoundingBox(new BlockPos(v.x, v.y, v.z)));
+        return Selection.of(new BoundingBox(new BlockPos((int) v.x, (int) v.y, (int) v.z)));
     }
 
     public static AllIcons allIconsOf(@Nullable Object o) {
@@ -97,7 +98,7 @@ public class Util {
         if (o instanceof CharSequence s) {
             ResourceLocation location = ResourceLocation.tryParse(s.toString());
             if (location != null) {
-                Block block = KubeJSRegistries.blocks().get(location);
+                Block block = ForgeRegistries.BLOCKS.getValue(location);
                 if (block != null) {
                     return block.defaultBlockState();
                 }
