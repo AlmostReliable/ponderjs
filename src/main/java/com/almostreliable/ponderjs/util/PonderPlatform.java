@@ -4,6 +4,7 @@ import com.simibubi.create.content.fluids.particle.FluidParticleData;
 import dev.latvian.mods.kubejs.fluid.FluidStackJS;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -25,22 +26,22 @@ public class PonderPlatform {
     }
 
     public static Stream<ParticleType<?>> getParticleTypes() {
-        return Registry.PARTICLE_TYPE.stream();
+        return BuiltInRegistries.PARTICLE_TYPE.stream();
     }
 
     public static ResourceLocation getParticleTypeName(ParticleType<?> particleType) {
-        return Registry.PARTICLE_TYPE.getKey(particleType);
+        return BuiltInRegistries.PARTICLE_TYPE.getKey(particleType);
     }
 
     public static ResourceLocation getBlockName(Block block) {
-        return Registry.BLOCK.getKey(block);
+        return BuiltInRegistries.BLOCK.getKey(block);
     }
 
     public static ResourceLocation getEntityTypeName(EntityType<?> entityType) {
-        return Registry.ENTITY_TYPE.getKey(entityType);
+        return BuiltInRegistries.ENTITY_TYPE.getKey(entityType);
     }
 
     public static ResourceLocation getItemName(Item item) {
-        return Registry.ITEM.getKey(item);
+        return BuiltInRegistries.ITEM.getKey(item);
     }
 }
