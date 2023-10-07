@@ -14,9 +14,9 @@ public class GenerateKubeJSLangCommand implements Command<CommandSourceStack> {
 
         CommandSourceStack source = context.getSource();
         if (ponderLang.generate(lang)) {
-            source.sendSuccess(() -> Component.literal("Changes detected - New lang file created."), false);
+            source.sendSuccess(Component.literal("Changes detected - New lang file created."), false);
         } else {
-            source.sendSuccess(() -> Component.literal("Lang file the same. Nothing created."), false);
+            source.sendSuccess(Component.literal("Lang file the same. Nothing created."), false);
         }
 
         return SINGLE_SUCCESS;

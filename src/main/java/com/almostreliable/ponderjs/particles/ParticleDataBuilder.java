@@ -1,5 +1,6 @@
 package com.almostreliable.ponderjs.particles;
 
+import com.mojang.math.Vector3f;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.kinetics.base.RotationIndicatorParticleData;
 import dev.latvian.mods.rhino.mod.util.color.Color;
@@ -160,13 +161,13 @@ public abstract class ParticleDataBuilder<O extends ParticleDataBuilder<O, PO>, 
         @Override
         DustParticleOptionsBase createOptions() {
             float s = scale == null ? 1.0f : scale;
-            var fC = new com.simibubi.create.foundation.utility.Color(fromColor.getRgbJS()).asVectorF();
+            Vector3f fC = new com.simibubi.create.foundation.utility.Color(fromColor.getRgbJS()).asVectorF();
 
             if (toColor == null) {
                 return new DustParticleOptions(fC, s);
             }
 
-            var toC = new com.simibubi.create.foundation.utility.Color(toColor.getRgbJS()).asVectorF();
+            Vector3f toC = new com.simibubi.create.foundation.utility.Color(toColor.getRgbJS()).asVectorF();
             return new DustColorTransitionOptions(fC, toC, s);
         }
     }

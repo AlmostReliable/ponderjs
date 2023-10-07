@@ -1,8 +1,5 @@
 # Changelog
 
-## [1.3.0]
-- Update to 1.20.1
-
 ## [1.2.0]
 - Update to KubeJS 6.1
 
@@ -50,7 +47,6 @@
 - Default structure will be used if no structure provided
 
 <!-- Versions -->
-[1.3.0]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.20.1-1.3.0
 [1.2.0]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.18-1.2.0
 [1.1.11]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.18-1.1.11
 [1.1.10]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.18-1.1.10
