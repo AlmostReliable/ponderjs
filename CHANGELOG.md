@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.3.1]
+- Fix crash with new kubejs version
+
 ## [1.3.0]
 - Update to 1.20.1
 
