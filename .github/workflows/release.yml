@@ -80,7 +80,7 @@ jobs:
         run: parse-changelog CHANGELOG.md ${{ env.MOD_VERSION }} > changes.md
 
       - name: Release
-        uses: Kir-Antipov/mc-publish@v3.2
+        uses: Kir-Antipov/mc-publish@v3.3
         with:
           curseforge-id: 622888
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
