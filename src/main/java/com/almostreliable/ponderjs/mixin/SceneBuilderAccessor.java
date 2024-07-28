@@ -18,4 +18,8 @@ public interface SceneBuilderAccessor {
     @Accessor(value = "special", remap = false)
     @Mutable
     void ponderjs$setSpecialInstructions(SceneBuilder.SpecialInstructions specialInstructions);
+
+    @Accessor(value = "overlay", remap = false)
+    @Mutable
+    void ponderjs$setOverlayInstructions(SceneBuilder.OverlayInstructions overlayInstructions);
 }

@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.4.0]
+- Add custom render elements
+
 ## [1.3.1]
 - Fix crash with new kubejs version
 

@@ -9,7 +9,9 @@ import com.simibubi.create.foundation.ponder.*;
 import com.simibubi.create.foundation.ponder.element.EntityElement;
 import com.simibubi.create.foundation.ponder.element.InputWindowElement;
 import com.simibubi.create.foundation.ponder.element.TextWindowElement;
+import com.simibubi.create.foundation.ponder.instruction.FadeInOutInstruction;
 import com.simibubi.create.foundation.ponder.instruction.ShowInputInstruction;
+import com.simibubi.create.foundation.ponder.instruction.TickingInstruction;
 import com.simibubi.create.foundation.utility.Pointing;
 import dev.latvian.mods.kubejs.util.ConsoleJS;
 import dev.latvian.mods.rhino.util.HideFromJS;
@@ -42,6 +44,7 @@ public class ExtendedSceneBuilder extends SceneBuilder {
         this.ponderScene = ponderScene;
         ((SceneBuilderAccessor) this).ponderjs$setWorldInstructions(new ExtendedWorldInstructions());
         ((SceneBuilderAccessor) this).ponderjs$setSpecialInstructions(new ExtendedSpecialInstructions());
+        ((SceneBuilderAccessor) this).ponderjs$setOverlayInstructions(new ExtendedOverlayInstructions());
         this.particles = new ParticleInstructions(this);
     }
 
@@ -141,7 +144,67 @@ public class ExtendedSceneBuilder extends SceneBuilder {
         return element;
     }
 
+    public class ExtendedOverlayInstructions extends OverlayInstructions {
+
+        public CustomPonderOverlayElement addElement(int ticks) {
+            var element = new CustomPonderOverlayElement();
+            addInstruction(new TickingInstruction(false, ticks) {
+                @Override
+                protected void firstTick(PonderScene scene) {
+                    super.firstTick(scene);
+                    scene.addElement(element);
+                }
+            });
+
+            return element;
+        }
+
+        public CustomPonderOverlayElement addElement() {
+            var element = new CustomPonderOverlayElement();
+            addInstruction(ponderScene -> {
+                ponderScene.addElement(element);
+            });
+
+            return element;
+        }
+    }
+
     public class ExtendedWorldInstructions extends WorldInstructions {
+
+        public CustomPonderSceneElement addElement(int ticks) {
+            var element = new CustomPonderSceneElement();
+            element.setVisible(false);
+            addInstruction(new FadeInOutInstruction(ticks) {
+                @Override
+                protected void show(PonderScene scene) {
+                    scene.addElement(element);
+                    element.setVisible(true);
+                }
+
+                @Override
+                protected void hide(PonderScene scene) {
+                    element.setVisible(false);
+                }
+
+                @Override
+                protected void applyFade(PonderScene scene, float fade) {
+                    element.setFade(fade);
+                }
+            });
+
+            return element;
+        }
+
+        public CustomPonderSceneElement addElement() {
+            var element = new CustomPonderSceneElement();
+            addInstruction(ponderScene -> {
+                ponderScene.addElement(element);
+                element.setVisible(true);
+            });
+
+            return element;
+        }
+
         /**
          * Create a new entity with some default behavior. The entity will be rotated to face north.
          *
