@@ -1,1 +1,1 @@
-com.almostreliable.ponderjs.PonderJSPlugin
+com.almostreliable.ponderjs.KubePlugin

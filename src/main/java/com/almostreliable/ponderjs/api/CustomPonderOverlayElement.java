@@ -1,12 +1,12 @@
 package com.almostreliable.ponderjs.api;
 
-import com.simibubi.create.foundation.ponder.PonderScene;
-import com.simibubi.create.foundation.ponder.element.AnimatedOverlayElement;
-import com.simibubi.create.foundation.ponder.ui.PonderUI;
-import dev.latvian.mods.rhino.util.HideFromJS;
+
+import net.createmod.ponder.foundation.PonderScene;
+import net.createmod.ponder.foundation.element.AnimatedOverlayElementBase;
+import net.createmod.ponder.foundation.ui.PonderUI;
 import net.minecraft.client.gui.GuiGraphics;
 
-public class CustomPonderOverlayElement extends AnimatedOverlayElement {
+public class CustomPonderOverlayElement extends AnimatedOverlayElementBase {
     protected OnRenderOverlay onRender = (ctx) -> {};
     protected OnElementAction onWhileSkipping = (ctx) -> {};
     protected OnElementAction onTick = (ctx) -> {};
@@ -57,9 +57,8 @@ public class CustomPonderOverlayElement extends AnimatedOverlayElement {
         onReset.accept(new OnElementAction.Context(this, scene));
     }
 
-    @HideFromJS
     @Override
-    protected void render(PonderScene scene, PonderUI screen, GuiGraphics graphics, float partialTicks, float fade) {
+    public void render(PonderScene scene, PonderUI screen, GuiGraphics graphics, float partialTicks, float fade) {
         var ctx = new OnRenderOverlay.RenderContext(this, scene, screen, graphics, partialTicks, fade);
         onRender.render(ctx);
     }

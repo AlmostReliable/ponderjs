@@ -1,14 +1,13 @@
 package com.almostreliable.ponderjs.util;
 
 import com.almostreliable.ponderjs.PonderJS;
-import com.simibubi.create.foundation.gui.AllIcons;
-import com.simibubi.create.foundation.ponder.PonderTag;
-import com.simibubi.create.foundation.ponder.Selection;
 import dev.latvian.mods.kubejs.block.predicate.BlockIDPredicate;
 import dev.latvian.mods.kubejs.util.ConsoleJS;
 import dev.latvian.mods.kubejs.util.UtilsJS;
+import net.createmod.ponder.api.scene.Selection;
+import net.createmod.ponder.foundation.PonderTag;
+import net.createmod.ponder.foundation.SelectionImpl;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -25,24 +24,25 @@ public class Util {
     public static Selection selectionOf(@Nullable Object o) {
         if (o instanceof Selection s) return s;
         if (o instanceof BoundingBox box) {
-            return Selection.of(box);
+            return SelectionImpl.of(box);
         }
 
         if (o instanceof BlockPos b) {
-            return Selection.of(new BoundingBox(b));
+            return SelectionImpl.of(new BoundingBox(b));
         }
 
         if (o instanceof List<?> l) {
-            if(l.stream().anyMatch(Objects::isNull)) {
-                ConsoleJS.CLIENT.warn("Selection was provided as list with invalid values. This may happen if a comma is missing. Please check your code.");
+            if (l.stream().anyMatch(Objects::isNull)) {
+                ConsoleJS.CLIENT.warn(
+                        "Selection was provided as list with invalid values. This may happen if a comma is missing. Please check your code.");
             }
 
             if (l.size() == 2) {
                 // TODO Change to direct typewrapper if kube adds them
                 UtilsJS.vec3Of(l.get(0));
-                Vec3 from =UtilsJS.vec3Of(l.get(0));
+                Vec3 from = UtilsJS.vec3Of(l.get(0));
                 Vec3 to = UtilsJS.vec3Of(l.get(1));
-                return Selection.of(new BoundingBox((int) from.x,
+                return SelectionImpl.of(new BoundingBox((int) from.x,
                         (int) from.y,
                         (int) from.z,
                         (int) to.x,
@@ -52,24 +52,34 @@ public class Util {
 
             Integer[] values = l.stream().map(entry -> UtilsJS.parseInt(entry, 0)).toArray(Integer[]::new);
             if (values.length == 6) {
-                return Selection.of(new BoundingBox(values[0], values[1], values[2], values[3], values[4], values[5]));
+                return SelectionImpl.of(new BoundingBox(values[0],
+                        values[1],
+                        values[2],
+                        values[3],
+                        values[4],
+                        values[5]));
             }
             if (values.length == 3) {
-                return Selection.of(new BoundingBox(values[0], values[1], values[2], values[0], values[1], values[2]));
+                return SelectionImpl.of(new BoundingBox(values[0],
+                        values[1],
+                        values[2],
+                        values[0],
+                        values[1],
+                        values[2]));
             }
         }
 
         Vec3 v = UtilsJS.vec3Of(o);
-        return Selection.of(new BoundingBox(new BlockPos((int) v.x, (int) v.y, (int) v.z)));
+        return SelectionImpl.of(new BoundingBox(new BlockPos((int) v.x, (int) v.y, (int) v.z)));
     }
 
-    public static AllIcons allIconsOf(@Nullable Object o) {
-        if (o instanceof AllIcons) return (AllIcons) o;
-        if (o == null) {
-            return AllIcons.I_ACTIVE;
-        }
-        return PonderJS.getIconByName(o.toString());
-    }
+//    public static AllIcons allIconsOf(@Nullable Object o) {
+//        if (o instanceof AllIcons) return (AllIcons) o;
+//        if (o == null) {
+//            return AllIcons.I_ACTIVE;
+//        }
+//        return PonderJS.getIconByName(o.toString());
+//    }
 
     public static PonderTag ponderTagOf(@Nullable Object o) {
         Objects.requireNonNull(o);
@@ -79,6 +89,7 @@ public class Util {
             PonderErrorHelper.yeet(e);
             throw e;
         }
+
         return ponderTag;
     }
 

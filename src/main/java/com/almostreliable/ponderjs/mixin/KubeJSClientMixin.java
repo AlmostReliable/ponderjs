@@ -1,10 +1,6 @@
 package com.almostreliable.ponderjs.mixin;
 
-import com.almostreliable.ponderjs.PonderJS;
-import dev.latvian.mods.kubejs.KubeJS;
 import dev.latvian.mods.kubejs.client.KubeJSClient;
-import dev.latvian.mods.kubejs.util.ConsoleJS;
-import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,14 +11,14 @@ public class KubeJSClientMixin {
 
     @Inject(method = "reloadClientScripts", at = @At("RETURN"), remap = false)
     private static void reloadClientScripts(CallbackInfo ci) {
-        if (PonderJS.isInitialized()) {
-            PonderJS.reload();
-            String msg = "Ponder tags event is currently not reloadable. Only scenes were reloaded.";
-            if (KubeJS.PROXY.getClientPlayer() != null) {
-                KubeJS.PROXY.getClientPlayer().sendSystemMessage(Component.literal(msg));
-            }
-            ConsoleJS.CLIENT.info(msg);
-        }
+//        if (PonderJS.isInitialized()) {
+//            PonderJS.reload();
+//            String msg = "Ponder tags event is currently not reloadable. Only scenes were reloaded.";
+//            if (KubeJS.PROXY.getClientPlayer() != null) {
+//                KubeJS.PROXY.getClientPlayer().sendSystemMessage(Component.literal(msg));
+//            }
+//            ConsoleJS.CLIENT.info(msg);
+//        }
     }
 
 }

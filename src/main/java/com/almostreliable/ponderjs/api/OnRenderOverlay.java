@@ -1,8 +1,8 @@
 package com.almostreliable.ponderjs.api;
 
-import com.simibubi.create.foundation.ponder.PonderScene;
-import com.simibubi.create.foundation.ponder.element.PonderOverlayElement;
-import com.simibubi.create.foundation.ponder.ui.PonderUI;
+import net.createmod.ponder.api.element.PonderOverlayElement;
+import net.createmod.ponder.foundation.PonderScene;
+import net.createmod.ponder.foundation.ui.PonderUI;
 import net.minecraft.client.gui.GuiGraphics;
 
 @FunctionalInterface

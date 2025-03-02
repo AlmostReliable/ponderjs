@@ -13,7 +13,6 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(BuildConfig.MOD_ID)
@@ -25,15 +24,10 @@ public class PonderJSMod {
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
-        modEventBus.addListener(this::ponderClientInit);
         // I need to refactor this
 //        modEventBus.addListener(ModConfigs::onLoad);
 //        modEventBus.addListener(ModConfigs::onReload);
 //        ModConfigs.register();
-    }
-
-    private void ponderClientInit(FMLClientSetupEvent event) {
-        event.enqueueWork(PonderJS::init);
     }
 
     private void registerCommands(RegisterCommandsEvent event) {

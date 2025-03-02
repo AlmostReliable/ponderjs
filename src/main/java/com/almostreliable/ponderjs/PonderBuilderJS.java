@@ -1,63 +1,42 @@
 package com.almostreliable.ponderjs;
 
-import com.almostreliable.ponderjs.api.AbstractPonderBuilder;
-import com.almostreliable.ponderjs.api.ExtendedPonderStoryBoard;
-import com.almostreliable.ponderjs.api.ExtendedSceneBuilder;
-import com.almostreliable.ponderjs.api.SceneBuildingUtilDelegate;
-import com.almostreliable.ponderjs.mixin.SceneBuilderAccessor;
 import com.almostreliable.ponderjs.util.PonderErrorHelper;
-import com.simibubi.create.foundation.ponder.PonderScene;
-import com.simibubi.create.foundation.ponder.PonderStoryBoardEntry;
-import com.simibubi.create.foundation.ponder.SceneBuilder;
-import com.simibubi.create.foundation.ponder.SceneBuildingUtil;
+import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
+import net.createmod.ponder.api.scene.PonderStoryBoard;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 
 import java.util.Set;
 
-public class PonderBuilderJS extends AbstractPonderBuilder<PonderBuilderJS> {
-    public static final String BASIC_STRUCTURE = "ponderjs:basic";
+public class PonderBuilderJS {
+    public static final ResourceLocation BASIC_STRUCTURE = new ResourceLocation("ponderjs:basic");
+    private final Set<ResourceLocation> itemIds;
+    private final PonderSceneRegistrationHelper<ResourceLocation> helper;
 
-    public PonderBuilderJS(Set<Item> items) {
-        super(items);
+    public PonderBuilderJS(Set<ResourceLocation> itemIds, PonderSceneRegistrationHelper<ResourceLocation> helper) {
+        this.itemIds = itemIds;
+        this.helper = helper;
     }
 
-    public PonderBuilderJS scene(String name, String title, ExtendedPonderStoryBoard scene) {
+    public PonderBuilderJS scene(String name, String title, PonderStoryBoard scene) {
         return scene(name, title, BASIC_STRUCTURE, scene);
     }
 
-    public PonderBuilderJS scene(String name, String title, String structureName, ExtendedPonderStoryBoard scene) {
-        ResourceLocation id = createTitleTranslationKey(name);
+    public PonderBuilderJS scene(String name, String title, ResourceLocation structureName, PonderStoryBoard storyBoard, ResourceLocation... tags) {
+        ResourceLocation id = PonderJS.appendKubeToId(name);
 
-        PonderStoryBoardWrapper wrapper = new PonderStoryBoardWrapper(scene);
-        for (var item : items) {
-            addNamedStoryBoard(id, title, item, PonderJS.appendKubeToId(structureName), wrapper);
-        }
-
-        return this;
-    }
-
-    @Override
-    public PonderBuilderJS getSelf() {
-        return this;
-    }
-
-    public static class PonderStoryBoardWrapper implements PonderStoryBoardEntry.PonderStoryBoard {
-        private final ExtendedPonderStoryBoard storyBoard;
-
-        protected PonderStoryBoardWrapper(ExtendedPonderStoryBoard storyBoard) {
-            this.storyBoard = storyBoard;
-        }
-
-        @Override
-        public void program(SceneBuilder builder, SceneBuildingUtil util) {
+        PonderStoryBoard wrapper = (scene, util) -> {
+            scene.title(id.getPath(), title);
             try {
-                PonderScene scene = ((SceneBuilderAccessor) builder).ponderjs$getPonderScene();
-                ExtendedSceneBuilder extended = new ExtendedSceneBuilder(scene);
-                storyBoard.program(extended, new SceneBuildingUtilDelegate(util));
+                storyBoard.program(scene, util);
             } catch (Exception e) {
                 PonderErrorHelper.yeet(e);
             }
+        };
+
+        for (var itemId : itemIds) {
+            helper.addStoryBoard(itemId, PonderJS.appendKubeToId(structureName.toString()), wrapper, tags);
         }
+
+        return this;
     }
 }

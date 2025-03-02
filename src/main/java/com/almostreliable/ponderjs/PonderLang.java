@@ -3,7 +3,6 @@ package com.almostreliable.ponderjs;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.simibubi.create.foundation.ponder.PonderLocalization;
 import org.apache.commons.io.FileUtils;
 
 import javax.annotation.Nullable;
@@ -63,9 +62,9 @@ public class PonderLang {
     }
 
     public JsonObject createFromLocalization() {
-        PonderJS.STORIES_MANAGER.compileLang();
+//        PonderJS.STORIES_MANAGER.compileLang();
         JsonObject object = new JsonObject();
-        PonderJS.NAMESPACES.forEach(namespace -> PonderLocalization.provideLang(namespace, object::addProperty));
+//        PonderJS.NAMESPACES.forEach(namespace -> PonderLocalization.provideLang(namespace, object::addProperty));
         return object;
     }
 }

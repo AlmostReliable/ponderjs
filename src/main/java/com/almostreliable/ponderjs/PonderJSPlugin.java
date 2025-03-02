@@ -1,31 +1,23 @@
 package com.almostreliable.ponderjs;
 
-import dev.latvian.mods.kubejs.KubeJSPlugin;
-import dev.latvian.mods.kubejs.script.BindingsEvent;
-import dev.latvian.mods.kubejs.script.ScriptType;
-import dev.latvian.mods.rhino.BaseFunction;
-import dev.latvian.mods.rhino.NativeJavaObject;
-import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
+import net.createmod.ponder.api.registration.PonderPlugin;
+import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
+import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
+import net.minecraft.resources.ResourceLocation;
 
-import java.util.function.Function;
-
-public class PonderJSPlugin extends KubeJSPlugin {
-
+public class PonderJSPlugin implements PonderPlugin {
     @Override
-    public void registerBindings(BindingsEvent event) {
-        if(event.getType().isClient()) {
-            PonderJS.addBindings(event);
-        }
+    public String getModId() {
+        return BuildConfig.MOD_ID;
     }
 
     @Override
-    public void registerTypeWrappers(ScriptType type, TypeWrappers typeWrappers) {
-        if (type != ScriptType.CLIENT) return;
-        PonderJS.addTypeWrappers(type, typeWrappers);
+    public void registerScenes(PonderSceneRegistrationHelper<ResourceLocation> helper) {
+        PonderEvents.REGISTRY.post(new PonderRegistryEventJS(helper));
     }
 
     @Override
-    public void registerEvents() {
-        PonderEvents.GROUP.register();
+    public void registerTags(PonderTagRegistrationHelper<ResourceLocation> helper) {
+        PonderEvents.REGISTRY.post(new PonderItemTagEventJS(helper));
     }
 }

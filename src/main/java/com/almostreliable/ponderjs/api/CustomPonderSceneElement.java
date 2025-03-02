@@ -1,14 +1,14 @@
 package com.almostreliable.ponderjs.api;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.foundation.ponder.PonderScene;
-import com.simibubi.create.foundation.ponder.PonderWorld;
-import com.simibubi.create.foundation.ponder.element.AnimatedSceneElement;
 import dev.latvian.mods.rhino.util.HideFromJS;
+import net.createmod.ponder.api.level.PonderLevel;
+import net.createmod.ponder.foundation.PonderScene;
+import net.createmod.ponder.foundation.element.AnimatedSceneElementBase;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 
-public class CustomPonderSceneElement extends AnimatedSceneElement {
+public class CustomPonderSceneElement extends AnimatedSceneElementBase {
     protected OnRenderWorld onRenderFirst = (ctx) -> {};
     protected OnRenderWorld.Layer onRenderWorldLayer = (ctx) -> {};
     protected OnRenderWorld onRenderLast = (ctx) -> {};
@@ -71,27 +71,28 @@ public class CustomPonderSceneElement extends AnimatedSceneElement {
         onReset.accept(new OnElementAction.Context(this, scene));
     }
 
+
     @HideFromJS
     @Override
-    public void renderFirst(PonderWorld world, MultiBufferSource buffer, PoseStack ms, float fade, float pt) {
-        super.renderFirst(world, buffer, ms, fade, pt);
-        var ctx = new OnRenderWorld.RenderContext(this, world, buffer, ms, pt, fade);
+    public void renderFirst(PonderLevel world, MultiBufferSource buffer, GuiGraphics graphics, float fade, float pt) {
+        super.renderFirst(world, buffer, graphics, fade, pt);
+        var ctx = new OnRenderWorld.RenderContext(this, world, buffer, graphics, pt, fade);
         onRenderFirst.renderWorld(ctx);
     }
 
     @HideFromJS
     @Override
-    public void renderLayer(PonderWorld world, MultiBufferSource buffer, RenderType type, PoseStack ms, float fade, float pt) {
-        super.renderLayer(world, buffer, type, ms, fade, pt);
-        var ctx = new OnRenderWorld.Layer.RenderContext(this, world, buffer, type, ms, pt, fade);
+    public void renderLayer(PonderLevel world, MultiBufferSource buffer, RenderType type, GuiGraphics graphics, float fade, float pt) {
+        super.renderLayer(world, buffer, type, graphics, fade, pt);
+        var ctx = new OnRenderWorld.Layer.RenderContext(this, world, buffer, type, graphics, pt, fade);
         onRenderWorldLayer.renderLayer(ctx);
     }
 
     @HideFromJS
     @Override
-    public void renderLast(PonderWorld world, MultiBufferSource buffer, PoseStack ms, float fade, float pt) {
-        super.renderLast(world, buffer, ms, fade, pt);
-        var ctx = new OnRenderWorld.RenderContext(this, world, buffer, ms, pt, fade);
+    public void renderLast(PonderLevel world, MultiBufferSource buffer, GuiGraphics graphics, float fade, float pt) {
+        super.renderLast(world, buffer, graphics, fade, pt);
+        var ctx = new OnRenderWorld.RenderContext(this, world, buffer, graphics, pt, fade);
         onRenderLast.renderWorld(ctx);
     }
 }

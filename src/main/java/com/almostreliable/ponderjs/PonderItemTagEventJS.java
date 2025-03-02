@@ -1,61 +1,72 @@
 package com.almostreliable.ponderjs;
 
-import com.almostreliable.ponderjs.mixin.PonderTagRegistryAccessor;
 import com.almostreliable.ponderjs.util.PonderPlatform;
-import com.google.common.collect.Multimap;
-import com.simibubi.create.foundation.ponder.PonderRegistry;
-import com.simibubi.create.foundation.ponder.PonderTag;
-import com.simibubi.create.foundation.ponder.PonderTagRegistry;
 import dev.latvian.mods.kubejs.event.EventJS;
-import dev.latvian.mods.kubejs.item.ItemStackJS;
-import dev.latvian.mods.kubejs.item.ingredient.IngredientJS;
 import dev.latvian.mods.kubejs.util.ConsoleJS;
-import net.minecraft.core.Registry;
+import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
+import net.createmod.ponder.foundation.PonderTag;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class PonderItemTagEventJS extends EventJS {
-    public void createTag(String id, ItemStack displayItem, String title, String description, @Nullable Ingredient ingredient) {
-        PonderJS.getTagByName(id).ifPresent(tag -> {
-            throw new IllegalArgumentException("Tag " + id + " already exists");
-        });
 
+    private final PonderTagRegistrationHelper<ResourceLocation> helper;
+
+    public PonderItemTagEventJS(PonderTagRegistrationHelper<ResourceLocation> helper) {
+        this.helper = helper;
+    }
+
+    public void createTag(String id, Item displayItem, String title, String description, @Nullable Ingredient ingredient) {
         ResourceLocation idWithNamespace = PonderJS.appendKubeToId(id);
-        PonderTag ponderTag = new PonderTag(idWithNamespace)
-                .item(displayItem.getItem())
-                .defaultLang(title, description);
-        PonderRegistry.TAGS.listTag(ponderTag);
+        helper
+                .registerTag(idWithNamespace)
+                .item(displayItem)
+                .title(title)
+                .description(description).register();
 
-        if(ingredient != null) {
-            add(ponderTag, ingredient);
+        if (ingredient != null) {
+            var tags = helper.addToTag(idWithNamespace);
+            for (ItemStack item : ingredient.getItems()) {
+                ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(item.getItem());
+                tags.add(itemId);
+            }
         }
+
         PonderJS.NAMESPACES.add(idWithNamespace.getNamespace());
     }
 
-    public void createTag(String id, ItemStack displayItem, String title, String description) {
+    public void createTag(String id, Item displayItem, String title, String description) {
         createTag(id, displayItem, title, description, null);
-    }
-
-    public void removeTag(PonderTag... tags) {
-        for (PonderTag tag : tags) {
-            Set<ResourceLocation> items = PonderRegistry.TAGS.getItems(tag);
-            PonderRegistry.TAGS.getListedTags().remove(tag);
-            remove(tag, items);
-        }
     }
 
     public void add(PonderTag tag, Ingredient ingredient) {
         if (ingredient.isEmpty()) return;
-        PonderTagRegistry.TagBuilder tagBuilder = PonderRegistry.TAGS.forTag(tag);
+
+        var tagBuilder = helper.addToTag(tag.getId());
         for (ItemStack item : ingredient.getItems()) {
-            tagBuilder.add(item.getItem());
+            var id = BuiltInRegistries.ITEM.getKey(item.getItem());
+            tagBuilder.add(id);
+        }
+    }
+
+    public void removeTag(PonderTag... tagsToRemove) {
+        if (tagsToRemove.length == 0) return;
+
+        var reg = PonderJS.getTagRegistryAccessor();
+        for (var tag : tagsToRemove) {
+            if (tag.equals(reg.getMissing())) continue;
+
+            reg.getRegisteredTags().remove(tag.getId());
+            reg.getListedTags().remove(tag);
+            remove(tag, PonderJS.getTagRegistry().getItems(tag));
         }
     }
 
@@ -69,10 +80,10 @@ public class PonderItemTagEventJS extends EventJS {
     }
 
     private void remove(PonderTag tag, Set<ResourceLocation> items) {
-        Multimap<ResourceLocation, PonderTag> tagMap = ((PonderTagRegistryAccessor) PonderRegistry.TAGS).getTags();
+        var reg = PonderJS.getTagRegistryAccessor();
+
         for (ResourceLocation item : items) {
-            Collection<PonderTag> tagsForItem = tagMap.get(item);
-            if (tagsForItem.remove(tag)) {
+            if (reg.getComponentTagMap().get(item).remove(tag.getId())) {
                 ConsoleJS.CLIENT.info("Removed ponder tag " + tag.getId() + " from item " + item);
             }
         }

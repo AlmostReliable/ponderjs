@@ -1,8 +1,8 @@
 package com.almostreliable.ponderjs.mixin;
 
 import com.almostreliable.ponderjs.util.PonderErrorHelper;
-import com.simibubi.create.foundation.ponder.PonderScene;
 import dev.latvian.mods.rhino.RhinoException;
+import net.createmod.ponder.foundation.PonderScene;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 /**
  * Mixin into the simple PonderInstruction to catch Rhino Exceptions, so we can delegate them to the user.
  */
-@Mixin(targets = "com.simibubi.create.foundation.ponder.instruction.PonderInstruction$Simple")
+@Mixin(targets = "net.createmod.ponder.foundation.instruction.PonderInstruction$Simple")
 public class PonderInstructionMixin {
 
     @Shadow(remap = false)

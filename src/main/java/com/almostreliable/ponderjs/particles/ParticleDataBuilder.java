@@ -1,10 +1,7 @@
 package com.almostreliable.ponderjs.particles;
 
-import com.simibubi.create.Create;
-import com.simibubi.create.content.kinetics.base.RotationIndicatorParticleData;
 import dev.latvian.mods.rhino.mod.util.color.Color;
-import dev.latvian.mods.rhino.mod.wrapper.ColorWrapper;
-import net.minecraft.core.Direction;
+import net.createmod.ponder.Ponder;
 import net.minecraft.core.particles.DustColorTransitionOptions;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.DustParticleOptionsBase;
@@ -78,33 +75,33 @@ public abstract class ParticleDataBuilder<O extends ParticleDataBuilder<O, PO>, 
 
     public O speed(Vec3 speed) {
         return transformMotion((partialTick, motion) -> new Vec3(
-                Create.RANDOM.nextGaussian() * speed.x,
-                Create.RANDOM.nextGaussian() * speed.y,
-                Create.RANDOM.nextGaussian() * speed.z
+                Ponder.RANDOM.nextGaussian() * speed.x,
+                Ponder.RANDOM.nextGaussian() * speed.y,
+                Ponder.RANDOM.nextGaussian() * speed.z
         ));
     }
 
     public O withinBlockSpace() {
         return transformPosition((partialTicks, position) -> new Vec3(
-                Math.floor(position.x) + Create.RANDOM.nextFloat(),
-                Math.floor(position.y) + Create.RANDOM.nextFloat(),
-                Math.floor(position.z) + Create.RANDOM.nextFloat()
+                Math.floor(position.x) + Ponder.RANDOM.nextFloat(),
+                Math.floor(position.y) + Ponder.RANDOM.nextFloat(),
+                Math.floor(position.z) + Ponder.RANDOM.nextFloat()
         ));
     }
 
     public O area(Vec3 area) {
         return transformPosition((partialTicks, position) -> new Vec3(
-                position.x + (Create.RANDOM.nextFloat() * (area.x - position.x)),
-                position.y + (Create.RANDOM.nextFloat() * (area.y - position.y)),
-                position.z + (Create.RANDOM.nextFloat() * (area.z - position.z))
+                position.x + (Ponder.RANDOM.nextFloat() * (area.x - position.x)),
+                position.y + (Ponder.RANDOM.nextFloat() * (area.y - position.y)),
+                position.z + (Ponder.RANDOM.nextFloat() * (area.z - position.z))
         ));
     }
 
     public O delta(Vec3 delta) {
         return transformPosition((partialTicks, position) -> new Vec3(
-                position.x + (Create.RANDOM.nextGaussian() * (delta.x)),
-                position.y + (Create.RANDOM.nextGaussian() * (delta.y)),
-                position.z + (Create.RANDOM.nextGaussian() * (delta.z))
+                position.x + (Ponder.RANDOM.nextGaussian() * (delta.x)),
+                position.y + (Ponder.RANDOM.nextGaussian() * (delta.y)),
+                position.z + (Ponder.RANDOM.nextGaussian() * (delta.z))
         ));
     }
 
@@ -160,42 +157,42 @@ public abstract class ParticleDataBuilder<O extends ParticleDataBuilder<O, PO>, 
         @Override
         DustParticleOptionsBase createOptions() {
             float s = scale == null ? 1.0f : scale;
-            var fC = new com.simibubi.create.foundation.utility.Color(fromColor.getRgbJS()).asVectorF();
+            var fC = new net.createmod.catnip.theme.Color(fromColor.getRgbJS()).asVectorF();
 
             if (toColor == null) {
                 return new DustParticleOptions(fC, s);
             }
 
-            var toC = new com.simibubi.create.foundation.utility.Color(toColor.getRgbJS()).asVectorF();
+            var toC = new net.createmod.catnip.theme.Color(toColor.getRgbJS()).asVectorF();
             return new DustColorTransitionOptions(fC, toC, s);
         }
     }
 
-    public static class RotationIndicatorParticleDataBuilder
-            extends ParticleDataBuilder<RotationIndicatorParticleDataBuilder, RotationIndicatorParticleData> {
-        private final float radius1;
-        private final float radius2;
-        private final Direction.Axis axis;
-        private float rotationSpeed;
-
-        public RotationIndicatorParticleDataBuilder(float radius1, float radius2, Direction.Axis axis) {
-            this.rotationSpeed = 1.0f;
-            this.radius1 = radius1;
-            this.radius2 = radius2;
-            this.axis = axis;
-        }
-
-        public RotationIndicatorParticleDataBuilder rotationSpeed(float rotationSpeed) {
-            this.rotationSpeed = rotationSpeed;
-            return getSelf();
-        }
-
-        @Override
-        RotationIndicatorParticleData createOptions() {
-            Color c = color == null ? ColorWrapper.BLACK : color;
-            char axisChar = axis.name().charAt(0);
-            int lTime = lifetime == null ? 40 : lifetime;
-            return new RotationIndicatorParticleData(c.getRgbJS(), rotationSpeed, radius1, radius2, lTime, axisChar);
-        }
-    }
+//    public static class RotationIndicatorParticleDataBuilder
+//            extends ParticleDataBuilder<RotationIndicatorParticleDataBuilder, RotationIndicatorParticleData> {
+//        private final float radius1;
+//        private final float radius2;
+//        private final Direction.Axis axis;
+//        private float rotationSpeed;
+//
+//        public RotationIndicatorParticleDataBuilder(float radius1, float radius2, Direction.Axis axis) {
+//            this.rotationSpeed = 1.0f;
+//            this.radius1 = radius1;
+//            this.radius2 = radius2;
+//            this.axis = axis;
+//        }
+//
+//        public RotationIndicatorParticleDataBuilder rotationSpeed(float rotationSpeed) {
+//            this.rotationSpeed = rotationSpeed;
+//            return getSelf();
+//        }
+//
+//        @Override
+//        RotationIndicatorParticleData createOptions() {
+//            Color c = color == null ? ColorWrapper.BLACK : color;
+//            char axisChar = axis.name().charAt(0);
+//            int lTime = lifetime == null ? 40 : lifetime;
+//            return new RotationIndicatorParticleData(c.getRgbJS(), rotationSpeed, radius1, radius2, lTime, axisChar);
+//        }
+//    }
 }

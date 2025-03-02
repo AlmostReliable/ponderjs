@@ -1,7 +1,7 @@
 package com.almostreliable.ponderjs.api;
 
-import com.simibubi.create.foundation.ponder.PonderScene;
-import com.simibubi.create.foundation.ponder.element.PonderElement;
+import net.createmod.ponder.api.element.PonderElement;
+import net.createmod.ponder.foundation.PonderScene;
 
 @FunctionalInterface
 public interface OnElementAction {

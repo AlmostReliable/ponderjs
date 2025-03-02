@@ -26,13 +26,6 @@ ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.ponderjs]]
-modId = "create"
-mandatory = true
-versionRange = "[${create_min_version},)"
-ordering = "AFTER"
-side = "BOTH"
-
-[[dependencies.ponderjs]]
 modId = "kubejs"
 mandatory = true
 versionRange = "[${kubejs_min_version},)"

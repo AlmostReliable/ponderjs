@@ -4,13 +4,11 @@ import com.almostreliable.ponderjs.mixin.ParticleAccessor;
 import com.almostreliable.ponderjs.mixin.PonderWorldAccessor;
 import com.almostreliable.ponderjs.util.PonderErrorHelper;
 import com.almostreliable.ponderjs.util.PonderPlatform;
-import com.simibubi.create.AllParticleTypes;
-import com.simibubi.create.content.fluids.particle.FluidParticleData;
-import com.simibubi.create.foundation.ponder.PonderScene;
-import com.simibubi.create.foundation.ponder.SceneBuilder;
-import com.simibubi.create.foundation.ponder.instruction.TickingInstruction;
 import dev.latvian.mods.kubejs.fluid.FluidStackJS;
 import dev.latvian.mods.rhino.mod.util.color.Color;
+import net.createmod.ponder.api.scene.SceneBuilder;
+import net.createmod.ponder.foundation.PonderScene;
+import net.createmod.ponder.foundation.instruction.TickingInstruction;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.*;
@@ -57,22 +55,26 @@ public class ParticleInstructions {
     }
 
     public ParticleDataBuilder<?, ?> fluid(int ticks, FluidStackJS fluid, Vec3 pos) {
-        FluidParticleData data = PonderPlatform.createFluidParticleData(fluid, AllParticleTypes.FLUID_PARTICLE.get());
-        return create(ticks, pos, new ParticleDataBuilder.Static(data));
+//        FluidParticleData data = PonderPlatform.createFluidParticleData(fluid, AllParticleTypes.FLUID_PARTICLE.get());
+//        return create(ticks, pos, new ParticleDataBuilder.Static(data));
+        throw new UnsupportedOperationException("Disabled due ponder is now without create");
     }
 
     public ParticleDataBuilder<?, ?> drip(int ticks, FluidStackJS fluid, Vec3 pos) {
-        FluidParticleData data = PonderPlatform.createFluidParticleData(fluid, AllParticleTypes.FLUID_DRIP.get());
-        return create(ticks, pos, new ParticleDataBuilder.Static(data));
+//        FluidParticleData data = PonderPlatform.createFluidParticleData(fluid, AllParticleTypes.FLUID_DRIP.get());
+//        return create(ticks, pos, new ParticleDataBuilder.Static(data));
+        throw new UnsupportedOperationException("Disabled due ponder is now without create");
     }
 
     public ParticleDataBuilder<?, ?> basin(int ticks, FluidStackJS fluid, Vec3 pos) {
-        FluidParticleData data = PonderPlatform.createFluidParticleData(fluid, AllParticleTypes.BASIN_FLUID.get());
-        return create(ticks, pos, new ParticleDataBuilder.Static(data));
+//        FluidParticleData data = PonderPlatform.createFluidParticleData(fluid, AllParticleTypes.BASIN_FLUID.get());
+//        return create(ticks, pos, new ParticleDataBuilder.Static(data));
+        throw new UnsupportedOperationException("Disabled due ponder is now without create");
     }
 
     public ParticleDataBuilder<?, ?> rotationIndicator(int ticks, Vec3 pos, float radius1, float radius2, Direction.Axis axis) {
-        return create(ticks, pos, new ParticleDataBuilder.RotationIndicatorParticleDataBuilder(radius1, radius2, axis));
+//        return create(ticks, pos, new ParticleDataBuilder.RotationIndicatorParticleDataBuilder(radius1, radius2, axis));
+        throw new UnsupportedOperationException("Disabled due ponder is now without create");
     }
 
     private <O extends ParticleDataBuilder<O, ?>> O create(int ticks, Vec3 origin, O options) {

@@ -1,8 +1,8 @@
 package com.almostreliable.ponderjs.api;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.foundation.ponder.PonderWorld;
-import com.simibubi.create.foundation.ponder.element.PonderElement;
+import net.createmod.ponder.api.element.PonderElement;
+import net.createmod.ponder.api.level.PonderLevel;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 
@@ -15,11 +15,11 @@ public interface OnRenderWorld {
     interface Layer {
         void renderLayer(RenderContext context);
 
-        record RenderContext(PonderElement getElement, PonderWorld getWorld, MultiBufferSource getBuffer,
-                             RenderType getType, PoseStack getPoseStack, float getPartialTicks, float getFade) {}
+        record RenderContext(PonderElement getElement, PonderLevel getWorld, MultiBufferSource getBuffer,
+                             RenderType getType, GuiGraphics getGraphics, float getPartialTicks, float getFade) {}
     }
 
 
-    record RenderContext(PonderElement getElement, PonderWorld getWorld, MultiBufferSource getBuffer,
-                         PoseStack getPoseStack, float getPartialTicks, float getFade) {}
+    record RenderContext(PonderElement getElement, PonderLevel getWorld, MultiBufferSource getBuffer,
+                         GuiGraphics getGraphics, float getPartialTicks, float getFade) {}
 }

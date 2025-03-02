@@ -5,10 +5,16 @@
   "refmap": "ponderjs.refmap.json",
   "mixins": [
     "KubeJSClientMixin",
+      "PonderIndexAccessor",
     "PonderInstructionMixin",
+    "PonderOverlayInstructionsMixin",
+    "PonderSceneBuilderMixin",
+    "PonderSpecialInstructionsMixin",
     "PonderTagRegistryAccessor",
     "PonderWorldAccessor",
-    "SceneBuilderAccessor"
+    "PonderWorldInstructionMixin",
+    "SceneBuilderAccessor",
+    "SceneBuildingUtilMixin"
   ],
   "client": [
     "ParticleAccessor"
