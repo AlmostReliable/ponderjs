@@ -29,6 +29,8 @@ archivesBaseName = mod_id
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
+jarJar.enable()
+
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
     mappings channel: mappings_channel, version: "${mappings_version}-${minecraft_version}"
@@ -117,18 +119,19 @@ repositories {
     }
 }
 
+
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-//    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
     implementation fg.deobf("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
-//    jarJar("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
 
-//    jarJar("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}")
     implementation fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}")
-//    implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
-//    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
-//    implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
+    jarJar("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}") {
+        version {
+            strictly("[1.0,2.0)")
+            prefer("${ponder_version}")
+        }
+    }
 
     implementation fg.deobf("dev.latvian.mods:kubejs-forge:${kubejs_version}")
     implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
@@ -198,4 +201,9 @@ buildConfig {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
+
+tasks.named('jarJar') {
+    it.archiveClassifier.set("");
+}
+
 jar.finalizedBy('reobfJar')
