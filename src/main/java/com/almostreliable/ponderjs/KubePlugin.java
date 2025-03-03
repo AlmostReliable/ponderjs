@@ -9,8 +9,6 @@ import net.createmod.ponder.foundation.PonderIndex;
 
 public class KubePlugin extends KubeJSPlugin {
 
-    private final Object lock = new Object();
-
     @Override
     public void registerBindings(BindingsEvent event) {
         if (event.getType().isClient()) {

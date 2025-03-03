@@ -13,7 +13,6 @@
     "PonderTagRegistryAccessor",
     "PonderWorldAccessor",
     "PonderWorldInstructionMixin",
-    "SceneBuilderAccessor",
     "SceneBuildingUtilMixin"
   ],
   "client": [

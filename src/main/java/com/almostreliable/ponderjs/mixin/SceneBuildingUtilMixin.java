@@ -2,16 +2,16 @@ package com.almostreliable.ponderjs.mixin;
 
 import dev.latvian.mods.rhino.util.RemapForJS;
 import net.createmod.ponder.api.scene.PositionUtil;
-import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.createmod.ponder.api.scene.SelectionUtil;
 import net.createmod.ponder.api.scene.VectorUtil;
+import net.createmod.ponder.foundation.PonderSceneBuildingUtil;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
-@Mixin(SceneBuildingUtil.class)
+@Mixin(PonderSceneBuildingUtil.class)
 public abstract class SceneBuildingUtilMixin {
 
     @Shadow(remap = false)

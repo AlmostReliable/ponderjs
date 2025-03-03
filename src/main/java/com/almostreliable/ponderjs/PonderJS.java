@@ -40,7 +40,6 @@ public class PonderJS {
         event.add("ParrotElement", ParrotElement.class);
         event.add("PonderInputWindowElement", InputWindowElement.class);
         event.add("PonderInput", InputWindowElement.class);
-//        event.add("PonderIcons", AllIcons.class);
         event.add("PonderPointing", Pointing.class);
     }
 
