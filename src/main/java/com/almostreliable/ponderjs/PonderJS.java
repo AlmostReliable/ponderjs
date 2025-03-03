@@ -16,6 +16,7 @@ import net.createmod.ponder.api.scene.Selection;
 import net.createmod.ponder.foundation.PonderTag;
 import net.createmod.ponder.foundation.element.InputWindowElement;
 import net.createmod.ponder.foundation.registration.PonderTagRegistry;
+import net.minecraft.locale.Language;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.logging.log4j.LogManager;
@@ -27,13 +28,15 @@ import java.util.Optional;
 import java.util.Set;
 
 public class PonderJS {
+    public static final PonderJSPlugin PLUGIN = new PonderJSPlugin();
     public static final Logger LOGGER = LogManager.getLogger(BuildConfig.MOD_ID);
     @Nullable public static final String TAG_EVENT = "ponder.tag";
     public static final String REGISTRY_EVENT = "ponder.registry";
     public static final Set<String> NAMESPACES = new HashSet<>();
     //    public static final HashMap<String, AllIcons> CACHED_ICONS = new HashMap<>();
     public static final PonderStoriesManager STORIES_MANAGER = new PonderStoriesManager();
-    private static boolean initialized;
+    @Nullable public static Language DEFAULT_LANGUAGE;
+
 
     static void addBindings(BindingsEvent event) {
         event.add("PonderPalette", PonderPalette.class);
@@ -78,16 +81,5 @@ public class PonderJS {
 
     public static Optional<PonderTag> getTagByName(String tag) {
         return getTagByName(appendCreateToId(tag));
-    }
-
-    public static void reload() {
-        // TODO try making PonderItemTag event reloadable
-//        PonderEvents.REGISTRY.post(new PonderRegistryEventJS(helper));
-//        PonderLang lang = new PonderLang();
-//        lang.generate("en_us");
-    }
-
-    public static boolean isInitialized() {
-        return initialized;
     }
 }

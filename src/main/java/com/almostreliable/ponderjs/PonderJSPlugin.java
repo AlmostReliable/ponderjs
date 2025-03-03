@@ -6,6 +6,7 @@ import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
 import net.minecraft.resources.ResourceLocation;
 
 public class PonderJSPlugin implements PonderPlugin {
+
     @Override
     public String getModId() {
         return BuildConfig.MOD_ID;

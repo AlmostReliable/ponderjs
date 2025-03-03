@@ -48,4 +48,9 @@ public abstract class PonderSceneBuilderMixin implements SceneBuilderExtension {
     public ParticleInstructions ponderjs$getParticles() {
         return ponderjs$particles;
     }
+
+    @Override
+    public SceneBuilder ponderjs$self() {
+        return (SceneBuilder) (Object) this;
+    }
 }

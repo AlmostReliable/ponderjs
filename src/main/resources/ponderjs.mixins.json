@@ -1,25 +1,27 @@
 {
-  "required": true,
-  "package": "com.almostreliable.ponderjs.mixin",
-  "compatibilityLevel": "JAVA_17",
-  "refmap": "ponderjs.refmap.json",
-  "mixins": [
-    "KubeJSClientMixin",
-      "PonderIndexAccessor",
-    "PonderInstructionMixin",
-    "PonderOverlayInstructionsMixin",
-    "PonderSceneBuilderMixin",
-    "PonderSpecialInstructionsMixin",
-    "PonderTagRegistryAccessor",
-    "PonderWorldAccessor",
-    "PonderWorldInstructionMixin",
-    "SceneBuildingUtilMixin"
-  ],
-  "client": [
-    "ParticleAccessor"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  },
-  "minVersion": "0.8.4"
+    "required": true,
+    "package": "com.almostreliable.ponderjs.mixin",
+    "compatibilityLevel": "JAVA_17",
+    "refmap": "ponderjs.refmap.json",
+    "mixins": [
+        "KubeJSClientMixin",
+        "PonderClientMixin",
+        "PonderIndexAccessor",
+        "PonderIndexMixin",
+        "PonderInstructionMixin",
+        "PonderOverlayInstructionsMixin",
+        "PonderSceneBuilderMixin",
+        "PonderSpecialInstructionsMixin",
+        "PonderTagRegistryAccessor",
+        "PonderWorldAccessor",
+        "PonderWorldInstructionMixin",
+        "SceneBuildingUtilMixin"
+    ],
+    "client": [
+        "ParticleAccessor"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "minVersion": "0.8.4"
 }

@@ -10,10 +10,9 @@ public class GenerateKubeJSLangCommand implements Command<CommandSourceStack> {
     @Override
     public int run(CommandContext<CommandSourceStack> context) {
         String lang = context.getArgument("lang", String.class);
-        PonderLang ponderLang = new PonderLang();
 
         CommandSourceStack source = context.getSource();
-        if (ponderLang.generate(lang)) {
+        if (PonderLang.generate(lang)) {
             source.sendSuccess(() -> Component.literal("Changes detected - New lang file created."), false);
         } else {
             source.sendSuccess(() -> Component.literal("Lang file the same. Nothing created."), false);

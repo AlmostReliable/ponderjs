@@ -17,6 +17,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import static com.almostreliable.ponderjs.PonderJS.PLUGIN;
+
 @Mod(BuildConfig.MOD_ID)
 public class PonderJSMod {
 
@@ -30,7 +32,7 @@ public class PonderJSMod {
     }
 
     private void onClient(FMLClientSetupEvent event) {
-        PonderIndex.addPlugin(new PonderJSPlugin());
+        PonderIndex.addPlugin(PLUGIN);
     }
 
     private void registerCommands(RegisterCommandsEvent event) {

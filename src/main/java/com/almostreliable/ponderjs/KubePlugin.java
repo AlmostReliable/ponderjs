@@ -1,11 +1,9 @@
 package com.almostreliable.ponderjs;
 
 import dev.latvian.mods.kubejs.KubeJSPlugin;
-import dev.latvian.mods.kubejs.client.LangEventJS;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
 import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
-import net.createmod.ponder.foundation.PonderIndex;
 
 public class KubePlugin extends KubeJSPlugin {
 
@@ -25,10 +23,5 @@ public class KubePlugin extends KubeJSPlugin {
     @Override
     public void registerEvents() {
         PonderEvents.GROUP.register();
-    }
-
-    @Override
-    public void generateLang(LangEventJS event) {
-        PonderIndex.getLangAccess().provideLang(BuildConfig.MOD_ID, event::add);
     }
 }
