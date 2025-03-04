@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.0.0]
+- Update to ponder standalone
+
 ## [1.4.0]
 - Add custom render elements
 
