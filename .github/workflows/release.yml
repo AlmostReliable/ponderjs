@@ -101,7 +101,6 @@ jobs:
 
           changelog-file: changes.md
           dependencies: |
-            create | depends | *
             kubejs | depends | *
 
           retry-attempts: 2
