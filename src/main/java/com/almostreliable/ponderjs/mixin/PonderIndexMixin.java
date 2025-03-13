@@ -15,8 +15,7 @@ public class PonderIndexMixin {
         PonderLang.initLanguage(true, true);
     }
 
-
-    @Inject(method = "registerAll", at = @At("RETURN"), remap = false, cancellable = true)
+    @Inject(method = "registerAll", at = @At("HEAD"), remap = false, cancellable = true)
     private static void ponderjs$blockRegistering(CallbackInfo ci) {
         if (PonderLang.IGNORE_PONDER_REGISTERING) ci.cancel();
     }

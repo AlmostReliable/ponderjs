@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.1]
+
+- Fix [#22](https://github.com/AlmostReliable/ponderjs/issues/22)
+
 ## [2.0.0]
 - Update to ponder standalone
 
