@@ -98,6 +98,7 @@ public class PonderLang {
     public static JsonObject createFromLocalization() {
         JsonObject object = new JsonObject();
         PonderIndex.getLangAccess().provideLang(BuildConfig.MOD_ID, object::addProperty);
+        PonderIndex.getLangAccess().provideLang("kubejs", object::addProperty);
         return object;
     }
 }
