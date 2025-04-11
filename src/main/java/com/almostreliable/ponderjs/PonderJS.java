@@ -36,6 +36,7 @@ public class PonderJS {
     //    public static final HashMap<String, AllIcons> CACHED_ICONS = new HashMap<>();
     public static final PonderStoriesManager STORIES_MANAGER = new PonderStoriesManager();
     @Nullable public static Language DEFAULT_LANGUAGE;
+    public static boolean ON_RELOAD = false;
 
 
     static void addBindings(BindingsEvent event) {
