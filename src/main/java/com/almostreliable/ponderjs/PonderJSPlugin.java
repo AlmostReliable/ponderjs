@@ -19,6 +19,6 @@ public class PonderJSPlugin implements PonderPlugin {
 
     @Override
     public void registerTags(PonderTagRegistrationHelper<ResourceLocation> helper) {
-        PonderEvents.REGISTRY.post(new PonderItemTagEventJS(helper));
+        PonderEvents.TAGS.post(new PonderItemTagEventJS(helper));
     }
 }
