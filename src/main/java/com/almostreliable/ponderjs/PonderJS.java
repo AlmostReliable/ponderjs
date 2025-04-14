@@ -67,20 +67,17 @@ public class PonderJS {
         return PonderIndexAccessor.getTags();
     }
 
-    protected static ResourceLocation appendNamespaceToId(String namespace, String id) {
-        if (!id.contains(":")) id = namespace + ":" + id;
+    public static ResourceLocation appendKubeToId(String id) {
+        if (!id.contains(":")) id = KubeJS.MOD_ID + ":" + id;
         return new ResourceLocation(id);
     }
 
-    public static ResourceLocation appendCreateToId(String tag) {
-        return appendNamespaceToId("create", tag);
-    }
-
-    public static ResourceLocation appendKubeToId(String id) {
-        return appendNamespaceToId(KubeJS.MOD_ID, id);
-    }
-
     public static Optional<PonderTag> getTagByName(String tag) {
-        return getTagByName(appendCreateToId(tag));
+        var rl = ResourceLocation.tryParse(tag);
+        if (rl == null) {
+            throw new IllegalArgumentException("Given tag is not a valid resource location: " + tag);
+        }
+
+        return getTagByName(rl);
     }
 }
