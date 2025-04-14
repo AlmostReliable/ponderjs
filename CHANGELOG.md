@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.3]
+
+- Fix [#26](https://github.com/AlmostReliable/ponderjs/issues/26) again
+
 ## [2.0.2]
 
 - Fix [#25](https://github.com/AlmostReliable/ponderjs/issues/25)
