@@ -23,6 +23,7 @@ public class PonderBuilderJS {
 
     public PonderBuilderJS scene(String name, String title, ResourceLocation structureName, PonderStoryBoard storyBoard, ResourceLocation... tags) {
         ResourceLocation id = PonderJS.appendKubeToId(name);
+        PonderJS.NAMESPACES.add(id.getNamespace());
 
         PonderStoryBoard wrapper = (scene, util) -> {
             scene.title(id.getPath(), title);
