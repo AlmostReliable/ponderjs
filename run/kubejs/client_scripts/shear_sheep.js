@@ -3,15 +3,11 @@ Ponder.tags((event) => {
         "minecraft:blaze_powder",
         "minecraft:shears",
     ]);
-
-    event.add("kinetic_appliances", "minecraft:dirt");
-    event.remove("kinetic_appliances", ["create:deployer", "create:encased_fan"]);
 });
 
 Ponder.registry((event) => {
     event
         .create("minecraft:shears")
-        .tag("lytho:ponder_test")
         .scene("shear_sheep", "How to shear a sheep", (scene, util) => {
             scene.showStructure();
             scene.idle(10);

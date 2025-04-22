@@ -15,7 +15,6 @@ Ponder.registry((event) => {
 
     event
         .create("minecraft:blaze_powder")
-        .tag("kubejs:particle_test")
         .scene("particles", "How to particle", (scene, util) => {
             scene.showStructure();
             scene.idle(10);
