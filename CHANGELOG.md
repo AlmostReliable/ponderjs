@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.4]
+
+- Allow better creation of tags
+- Allow localization with custom namespaces
+- Add missing tags to the ponder index
+
 ## [2.0.3]
 
 - Fix [#26](https://github.com/AlmostReliable/ponderjs/issues/26) again
