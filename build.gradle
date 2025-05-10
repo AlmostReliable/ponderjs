@@ -112,7 +112,7 @@ repositories {
         url = "https://maven.architectury.dev"
     }
     maven {
-        url "https://maven.saps.dev/minecraft"
+        url "https://maven.latvian.dev/releases"
     }
     maven {
         url "https://maven.blamejared.com"
