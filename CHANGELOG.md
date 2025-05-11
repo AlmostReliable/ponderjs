@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.5]
+
+- Fix missing lang entries for scenes
+
 ## [2.0.4]
 
 - Allow better creation of tags
