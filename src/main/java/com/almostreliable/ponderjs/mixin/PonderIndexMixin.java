@@ -41,8 +41,7 @@ public class PonderIndexMixin {
     @Inject(method = "registerAll", at = @At("RETURN"), remap = false)
     private static void ponderjs$invokeEvents(CallbackInfo ci) {
         PonderJS.NAMESPACES.clear();
-        var sceneRegHelper = new DefaultPonderSceneRegistrationHelper(PLUGIN.getModId(), SCENES);
-        PonderEvents.REGISTRY.post(new PonderRegistryEventJS(sceneRegHelper));
+        PonderEvents.REGISTRY.post(new PonderRegistryEventJS(SCENES));
         var tagRegHelper = new DefaultPonderTagRegistrationHelper(PLUGIN.getModId(), TAGS, LOCALIZATION);
         PonderEvents.TAGS.post(new PonderItemTagEventJS(tagRegHelper));
     }

@@ -4,6 +4,7 @@ import com.almostreliable.ponderjs.util.PonderPlatform;
 import dev.latvian.mods.kubejs.event.EventJS;
 import dev.latvian.mods.kubejs.util.ConsoleJS;
 import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
+import net.createmod.ponder.foundation.registration.PonderSceneRegistry;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -16,10 +17,10 @@ import java.util.stream.Collectors;
 
 public class PonderRegistryEventJS extends EventJS {
 
-    private final PonderSceneRegistrationHelper<ResourceLocation> helper;
+    private final PonderSceneRegistry sceneRegistry;
 
-    public PonderRegistryEventJS(PonderSceneRegistrationHelper<ResourceLocation> helper) {
-        this.helper = helper;
+    public PonderRegistryEventJS(PonderSceneRegistry sceneRegistry) {
+        this.sceneRegistry = sceneRegistry;
     }
 
     public PonderBuilderJS create(Ingredient ingredient) {
@@ -33,7 +34,7 @@ public class PonderRegistryEventJS extends EventJS {
                 .map(BuiltInRegistries.ITEM::getKey)
                 .collect(
                         Collectors.toSet());
-        return new PonderBuilderJS(itemIds, helper);
+        return new PonderBuilderJS(itemIds, sceneRegistry);
     }
 
     public void printParticleNames() {
