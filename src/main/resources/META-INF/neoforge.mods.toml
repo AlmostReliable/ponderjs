@@ -1,20 +1,20 @@
 modLoader = "javafml"
-loaderVersion = "[${forge_min_version},)"
-issueTrackerURL = "https://github.com/${github_user}/${github_repo}/issues"
+loaderVersion = "[2,)"
+issueTrackerURL = "https://github.com/${githubUser}/${githubRepo}/issues"
 license = "${license}"
 
 [[mods]]
-modId = "${mod_id}"
-version = "${mod_version}"
-displayName = "${mod_name}"
-credits = "${mod_credits}"
-authors = "${mod_authors}"
-description = '''${mod_description}'''
+modId = "${modId}"
+version = "${version}"
+displayName = "${modName}"
+credits = "${modCredits}"
+authors = "${modAuthor}"
+description = '''${modDescription}'''
 
 [[dependencies.ponderjs]]
 modId = "forge"
 mandatory = true
-versionRange = "[${forge_min_version},)"
+versionRange = "[${neoforgeVersion},)"
 ordering = "NONE"
 side = "BOTH"
 
@@ -31,3 +31,6 @@ mandatory = true
 versionRange = "[${kubejs_min_version},)"
 ordering = "AFTER"
 side = "BOTH"
+
+[[mixins]]
+config = "ponderjs.mixins.json"
