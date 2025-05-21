@@ -12,7 +12,7 @@ authors = "${modAuthor}"
 description = '''${modDescription}'''
 
 [[dependencies.ponderjs]]
-modId = "forge"
+modId = "neoforge"
 mandatory = true
 versionRange = "[${neoforgeVersion},)"
 ordering = "NONE"

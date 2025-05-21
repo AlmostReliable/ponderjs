@@ -103,19 +103,4 @@ public class Util {
         }
         return predicate;
     }
-
-    public static BlockState blockStateOf(@Nullable Object o) {
-        if (o instanceof BlockState blockState) return blockState;
-        if (o instanceof Block block) return block.defaultBlockState();
-        if (o instanceof BlockIDPredicate predicate) return predicate.getBlockState();
-
-        if (o instanceof CharSequence s) {
-            ResourceLocation location = ResourceLocation.tryParse(s.toString());
-            if (location != null) {
-                return BuiltInRegistries.BLOCK.get(location).defaultBlockState();
-            }
-        }
-
-        return Blocks.AIR.defaultBlockState();
-    }
 }

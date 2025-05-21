@@ -6,9 +6,7 @@ import com.almostreliable.ponderjs.util.Util;
 import dev.latvian.mods.kubejs.event.EventGroupRegistry;
 import dev.latvian.mods.kubejs.plugin.KubeJSPlugin;
 import dev.latvian.mods.kubejs.script.BindingRegistry;
-import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.kubejs.script.TypeWrapperRegistry;
-import dev.latvian.mods.rhino.util.wrap.TypeWrappers;
 import net.createmod.catnip.math.Pointing;
 import net.createmod.ponder.api.PonderPalette;
 import net.createmod.ponder.api.element.ParrotElement;
@@ -40,7 +38,6 @@ public class KubePlugin implements KubeJSPlugin {
 
         registry.register(Selection.class, Util::selectionOf);
         registry.register(PonderTag.class, Util::ponderTagOf);
-        registry.register(BlockState.class, Util::blockStateOf);
         registry.register(BlockStateFunction.class, BlockStateFunction::of);
         registry.register(ParticleTransformation.Data.class, ParticleTransformation.Data::of);
     }
