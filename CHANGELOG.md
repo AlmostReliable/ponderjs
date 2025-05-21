@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+- /
+
+## [2.1.0] - 2025-05-21
 - Alpha update for 1.21.1. Please report issues :-)
 
 ## [2.0.5]
@@ -85,6 +88,7 @@
 - Default structure will be used if no structure provided
 
 <!-- Versions -->
+[2.1.0]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.21.1-neoforge-2.1.0
 [1.3.0]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.20.1-1.3.0
 [1.2.0]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.18-1.2.0
 [1.1.11]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.18-1.1.11
