@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- Alpha update for 1.21.1. Please report issues :-)
+
 ## [2.0.5]
 
 - Fix missing lang entries for scenes
