@@ -1,11 +1,11 @@
 package com.almostreliable.ponderjs.particles;
 
-import dev.latvian.mods.rhino.mod.util.color.Color;
+import dev.latvian.mods.kubejs.color.Color;
 import net.createmod.ponder.Ponder;
 import net.minecraft.core.particles.DustColorTransitionOptions;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.DustParticleOptionsBase;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ScalableParticleOptionsBase;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
@@ -139,7 +139,7 @@ public abstract class ParticleDataBuilder<O extends ParticleDataBuilder<O, PO>, 
     }
 
     public static class DustParticleDataBuilder
-            extends ParticleDataBuilder<DustParticleDataBuilder, DustParticleOptionsBase> {
+            extends ParticleDataBuilder<DustParticleDataBuilder, ScalableParticleOptionsBase> {
         final Color fromColor;
         @Nullable final Color toColor;
 
@@ -155,7 +155,7 @@ public abstract class ParticleDataBuilder<O extends ParticleDataBuilder<O, PO>, 
         }
 
         @Override
-        DustParticleOptionsBase createOptions() {
+        ScalableParticleOptionsBase createOptions() {
             float s = scale == null ? 1.0f : scale;
             var fC = new net.createmod.catnip.theme.Color(fromColor.getRgbJS()).asVectorF();
 
@@ -167,32 +167,4 @@ public abstract class ParticleDataBuilder<O extends ParticleDataBuilder<O, PO>, 
             return new DustColorTransitionOptions(fC, toC, s);
         }
     }
-
-//    public static class RotationIndicatorParticleDataBuilder
-//            extends ParticleDataBuilder<RotationIndicatorParticleDataBuilder, RotationIndicatorParticleData> {
-//        private final float radius1;
-//        private final float radius2;
-//        private final Direction.Axis axis;
-//        private float rotationSpeed;
-//
-//        public RotationIndicatorParticleDataBuilder(float radius1, float radius2, Direction.Axis axis) {
-//            this.rotationSpeed = 1.0f;
-//            this.radius1 = radius1;
-//            this.radius2 = radius2;
-//            this.axis = axis;
-//        }
-//
-//        public RotationIndicatorParticleDataBuilder rotationSpeed(float rotationSpeed) {
-//            this.rotationSpeed = rotationSpeed;
-//            return getSelf();
-//        }
-//
-//        @Override
-//        RotationIndicatorParticleData createOptions() {
-//            Color c = color == null ? ColorWrapper.BLACK : color;
-//            char axisChar = axis.name().charAt(0);
-//            int lTime = lifetime == null ? 40 : lifetime;
-//            return new RotationIndicatorParticleData(c.getRgbJS(), rotationSpeed, radius1, radius2, lTime, axisChar);
-//        }
-//    }
 }

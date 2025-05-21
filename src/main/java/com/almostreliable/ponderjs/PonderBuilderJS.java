@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.Set;
 
 public class PonderBuilderJS {
-    public static final ResourceLocation BASIC_STRUCTURE = new ResourceLocation("ponderjs:basic");
+    public static final ResourceLocation BASIC_STRUCTURE = ResourceLocation.parse("ponderjs:basic");
     private final Set<ResourceLocation> itemIds;
     private final PonderSceneRegistry sceneRegistry;
 

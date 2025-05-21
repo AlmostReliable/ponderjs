@@ -6,6 +6,7 @@ import dev.latvian.mods.kubejs.script.ScriptType;
 import dev.latvian.mods.rhino.BaseFunction;
 import dev.latvian.mods.rhino.Context;
 import dev.latvian.mods.rhino.NativeJavaObject;
+import dev.latvian.mods.rhino.type.TypeInfo;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
@@ -13,12 +14,13 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 public interface BlockStateFunction extends Function<BlockIDPredicate, BlockState> {
+
+    TypeInfo FUNCTION_TYPE = TypeInfo.of(Function.class);
+
     static BlockStateFunction of(Context ctx, @Nullable Object o) {
         if (o instanceof BaseFunction function) {
             //noinspection rawtypes
-            Function f = (Function) NativeJavaObject.createInterfaceAdapter(ctx,
-                    Function.class,
-                    function);
+            Function f = (Function) ctx.createInterfaceAdapter(FUNCTION_TYPE, function);
             return blockIDPredicate -> {
                 //noinspection unchecked
                 Object result = f.apply(blockIDPredicate);

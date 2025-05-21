@@ -1,9 +1,7 @@
 package com.almostreliable.ponderjs;
 
-import com.almostreliable.ponderjs.util.PonderPlatform;
-import dev.latvian.mods.kubejs.event.EventJS;
-import dev.latvian.mods.kubejs.util.ConsoleJS;
-import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
+import dev.latvian.mods.kubejs.event.KubeEvent;
+import dev.latvian.mods.kubejs.script.ConsoleJS;
 import net.createmod.ponder.foundation.registration.PonderSceneRegistry;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -15,7 +13,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class PonderRegistryEventJS extends EventJS {
+public class PonderRegistryEventJS implements KubeEvent {
 
     private final PonderSceneRegistry sceneRegistry;
 
@@ -32,17 +30,17 @@ public class PonderRegistryEventJS extends EventJS {
                 .stream(ingredient.getItems())
                 .map(ItemStack::getItem)
                 .map(BuiltInRegistries.ITEM::getKey)
-                .collect(
-                        Collectors.toSet());
+                .collect(Collectors.toSet());
         return new PonderBuilderJS(itemIds, sceneRegistry);
     }
 
+    @SuppressWarnings("DataFlowIssue")
     public void printParticleNames() {
         StringBuilder sb = new StringBuilder();
         sb.append("\n").append("### Particles ###").append("\n");
-        PonderPlatform.getParticleTypes()
+        BuiltInRegistries.PARTICLE_TYPE.stream()
                 .filter(SimpleParticleType.class::isInstance)
-                .map(PonderPlatform::getParticleTypeName)
+                .map(BuiltInRegistries.PARTICLE_TYPE::getKey)
                 .sorted()
                 .forEach(id -> sb.append(" - ").append(id).append("\n"));
         ConsoleJS.CLIENT.info(sb.toString());

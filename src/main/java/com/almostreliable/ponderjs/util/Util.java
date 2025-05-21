@@ -2,26 +2,30 @@ package com.almostreliable.ponderjs.util;
 
 import com.almostreliable.ponderjs.PonderJS;
 import dev.latvian.mods.kubejs.block.predicate.BlockIDPredicate;
-import dev.latvian.mods.kubejs.util.ConsoleJS;
+import dev.latvian.mods.kubejs.script.ConsoleJS;
 import dev.latvian.mods.kubejs.util.UtilsJS;
+import dev.latvian.mods.rhino.Context;
+import dev.latvian.mods.rhino.type.TypeInfo;
 import net.createmod.ponder.api.scene.Selection;
 import net.createmod.ponder.foundation.PonderTag;
 import net.createmod.ponder.foundation.SelectionImpl;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
 public class Util {
-    public static Selection selectionOf(@Nullable Object o) {
+    public static final TypeInfo VEC_TYPE = TypeInfo.of(Vec3.class);
+
+    public static Selection selectionOf(Context ctx, @Nullable Object o) {
         if (o instanceof Selection s) return s;
         if (o instanceof BoundingBox box) {
             return SelectionImpl.of(box);
@@ -39,9 +43,8 @@ public class Util {
 
             if (l.size() == 2) {
                 // TODO Change to direct typewrapper if kube adds them
-                UtilsJS.vec3Of(l.get(0));
-                Vec3 from = UtilsJS.vec3Of(l.get(0));
-                Vec3 to = UtilsJS.vec3Of(l.get(1));
+                Vec3 from = (Vec3) ctx.jsToJava(l.get(0), VEC_TYPE);
+                Vec3 to = (Vec3) ctx.jsToJava(l.get(1), VEC_TYPE);
                 return SelectionImpl.of(new BoundingBox((int) from.x,
                         (int) from.y,
                         (int) from.z,
@@ -69,7 +72,7 @@ public class Util {
             }
         }
 
-        Vec3 v = UtilsJS.vec3Of(o);
+        Vec3 v = (Vec3) ctx.jsToJava(o, VEC_TYPE);
         return SelectionImpl.of(new BoundingBox(new BlockPos((int) v.x, (int) v.y, (int) v.z)));
     }
 
@@ -94,7 +97,7 @@ public class Util {
     }
 
     public static BlockIDPredicate createBlockID(BlockState state) {
-        BlockIDPredicate predicate = new BlockIDPredicate(PonderPlatform.getBlockName(state.getBlock()));
+        BlockIDPredicate predicate = new BlockIDPredicate(BuiltInRegistries.BLOCK.getKey(state.getBlock()));
         for (var entry : state.getValues().entrySet()) {
             predicate.with(entry.getKey().getName(), entry.getValue().toString());
         }
@@ -109,10 +112,7 @@ public class Util {
         if (o instanceof CharSequence s) {
             ResourceLocation location = ResourceLocation.tryParse(s.toString());
             if (location != null) {
-                Block block = ForgeRegistries.BLOCKS.getValue(location);
-                if (block != null) {
-                    return block.defaultBlockState();
-                }
+                return BuiltInRegistries.BLOCK.get(location).defaultBlockState();
             }
         }
 

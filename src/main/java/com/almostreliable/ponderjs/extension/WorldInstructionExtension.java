@@ -2,7 +2,6 @@ package com.almostreliable.ponderjs.extension;
 
 import com.almostreliable.ponderjs.api.CustomPonderSceneElement;
 import com.almostreliable.ponderjs.util.BlockStateFunction;
-import com.almostreliable.ponderjs.util.PonderPlatform;
 import dev.latvian.mods.rhino.util.HideFromJS;
 import dev.latvian.mods.rhino.util.RemapPrefixForJS;
 import net.createmod.ponder.api.element.ElementLink;
@@ -14,6 +13,7 @@ import net.createmod.ponder.foundation.PonderSceneBuilder;
 import net.createmod.ponder.foundation.instruction.FadeInOutInstruction;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -76,8 +76,11 @@ public interface WorldInstructionExtension {
     default ElementLink<EntityElement> ponderjs$createEntity(EntityType<?> entityType, Vec3 position, Consumer<Entity> consumer) {
         return ponderjs$builder().world().createEntity(level -> {
             Entity entity = entityType.create(level);
-            Objects.requireNonNull(entity, "Could not create entity of type " +
-                                           PonderPlatform.getEntityTypeName(entityType));
+            if (entity == null) {
+                throw new IllegalArgumentException("Could not create entity of type " +
+                                                   BuiltInRegistries.ENTITY_TYPE.getKey(entityType));
+            }
+
             entity.setPosRaw(position.x, position.y, position.z);
             entity.setOldPosAndRot();
             entity.lookAt(EntityAnchorArgument.Anchor.FEET, position.add(0, 0, -1));

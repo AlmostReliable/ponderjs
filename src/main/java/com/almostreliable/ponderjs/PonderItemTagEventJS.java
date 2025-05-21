@@ -1,9 +1,8 @@
 package com.almostreliable.ponderjs;
 
-import com.almostreliable.ponderjs.util.PonderPlatform;
 import com.google.common.base.Preconditions;
-import dev.latvian.mods.kubejs.event.EventJS;
-import dev.latvian.mods.kubejs.util.ConsoleJS;
+import dev.latvian.mods.kubejs.event.KubeEvent;
+import dev.latvian.mods.kubejs.script.ConsoleJS;
 import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
 import net.createmod.ponder.foundation.PonderTag;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -20,7 +19,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public class PonderItemTagEventJS extends EventJS {
+public class PonderItemTagEventJS implements KubeEvent {
 
     private final PonderTagRegistrationHelper<ResourceLocation> helper;
 
@@ -77,7 +76,7 @@ public class PonderItemTagEventJS extends EventJS {
         if (ingredient.isEmpty()) return;
         Set<ResourceLocation> ids = Arrays.stream(ingredient.getItems())
                 .map(ItemStack::getItem)
-                .map(PonderPlatform::getItemName)
+                .map(BuiltInRegistries.ITEM::getKey)
                 .collect(Collectors.toSet());
         remove(tag, ids);
     }

@@ -8,27 +8,24 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.IExtensionPoint;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 import static com.almostreliable.ponderjs.PonderJS.PLUGIN;
 
 @Mod(BuildConfig.MOD_ID)
 public class PonderJSMod {
 
-    public PonderJSMod() {
-        ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class,
-                () -> new IExtensionPoint.DisplayTest(() -> "ANY", (a, b) -> true));
+    public PonderJSMod(IEventBus bus) {
+        // I have no clue for what this existed lol
+//        ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class,
+//                () -> new IExtensionPoint.DisplayTest(() -> "ANY", (a, b) -> true));
 
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
-        modEventBus.addListener(this::onClient);
+        NeoForge.EVENT_BUS.addListener(this::registerCommands);
+        bus.addListener(this::onClient);
     }
 
     private void onClient(FMLClientSetupEvent event) {

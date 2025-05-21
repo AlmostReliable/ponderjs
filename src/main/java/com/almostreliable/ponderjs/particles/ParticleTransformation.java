@@ -1,6 +1,7 @@
 package com.almostreliable.ponderjs.particles;
 
 import com.almostreliable.ponderjs.util.PonderErrorHelper;
+import com.almostreliable.ponderjs.util.Util;
 import dev.latvian.mods.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.Context;
 import net.minecraft.world.phys.Vec3;
@@ -26,10 +27,10 @@ public interface ParticleTransformation {
     }
 
     record Data(Vec3 position, Vec3 motion) {
-        public static Data of(@Nullable Object o) {
+        public static Data of(Context ctx, @Nullable Object o) {
             if (o instanceof List<?> list && list.size() >= 2) {
-                Vec3 pos = UtilsJS.vec3Of(list.get(0));
-                Vec3 motion = UtilsJS.vec3Of(list.get(1));
+                Vec3 pos = (Vec3) ctx.jsToJava(list.get(0), Util.VEC_TYPE);
+                Vec3 motion = (Vec3) ctx.jsToJava(list.get(1), Util.VEC_TYPE);
                 return new Data(pos, motion);
             }
 
