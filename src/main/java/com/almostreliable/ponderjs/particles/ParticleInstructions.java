@@ -3,7 +3,7 @@ package com.almostreliable.ponderjs.particles;
 import com.almostreliable.ponderjs.mixin.ParticleAccessor;
 import com.almostreliable.ponderjs.mixin.PonderWorldAccessor;
 import com.almostreliable.ponderjs.util.PonderErrorHelper;
-import dev.latvian.mods.kubejs.color.Color;
+import dev.latvian.mods.kubejs.color.KubeColor;
 import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.foundation.PonderScene;
 import net.createmod.ponder.foundation.instruction.TickingInstruction;
@@ -34,11 +34,11 @@ public class ParticleInstructions {
                 " is null or not simple.");
     }
 
-    public ParticleDataBuilder.DustParticleDataBuilder dust(int ticks, Color color, Vec3 pos) {
+    public ParticleDataBuilder.DustParticleDataBuilder dust(int ticks, KubeColor color, Vec3 pos) {
         return create(ticks, pos, new ParticleDataBuilder.DustParticleDataBuilder(color, null).color(color));
     }
 
-    public ParticleDataBuilder.DustParticleDataBuilder dust(int ticks, Color fromColor, Color toColor, Vec3 pos) {
+    public ParticleDataBuilder.DustParticleDataBuilder dust(int ticks, KubeColor fromColor, KubeColor toColor, Vec3 pos) {
         return create(ticks, pos, new ParticleDataBuilder.DustParticleDataBuilder(fromColor, toColor).color(fromColor));
     }
 
@@ -116,7 +116,7 @@ public class ParticleInstructions {
         private void applyParticleData(Particle particle) {
             if (particle instanceof ParticleAccessor accessor) {
                 if (builder.color != null) {
-                    long argb = builder.color.getArgbJS();
+                    long argb = builder.color.kjs$getARGB();
                     float a = (argb >> 24 & 255) / 255.0F;
                     float r = (argb >> 16 & 255) / 255.0F;
                     float g = (argb >> 8 & 255) / 255.0F;

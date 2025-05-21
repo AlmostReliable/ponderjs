@@ -1,6 +1,6 @@
 package com.almostreliable.ponderjs.particles;
 
-import dev.latvian.mods.kubejs.color.Color;
+import dev.latvian.mods.kubejs.color.KubeColor;
 import net.createmod.ponder.Ponder;
 import net.minecraft.core.particles.DustColorTransitionOptions;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -18,7 +18,7 @@ public abstract class ParticleDataBuilder<O extends ParticleDataBuilder<O, PO>, 
     @Nullable Float gravity = null;
     @Nullable Boolean physics = null;
     @Nullable Boolean collision = null;
-    @Nullable Color color = null;
+    @Nullable KubeColor color = null;
     @Nullable Float roll = null;
     @Nullable Float friction = null;
     @Nullable Float scale = null;
@@ -44,7 +44,7 @@ public abstract class ParticleDataBuilder<O extends ParticleDataBuilder<O, PO>, 
         return getSelf();
     }
 
-    public O color(Color color) {
+    public O color(KubeColor color) {
         this.color = color;
         return getSelf();
     }
@@ -140,16 +140,16 @@ public abstract class ParticleDataBuilder<O extends ParticleDataBuilder<O, PO>, 
 
     public static class DustParticleDataBuilder
             extends ParticleDataBuilder<DustParticleDataBuilder, ScalableParticleOptionsBase> {
-        final Color fromColor;
-        @Nullable final Color toColor;
+        final KubeColor fromColor;
+        @Nullable final KubeColor toColor;
 
-        public DustParticleDataBuilder(Color fromColor, @Nullable Color toColor) {
+        public DustParticleDataBuilder(KubeColor fromColor, @Nullable KubeColor toColor) {
             this.fromColor = fromColor;
             this.toColor = toColor;
         }
 
         @Override
-        public DustParticleDataBuilder color(Color color) {
+        public DustParticleDataBuilder color(KubeColor color) {
             // color is defined through constructor
             return this;
         }
@@ -157,13 +157,13 @@ public abstract class ParticleDataBuilder<O extends ParticleDataBuilder<O, PO>, 
         @Override
         ScalableParticleOptionsBase createOptions() {
             float s = scale == null ? 1.0f : scale;
-            var fC = new net.createmod.catnip.theme.Color(fromColor.getRgbJS()).asVectorF();
+            var fC = new net.createmod.catnip.theme.Color(fromColor.kjs$getRGB()).asVectorF();
 
             if (toColor == null) {
                 return new DustParticleOptions(fC, s);
             }
 
-            var toC = new net.createmod.catnip.theme.Color(toColor.getRgbJS()).asVectorF();
+            var toC = new net.createmod.catnip.theme.Color(toColor.kjs$getRGB()).asVectorF();
             return new DustColorTransitionOptions(fC, toC, s);
         }
     }
