@@ -19,10 +19,8 @@ Ponder.tags((event) => {
         tag.addIconToItems();
     });
 
-    try {
+    if (Platform.isLoaded("create")) {
         event.add("create:kinetic_appliances", "minecraft:dirt");
         event.remove("create:kinetic_appliances", ["create:deployer", "create:encased_fan"]);
-    } catch (e) {
-        console.log("Create not loaded, so we just skip")
     }
 });
