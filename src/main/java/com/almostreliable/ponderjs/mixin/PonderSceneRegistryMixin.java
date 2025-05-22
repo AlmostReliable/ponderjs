@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 @Mixin(PonderSceneRegistry.class)
 public class PonderSceneRegistryMixin {
 
+    // TODO check if still needed.
     @ModifyVariable(method = "compileScene", at = @At("HEAD"), ordinal = 0, argsOnly = true, remap = false)
     private static @Nullable PonderLevel ponderjs$createLevelIfNotExist(@Nullable PonderLevel level) {
         if (!PonderJS.ON_RELOAD) {

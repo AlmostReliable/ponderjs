@@ -19,16 +19,14 @@ import static com.almostreliable.ponderjs.PonderJS.PLUGIN;
 public class PonderLang {
     public static final String PATH = "kubejs/assets/ponderjs_generated/lang/%lang%.json";
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    public static boolean IGNORE_PONDER_REGISTERING = false;
-    public static boolean IGNORE_SHARED_TEXT = false;
+    public static boolean GENERATING_LANG = false;
 
-    public static void initLanguage(boolean ignorePonderReg, boolean ignoreSharedText) {
+    public static void initLanguage(boolean ignoreSharedText) {
         if (!PonderIndexAccessor.getPlugins().contains(PLUGIN)) {
             return;
         }
 
-        IGNORE_PONDER_REGISTERING = ignorePonderReg;
-        IGNORE_SHARED_TEXT = ignoreSharedText;
+        GENERATING_LANG = true;
 
         try {
             if (generate("en_us")) {
@@ -44,8 +42,7 @@ public class PonderLang {
             PonderErrorHelper.yeet(e);
         }
 
-        IGNORE_PONDER_REGISTERING = false;
-        IGNORE_SHARED_TEXT = false;
+        GENERATING_LANG = false;
     }
 
     /**

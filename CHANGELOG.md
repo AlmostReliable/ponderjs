@@ -1,7 +1,7 @@
 # Changelog
 
 ## Unreleased
-- /
+- Fix #[29](https://github.com/AlmostReliable/ponderjs/issues/29)
 
 ## [2.1.0] - 2025-05-21
 - Alpha update for 1.21.1. Please report issues :-)

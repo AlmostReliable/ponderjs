@@ -24,18 +24,18 @@ public class PonderIndexMixin {
     @Inject(method = "reload", at = @At("RETURN"), remap = false)
     private static void ponderjs$injectLanguage(CallbackInfo ci) {
         PonderJS.ON_RELOAD = true;
-        PonderLang.initLanguage(true, true);
+        PonderLang.initLanguage(true);
         PonderJS.ON_RELOAD = false;
     }
 
     @Inject(method = "registerAll", at = @At("HEAD"), remap = false, cancellable = true)
     private static void ponderjs$blockRegistering(CallbackInfo ci) {
-        if (PonderLang.IGNORE_PONDER_REGISTERING) ci.cancel();
+        if (PonderLang.GENERATING_LANG) ci.cancel();
     }
 
     @Inject(method = "gatherSharedText", at = @At("HEAD"), remap = false, cancellable = true)
     private static void ponderjs$blockSharedText(CallbackInfo ci) {
-        if (PonderLang.IGNORE_SHARED_TEXT) ci.cancel();
+        if (PonderJS.ON_RELOAD) ci.cancel();
     }
 
     @Inject(method = "registerAll", at = @At("RETURN"), remap = false)

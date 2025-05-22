@@ -12,6 +12,6 @@ public class PonderClientMixin {
 
     @Inject(method = "modLoadCompleted", at = @At("RETURN"), remap = false)
     private static void ponderjs$injectLanguage(CallbackInfo ci) {
-        PonderLang.initLanguage(true, false);
+        PonderLang.initLanguage(false);
     }
 }
