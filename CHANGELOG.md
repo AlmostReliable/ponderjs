@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+- /
+
+## [2.1.2] - 2025-06-02
 - Fix [#32](https://github.com/AlmostReliable/ponderjs/issues/32)
 
 ## [2.1.1] - 2025-05-22
@@ -91,6 +94,7 @@
 - Default structure will be used if no structure provided
 
 <!-- Versions -->
+[2.1.2]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.21.1-neoforge-2.1.2
 [2.1.1]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.21.1-neoforge-2.1.1
 [2.1.0]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.21.1-neoforge-2.1.0
 [1.3.0]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.20.1-1.3.0
