@@ -22,22 +22,12 @@ dependencies {
     testImplementation("dev.latvian.mods:kubejs-neoforge:${kubejsVersion}")
 
     val flywheelVersion: String by project
+    jarJar("dev.engine-room.flywheel:flywheel-neoforge-${almostgradle.minecraftVersion}:${flywheelVersion}")
     implementation("dev.engine-room.flywheel:flywheel-neoforge-${almostgradle.minecraftVersion}:${flywheelVersion}")
-    jarJar("dev.engine-room.flywheel:flywheel-neoforge-${almostgradle.minecraftVersion}:${flywheelVersion}") {
-        version {
-            strictly("[1.0,2.0)")
-            prefer(flywheelVersion)
-        }
-    }
 
     val ponderVersion: String by project
+    jarJar("net.createmod.ponder:Ponder-NeoForge-${almostgradle.minecraftVersion}:${ponderVersion}")
     implementation("net.createmod.ponder:Ponder-NeoForge-${almostgradle.minecraftVersion}:${ponderVersion}")
-    jarJar("net.createmod.ponder:Ponder-NeoForge-${almostgradle.minecraftVersion}:${ponderVersion}") {
-        version {
-            strictly("[1.0,2.0)")
-            prefer(ponderVersion)
-        }
-    }
 
     testLocalRuntime(almostgradle.recipeViewers.emi.dependency)
 }
