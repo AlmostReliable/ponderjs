@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+- /
+
+## [2.1.3] - 2025-06-24
 - re-add `tag` method for building scenes
 
 ## [2.1.2] - 2025-06-02
@@ -94,6 +97,7 @@
 - Default structure will be used if no structure provided
 
 <!-- Versions -->
+[2.1.3]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.21.1-neoforge-2.1.3
 [2.1.2]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.21.1-neoforge-2.1.2
 [2.1.1]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.21.1-neoforge-2.1.1
 [2.1.0]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.21.1-neoforge-2.1.0
