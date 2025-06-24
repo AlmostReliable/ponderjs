@@ -1,7 +1,7 @@
 # Changelog
 
 ## Unreleased
-- /
+- re-add `tag` method for building scenes
 
 ## [2.1.2] - 2025-06-02
 - Fix [#32](https://github.com/AlmostReliable/ponderjs/issues/32)
