@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.6]
+
+- re-add `tag` method for building scenes
+
 ## [2.0.5]
 
 - Fix missing lang entries for scenes
