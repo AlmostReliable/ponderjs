@@ -1,13 +1,14 @@
 Ponder.tags((event) => {
     event.createTag("lytho:ponder_test", "minecraft:shears", "Some testing", "Some test description!", [
         "minecraft:blaze_powder",
-        "minecraft:shears",
+//        "minecraft:shears",
     ]);
 });
 
 Ponder.registry((event) => {
     event
         .create("minecraft:shears")
+        .tag("lytho:ponder_test")
         .scene("shear_sheep", "How to shear a sheep", (scene, util) => {
             scene.showStructure();
             scene.idle(10);
