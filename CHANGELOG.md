@@ -1,7 +1,8 @@
 # Changelog
 
 ## Unreleased
-- /
+- allow removing of scenes
+- fix crash when using create 6.0.8
 
 ## [2.1.3] - 2025-06-24
 - re-add `tag` method for building scenes
