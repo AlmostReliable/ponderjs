@@ -11,6 +11,7 @@
     "PonderLocalizationMixin",
     "PonderOverlayInstructionsMixin",
     "PonderSceneBuilderMixin",
+      "PonderSceneRegistryAccessor",
     "PonderSceneRegistryMixin",
     "PonderSpecialInstructionsMixin",
     "PonderTagRegistryAccessor",
