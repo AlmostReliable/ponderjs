@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.0]
+
+- fix crash when using create 6.0.8
+
 ## [2.0.6]
 
 - re-add `tag` method for building scenes
