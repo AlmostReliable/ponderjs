@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+- /
+
+## [2.2.0] - 2025-11-05
 - allow removing of scenes
 - fix crash when using create 6.0.8
 
@@ -98,6 +101,7 @@
 - Default structure will be used if no structure provided
 
 <!-- Versions -->
+[2.2.0]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.21.1-neoforge-2.2.0
 [2.1.3]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.21.1-neoforge-2.1.3
 [2.1.2]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.21.1-neoforge-2.1.2
 [2.1.1]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.21.1-neoforge-2.1.1
