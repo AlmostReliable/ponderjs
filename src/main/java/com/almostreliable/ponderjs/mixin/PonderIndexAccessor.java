@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.throwables.MixinException;
 
-import java.util.Set;
+import java.util.List;
 
 @Mixin(PonderIndex.class)
 public interface PonderIndexAccessor {
@@ -18,7 +18,7 @@ public interface PonderIndexAccessor {
     }
 
     @Accessor(value = "plugins", remap = false)
-    static Set<PonderPlugin> getPlugins() {
+    static List<PonderPlugin> getPlugins() {
         throw new MixinException("Cannot access PonderIndex.plugins directly!");
     }
 }

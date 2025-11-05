@@ -1,6 +1,6 @@
 plugins {
-    id("net.neoforged.moddev") version "2.0.39-beta"
-    id("com.almostreliable.almostgradle") version "1.1.+"
+    id("net.neoforged.moddev") version "2.0.80"
+    id("com.almostreliable.almostgradle") version "1.4.+"
 }
 
 repositories {
@@ -29,5 +29,5 @@ dependencies {
     jarJar("net.createmod.ponder:Ponder-NeoForge-${almostgradle.minecraftVersion}:${ponderVersion}")
     implementation("net.createmod.ponder:Ponder-NeoForge-${almostgradle.minecraftVersion}:${ponderVersion}")
 
-    testLocalRuntime(almostgradle.recipeViewers.emi.dependency)
+    almostgradle.recipeViewers.emi.dependencies.get().forEach { it -> testLocalRuntime(it) }
 }
