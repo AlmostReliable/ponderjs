@@ -3,7 +3,6 @@ package com.almostreliable.ponderjs.util;
 import com.almostreliable.ponderjs.PonderJS;
 import dev.latvian.mods.kubejs.block.predicate.BlockIDPredicate;
 import dev.latvian.mods.kubejs.script.ConsoleJS;
-import dev.latvian.mods.kubejs.util.UtilsJS;
 import dev.latvian.mods.rhino.Context;
 import dev.latvian.mods.rhino.type.TypeInfo;
 import net.createmod.ponder.api.scene.Selection;
@@ -11,9 +10,6 @@ import net.createmod.ponder.foundation.PonderTag;
 import net.createmod.ponder.foundation.SelectionImpl;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.Vec3;
@@ -53,7 +49,14 @@ public class Util {
                         (int) to.z));
             }
 
-            Integer[] values = l.stream().map(entry -> UtilsJS.parseInt(entry, 0)).toArray(Integer[]::new);
+            Integer[] values = l.stream().map(entry -> {
+                try {
+                    return (int) Double.parseDouble(entry.toString());
+                } catch (Exception e) {
+                    ConsoleJS.CLIENT.error("Selection was provided as list with invalid values.", e);
+                    return 0;
+                }
+            }).toArray(Integer[]::new);
             if (values.length == 6) {
                 return SelectionImpl.of(new BoundingBox(values[0],
                         values[1],

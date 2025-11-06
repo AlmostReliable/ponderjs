@@ -1,7 +1,8 @@
 # Changelog
 
 ## Unreleased
-- /
+
+- update to kubejs 7.2
 
 ## [2.2.0] - 2025-11-05
 - allow removing of scenes
