@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+- /
+
+## [2.3.0] - 2025-11-07
 
 - update to kubejs 7.2
 
@@ -102,6 +105,7 @@
 - Default structure will be used if no structure provided
 
 <!-- Versions -->
+[2.3.0]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.21.1-neoforge-2.3.0
 [2.2.0]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.21.1-neoforge-2.2.0
 [2.1.3]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.21.1-neoforge-2.1.3
 [2.1.2]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.21.1-neoforge-2.1.2
