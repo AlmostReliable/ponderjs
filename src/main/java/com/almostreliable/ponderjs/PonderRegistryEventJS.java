@@ -1,5 +1,6 @@
 package com.almostreliable.ponderjs;
 
+import com.almostreliable.ponderjs.mixin.PonderSceneRegistryAccessor;
 import com.almostreliable.ponderjs.util.PonderPlatform;
 import dev.latvian.mods.kubejs.event.EventJS;
 import dev.latvian.mods.kubejs.util.ConsoleJS;
@@ -21,6 +22,19 @@ public class PonderRegistryEventJS extends EventJS {
 
     public PonderRegistryEventJS(PonderSceneRegistry sceneRegistry) {
         this.sceneRegistry = sceneRegistry;
+    }
+
+    public void remove(Ingredient ingredient) {
+        var scenes = ((PonderSceneRegistryAccessor) sceneRegistry).ponderjs$scenes();
+        Set<ResourceLocation> itemIds = Arrays
+                .stream(ingredient.getItems())
+                .map(ItemStack::getItem)
+                .map(BuiltInRegistries.ITEM::getKey)
+                .collect(Collectors.toSet());
+
+        for (var itemId : itemIds) {
+            scenes.removeAll(itemId);
+        }
     }
 
     public PonderBuilderJS create(Ingredient ingredient) {

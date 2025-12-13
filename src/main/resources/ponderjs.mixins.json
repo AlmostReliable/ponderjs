@@ -12,6 +12,7 @@
         "PonderOverlayInstructionsMixin",
         "PonderSceneBuilderMixin",
         "PonderSceneRegistryMixin",
+        "PonderSceneRegistryAccessor",
         "PonderSpecialInstructionsMixin",
         "PonderTagRegistryAccessor",
         "PonderWorldAccessor",
