@@ -17,7 +17,8 @@
     "PonderTagRegistryAccessor",
     "PonderWorldAccessor",
     "PonderWorldInstructionMixin",
-    "SceneBuildingUtilMixin"
+      "SceneBuildingUtilMixin",
+      "TextWindowElementAccessor"
   ],
   "client": [
     "ParticleAccessor"

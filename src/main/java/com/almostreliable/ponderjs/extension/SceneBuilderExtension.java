@@ -1,5 +1,6 @@
 package com.almostreliable.ponderjs.extension;
 
+import com.almostreliable.ponderjs.TextElementBuilderJS;
 import com.almostreliable.ponderjs.particles.ParticleInstructions;
 import com.google.common.base.Preconditions;
 import dev.latvian.mods.rhino.util.HideFromJS;
@@ -15,6 +16,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -79,16 +81,19 @@ public interface SceneBuilderExtension {
         ponderjs$playSound(soundEvent, SoundSource.MASTER, 1, 1);
     }
 
-    default TextElementBuilder ponderjs$text(int duration, String text) {
-        return ponderjs$self().overlay().showText(duration).text(text);
+    default TextElementBuilderJS ponderjs$text(int duration, Component component) {
+        var overlay = (OverlayInstructionExtension) ponderjs$self().overlay();
+        return overlay.ponderjs$showText(duration).text(component);
     }
 
-    default TextElementBuilder ponderjs$text(int duration, String text, Vec3 position) {
-        return ponderjs$self().overlay().showText(duration).text(text).pointAt(position);
+    default TextElementBuilderJS ponderjs$text(int duration, Component component, Vec3 position) {
+        var overlay = (OverlayInstructionExtension) ponderjs$self().overlay();
+        return overlay.ponderjs$showText(duration).text(component).pointAt(position);
     }
 
-    default TextElementBuilder ponderjs$sharedText(int duration, ResourceLocation key) {
-        return ponderjs$self().overlay().showText(duration).sharedText(key);
+    default TextElementBuilderJS ponderjs$sharedText(int duration, ResourceLocation key) {
+        var overlay = (OverlayInstructionExtension) ponderjs$self().overlay();
+        return overlay.ponderjs$showText(duration).sharedText(key);
     }
 
     default TextElementBuilder ponderjs$sharedText(int duration, ResourceLocation key, Vec3 position) {
