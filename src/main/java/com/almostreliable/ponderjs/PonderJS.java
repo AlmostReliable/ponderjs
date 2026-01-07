@@ -5,25 +5,19 @@ import com.almostreliable.ponderjs.mixin.PonderTagRegistryAccessor;
 import dev.latvian.mods.kubejs.KubeJS;
 import net.createmod.ponder.foundation.PonderTag;
 import net.createmod.ponder.foundation.registration.PonderTagRegistry;
-import net.minecraft.locale.Language;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 public class PonderJS {
     public static final PonderJSPlugin PLUGIN = new PonderJSPlugin();
     public static final Logger LOGGER = LogManager.getLogger(BuildConfig.MOD_ID);
     @Nullable public static final String TAG_EVENT = "ponder.tag";
     public static final String REGISTRY_EVENT = "ponder.registry";
-    public static final Set<String> NAMESPACES = new HashSet<>();
     //    public static final HashMap<String, AllIcons> CACHED_ICONS = new HashMap<>();
-    public static final PonderStoriesManager STORIES_MANAGER = new PonderStoriesManager();
-    @Nullable public static Language DEFAULT_LANGUAGE;
     public static boolean ON_RELOAD = false;
 
     public static Optional<PonderTag> getTagByName(ResourceLocation res) {

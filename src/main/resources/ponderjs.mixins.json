@@ -3,8 +3,6 @@
   "package": "com.almostreliable.ponderjs.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "KubeJSClientMixin",
-    "PonderClientMixin",
     "PonderIndexAccessor",
     "PonderIndexMixin",
     "PonderInstructionMixin",
@@ -12,7 +10,6 @@
     "PonderOverlayInstructionsMixin",
     "PonderSceneBuilderMixin",
       "PonderSceneRegistryAccessor",
-    "PonderSceneRegistryMixin",
     "PonderSpecialInstructionsMixin",
     "PonderTagRegistryAccessor",
     "PonderWorldAccessor",

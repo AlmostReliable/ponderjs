@@ -32,7 +32,7 @@ public class PonderBuilderJS {
 
     public PonderBuilderJS scene(String name, String title, ResourceLocation structureName, PonderStoryBoard storyBoard, ResourceLocation... tags) {
         ResourceLocation id = PonderJS.appendKubeToId(name);
-        PonderJS.NAMESPACES.add(id.getNamespace());
+        PonderLang.SCENES.add(id);
 
         PonderStoryBoard wrapper = (scene, util) -> {
             scene.title(id.getPath(), title);
@@ -48,7 +48,6 @@ public class PonderBuilderJS {
             storyBoardEntry.highlightTags(tags);
             sceneRegistry.addStoryBoard(storyBoardEntry);
         }
-
 
         return this;
     }

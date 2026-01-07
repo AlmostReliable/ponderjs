@@ -29,7 +29,7 @@ public class PonderItemTagEventJS implements KubeEvent {
 
     public void createTag(String id, Consumer<Builder> onCreate) {
         var idWithNameSpace = PonderJS.appendKubeToId(id);
-        PonderJS.NAMESPACES.add(idWithNameSpace.getNamespace());
+        PonderLang.TAGS.add(idWithNameSpace);
 
         var builder = new Builder(idWithNameSpace);
         onCreate.accept(builder);
