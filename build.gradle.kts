@@ -26,8 +26,8 @@ dependencies {
     implementation("dev.engine-room.flywheel:flywheel-neoforge-${almostgradle.minecraftVersion}:${flywheelVersion}")
 
     val ponderVersion: String by project
-    jarJar("net.createmod.ponder:Ponder-NeoForge-${almostgradle.minecraftVersion}:${ponderVersion}")
-    implementation("net.createmod.ponder:Ponder-NeoForge-${almostgradle.minecraftVersion}:${ponderVersion}")
+    jarJar("net.createmod.ponder:ponder-neoforge:${ponderVersion}+mc${almostgradle.minecraftVersion}")
+    implementation("net.createmod.ponder:ponder-neoforge:${ponderVersion}+mc${almostgradle.minecraftVersion}")
 
     almostgradle.recipeViewers.emi.dependencies.get().forEach { it -> testLocalRuntime(it) }
 }
