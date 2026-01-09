@@ -1,7 +1,9 @@
 # Changelog
 
 ## Unreleased
-- /
+
+- fix language handling
+- update to create 6.0.9
 
 ## [2.3.0] - 2025-11-07
 
