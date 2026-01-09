@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+- /
+
+## [2.4.0] - 2026-01-09
 
 - fix language handling
 - update to create 6.0.9
@@ -107,6 +110,7 @@
 - Default structure will be used if no structure provided
 
 <!-- Versions -->
+[2.4.0]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.21.1-neoforge-2.4.0
 [2.3.0]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.21.1-neoforge-2.3.0
 [2.2.0]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.21.1-neoforge-2.2.0
 [2.1.3]: https://github.com/AlmostReliable/ponderjs/releases/tag/v1.21.1-neoforge-2.1.3
